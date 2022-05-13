@@ -2,7 +2,8 @@
   <div>
     <v-btn color="primary" text small @click="displayDialog">
       <v-icon class="mr-1">email</v-icon>
-      <span>Email a receipt of this submission</span>
+      <span v-if="lang === 'en' || lang === ''">Email a receipt of this submission</span>
+      <span v-if="lang === 'fr'">Envoyer par courriel un accusé de réception de cette soumission</span>
     </v-btn>
 
     <BaseDialog
@@ -26,16 +27,22 @@
             flat
             solid
             outlined
-            label="Send to E-mail Address"
+            :label="lang === 'fr' ? 'Envoyer à l\'adresse e-mail' : 'Send to E-mail Address'"
             :rules="emailRules"
             v-model="to"
             data-test="text-form-to"
           />
         </v-form>
       </template>
-      <template v-slot:button-text-continue>
-        <span>SEND</span>
+      <template v-slot:button-text-cancel>
+        <span v-if="lang === 'en' || lang === ''">CANCEL</span>
+        <span v-if="lang === 'fr'">ANNULER</span>
       </template>
+      <template v-slot:button-text-continue>
+        <span v-if="lang === 'en' || lang === ''">SEND</span>
+        <span v-if="lang === 'fr'">ENVOYER</span>
+      </template>
+
     </BaseDialog>
   </div>
 </template>
@@ -100,6 +107,10 @@ export default {
       type: String,
       required: true,
     },
+    lang: {
+      type: String,
+      default: 'en'
+    }
   },
 };
 </script>

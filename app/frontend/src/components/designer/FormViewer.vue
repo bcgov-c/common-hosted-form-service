@@ -41,7 +41,7 @@
         <div v-else>Draft Saved</div>
       </v-alert>
 
-      <slot name="alert" v-bind:form="form" />
+      <slot name="alert" v-bind:form="form" v-bind:submission="submission"/>
 
       <BaseDialog
         v-model="showSubmitConfirmDialog"
