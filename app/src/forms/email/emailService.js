@@ -87,10 +87,11 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
     const bodyTemplate = form.identityProviders.length > 0 && form.identityProviders[0].idp === 'public' ? 'submission-received-confirmation-public.html' : 'submission-received-confirmation-login.html';
     configData = {
       bodyTemplate: bodyTemplate,
-      title: `${form.name} Accepted`,
-      subject: `${form.name} Accepted`,
+      title: `${form.name} Accepted/Accepté`,
+      subject: `${form.name} Accepted/Accepté`,
       priority: 'normal',
       messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
+      messageLinkTextFR: `Merci pour votre soumission de ${form.name}. Vous pouvez consulter les détails de votre soumission en visitant les liens suivants:`,
       form,
     };
   }
@@ -105,7 +106,8 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
         messageLinkText: configData.messageLinkText,
         messageLinkUrl: `${service._appUrl(referer)}/${userTypePath}?s=${submission.id}`,
         emailContent: additionalProperties.emailContent,
-        title: configData.title
+        title: configData.title,
+        messageLinkTextFR: configData.messageLinkTextFR || '',
       },
       to: contextToVal
     }]

@@ -1,6 +1,6 @@
 module.exports = Object.freeze({
   EmailProperties: {
-    FROM_EMAIL: 'donotreplyCHEFS@gov.bc.ca'
+    FROM_EMAIL: 'WorkBC Forms <donotreplyWorkBCForms@gov.bc.ca>'
   },
   EmailTypes: {
     SUBMISSION_ASSIGNED: 'submissionAssigned',
