@@ -53,17 +53,15 @@
                     label="Basic BCeID"
                     :value="ID_PROVIDERS.BCEIDBASIC"
                   />
-                  <!-- Commented out as per IDIM request -->
-                  <!-- <v-radio
+                  <v-radio
                     class="mx-2"
-                    disabled
                     label="Business BCeID"
                     :value="ID_PROVIDERS.BCEIDBUSINESS"
-                  /> -->
+                  />
                   <!-- Mandatory BCeID process notification -->
                   <v-expand-transition>
                     <BaseInfoCard
-                      v-if="idps[0] && idps[0] === ID_PROVIDERS.BCEIDBASIC"
+                      v-if="idps[0] && [ID_PROVIDERS.BCEIDBASIC, ID_PROVIDERS.BCEIDBUSINESS].includes(idps[0])"
                       class="mr-4"
                     >
                       <h4 class="primary--text">
@@ -79,7 +77,7 @@
                       <p class="mt-2 mb-0">
                         Please reference our
                         <a
-                          href="https://github.com/bcgov/common-hosted-form-service/wiki/Form-Access#please-notify-the-idim-team-if-you-are-using-bceid"
+                          href="https://github.com/bcgov/common-hosted-form-service/wiki/Accessing-forms#Notify-the-idim-team-if-you-are-using-bceid"
                         >user guide</a
                         >
                         for more details.

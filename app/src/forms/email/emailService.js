@@ -25,6 +25,17 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
       priority: 'normal',
       form,
     };
+  } else if (emailType === EmailTypes.STATUS_COMPLETED) {
+    contextToVal = [additionalProperties.submissionUserEmail];
+    userTypePath = 'user/view';
+    configData = {
+      bodyTemplate: 'submission-completed.html',
+      title: `${form.name} Has Been Completed`,
+      subject: 'Form Has Been Completed',
+      messageLinkText: `Your submission from ${form.name} has been Completed.`,
+      priority: 'normal',
+      form,
+    };
   } else if (emailType === EmailTypes.SUBMISSION_UNASSIGNED) {
     contextToVal = [additionalProperties.assignmentNotificationEmail];
     userTypePath = 'user/view';
@@ -48,7 +59,7 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
       form,
     };
   } else if (emailType === EmailTypes.STATUS_REVISING) {
-    contextToVal = [additionalProperties.revisionNotificationEmail];
+    contextToVal = [additionalProperties.submissionUserEmail];
     userTypePath = 'user/view';
     configData = {
       bodyTemplate: 'send-status-revising-email-body.html',
@@ -93,7 +104,7 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
         form: configData.form,
         messageLinkText: configData.messageLinkText,
         messageLinkUrl: `${service._appUrl(referer)}/${userTypePath}?s=${submission.id}`,
-        revisionNotificationEmailContent: additionalProperties.revisionNotificationEmailContent,
+        emailContent: additionalProperties.emailContent,
         title: configData.title
       },
       to: contextToVal
@@ -232,12 +243,13 @@ const service = {
    * @param {string} formId
    * @param {string} currentStatus
    * @param {string} assignmentNotificationEmail
+   * @param {string} emailContent
    * @param {string} referer
    * @returns The result of the email merge operation
    */
-  statusAssigned: async (formId, currentStatus, assignmentNotificationEmail, referer) => {
+  statusAssigned: async (formId, currentStatus, assignmentNotificationEmail, emailContent, referer) => {
     try {
-      const { configData, contexts } = await buildEmailTemplate(formId, currentStatus.submissionId, EmailTypes.STATUS_ASSIGNED, referer, { assignmentNotificationEmail });
+      const { configData, contexts } = await buildEmailTemplate(formId, currentStatus.submissionId, EmailTypes.STATUS_ASSIGNED, referer, { assignmentNotificationEmail, emailContent });
 
       return service._sendEmailTemplate(configData, contexts);
     } catch (e) {
@@ -251,18 +263,42 @@ const service = {
   },
 
   /**
+   * @function statusCompleted
+   * Setting Completed status to user on Submission
+   * @param {string} formId
+   * @param {string} currentStatus
+   * @param {string} submissionUserEmail The email address to send to
+   * @param {string} emailContent
+   * @param {string} referer
+   * @returns {object} The result of the email merged from operation
+   */
+  statusCompleted: async (formId, currentStatus, submissionUserEmail, emailContent, referer) => {
+    try {
+      const { configData, contexts } = await buildEmailTemplate(formId, currentStatus.submissionId, EmailTypes.STATUS_COMPLETED, referer, { submissionUserEmail, emailContent });
+      return service._sendEmailTemplate(configData, contexts);
+    } catch (e) {
+      log.error(e.message, {
+        function: EmailTypes.STATUS_COMPLETED,
+        status: currentStatus,
+        referer: referer
+      });
+      throw e;
+    }
+  },
+
+  /**
    * @function statusRevising
    * Revising status to submission form owner
    * @param {string} formId The form id
    * @param {string} currentStatus The current status
-   * @param {string} revisionNotificationEmail The email address to send to
-   * @param {string} revisionNotificationEmailContent The optional content to send as a comment
+   * @param {string} submissionUserEmail The email address to send to
+   * @param {string} emailContent The optional content to send as a comment
    * @param {string} referer The currently logged in user
    * @returns The result of the email merge operation
    */
-  statusRevising: async (formId, currentStatus, revisionNotificationEmail, revisionNotificationEmailContent, referer) => {
+  statusRevising: async (formId, currentStatus, submissionUserEmail, emailContent, referer) => {
     try {
-      const { configData, contexts } = await buildEmailTemplate(formId, currentStatus.submissionId, EmailTypes.STATUS_REVISING, referer, { revisionNotificationEmail, revisionNotificationEmailContent });
+      const { configData, contexts } = await buildEmailTemplate(formId, currentStatus.submissionId, EmailTypes.STATUS_REVISING, referer, { submissionUserEmail, emailContent });
 
       return service._sendEmailTemplate(configData, contexts);
     } catch (e) {
@@ -287,8 +323,11 @@ const service = {
   submissionReceived: async (formId, submissionId, body, referer) => {
     try {
       const { configData, contexts } = await buildEmailTemplate(formId, submissionId, EmailTypes.SUBMISSION_RECEIVED, referer, { body });
-
-      return service._sendEmailTemplate(configData, contexts);
+      if (contexts[0].to.length) {
+        return service._sendEmailTemplate(configData, contexts);
+      } else {
+        return {};
+      }
     } catch (e) {
       log.error(e.message, {
         function: EmailTypes.SUBMISSION_RECEIVED,
