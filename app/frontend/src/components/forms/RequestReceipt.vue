@@ -3,7 +3,7 @@
     <v-btn color="primary" text small @click="displayDialog">
       <v-icon class="mr-1">email</v-icon>
       <span v-if="lang === 'en' || lang === ''">Email a receipt of this submission</span>
-      <span v-if="lang === 'fr'">Envoyer par courriel un accusé de réception de cette soumission</span>
+      <span v-if="lang === 'fr'">Envoyer un courriel de confirmation de cet envoi</span>
     </v-btn>
 
     <BaseDialog
@@ -27,7 +27,7 @@
             flat
             solid
             outlined
-            :label="lang === 'fr' ? 'Envoyer à l\'adresse e-mail' : 'Send to E-mail Address'"
+            :label="lang === 'fr' ? 'Envoyer à l\'adresse courriel' : 'Send to E-mail Address'"
             :rules="emailRules"
             v-model="to"
             data-test="text-form-to"
@@ -35,12 +35,12 @@
         </v-form>
       </template>
       <template v-slot:button-text-cancel>
-        <span v-if="lang === 'en' || lang === ''">CANCEL</span>
         <span v-if="lang === 'fr'">ANNULER</span>
+        <span v-else>CANCEL</span>
       </template>
       <template v-slot:button-text-continue>
-        <span v-if="lang === 'en' || lang === ''">SEND</span>
         <span v-if="lang === 'fr'">ENVOYER</span>
+        <span v-else>SEND</span>
       </template>
 
     </BaseDialog>
@@ -73,7 +73,7 @@ export default {
             to: this.to,
           });
           this.addNotification({
-            message: `An email has been sent to ${this.to}.`,
+            message: lang === 'fr' ? `Un courriel a été envoyé à ${this.to}.` : `An email has been sent to ${this.to}.`,
             ...NotificationTypes.SUCCESS,
           });
         } catch (error) {

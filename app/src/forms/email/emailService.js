@@ -91,7 +91,7 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
       subject: `${form.name} Accepted/Accepté`,
       priority: 'normal',
       messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
-      messageLinkTextFR: `Merci pour votre soumission de ${form.name}. Vous pouvez consulter les détails de votre soumission en visitant les liens suivants:`,
+      messageLinkTextFR: `Merci de l’envoi de votre formulaire de ${form.name}. Vous pouvez visualiser vos renseignements envoyés en suivant les liens suivants:`,
       form,
     };
   }
