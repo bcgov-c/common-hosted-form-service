@@ -73,7 +73,7 @@ export default {
             to: this.to,
           });
           this.addNotification({
-            message: lang === 'fr' ? `Un courriel a été envoyé à ${this.to}.` : `An email has been sent to ${this.to}.`,
+            message: this.lang === 'fr' ? `Un courriel a été envoyé à ${this.to}.` : `An email has been sent to ${this.to}.`,
             ...NotificationTypes.SUCCESS,
           });
         } catch (error) {
