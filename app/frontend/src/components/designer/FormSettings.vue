@@ -62,9 +62,11 @@
               <v-row v-if="userType === ID_MODE.LOGIN" class="pl-6">
                 <v-radio-group class="my-0" v-model="idps[0]">
                   <v-radio class="mx-2" label="IDIR" :value="ID_PROVIDERS.IDIR" />
-                  <v-radio class="mx-2" label="Basic BCeID" :value="ID_PROVIDERS.BCEIDBASIC"/>
-                  <v-radio class="mx-2" label="Business BCeID" :value="ID_PROVIDERS.BCEIDBUSINESS"/>
+                  <!--<v-radio class="mx-2" label="Basic BCeID" :value="ID_PROVIDERS.BCEIDBASIC"/-->
+                  <!--<v-radio class="mx-2" label="Business BCeID" :value="ID_PROVIDERS.BCEIDBUSINESS"/-->
+                  <v-radio class="mx-2" label="Basic or Business BCeID" :value="ID_PROVIDERS.BCEIDBOTH"/>
                   <!-- Mandatory BCeID process notification -->
+                  <!--
                   <v-expand-transition>
                     <BaseInfoCard
                       v-if="idps[0] && [ID_PROVIDERS.BCEIDBASIC, ID_PROVIDERS.BCEIDBUSINESS].includes(idps[0])"
@@ -90,6 +92,7 @@
                       </p>
                     </BaseInfoCard>
                   </v-expand-transition>
+                  -->
                 </v-radio-group>
               </v-row>
             </v-expand-transition>

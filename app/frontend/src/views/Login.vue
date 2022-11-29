@@ -55,6 +55,12 @@ export default {
       },
       {
         disabled: false,
+        label: 'Basic or Business BCeID',
+        type: IdentityProviders.BCEIDBOTH,
+      },
+      /*
+      {
+        disabled: false,
         label: 'Basic BCeID',
         type: IdentityProviders.BCEIDBASIC,
       },
@@ -63,6 +69,7 @@ export default {
         label: 'Business BCeID',
         type: IdentityProviders.BCEIDBUSINESS,
       },
+      */
     ]),
   },
   methods: {
