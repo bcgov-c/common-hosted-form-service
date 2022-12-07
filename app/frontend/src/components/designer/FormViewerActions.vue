@@ -1,5 +1,6 @@
 <template>
   <v-row class="d-print-none">
+    <!--
     <v-col v-if="formId">
       <router-link :to="{ name: 'UserSubmissions', query: { f: formId } }">
         <v-btn color="primary" outlined>
@@ -7,6 +8,7 @@
         </v-btn>
       </router-link>
     </v-col>
+    -->
     <v-col v-if="draftEnabled" class="text-right">
       <!-- Save a draft -->
       <span v-if="canSaveDraft" class="ml-2">
@@ -48,22 +50,26 @@
       </span>
 
       <!-- Go to draft edit -->
+      <!--
       <span v-if="submissionId" class="ml-2">
         <ManageSubmissionUsers :isDraft="isDraft" :submissionId="submissionId" />
       </span>
+      -->
     </v-col>
   </v-row>
 </template>
 
 <script>
 import { FormPermissions } from '@/utils/constants';
-import ManageSubmissionUsers from '@/components/forms/submission/ManageSubmissionUsers.vue';
+// import ManageSubmissionUsers from '@/components/forms/submission/ManageSubmissionUsers.vue';
 
 export default {
   name: 'MySubmissionsActions',
+  /*
   components: {
     ManageSubmissionUsers,
   },
+  */
   props: {
     draftEnabled: {
       type: Boolean,

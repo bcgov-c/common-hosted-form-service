@@ -23,6 +23,7 @@
           <span>
             <PrintOptions :submissionId="submissionId" />
           </span>
+          <!--
           <span>
             <v-tooltip bottom>
               <template #activator="{ on, attrs }">
@@ -35,6 +36,7 @@
               <span>View All Submissions</span>
             </v-tooltip>
           </span>
+          -->
           <DeleteSubmission @deleted="onDelete" :submissionId="submissionId" />
         </v-col>
       </v-row>
