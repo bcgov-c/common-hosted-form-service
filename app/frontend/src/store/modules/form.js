@@ -120,7 +120,8 @@ export default {
           idps: f.idps,
           name: f.formName,
           description: f.formDescription,
-          permissions: f.permissions
+          permissions: f.permissions,
+          published: f.published
         }));
         commit('SET_FORMLIST', forms);
       } catch (error) {
@@ -350,15 +351,15 @@ export default {
         }, { root: true });
       }
     },
-    async fetchSubmissions({ commit, dispatch, state }, { formId, userView, deletedOnly = false }) {
+    async fetchSubmissions({ commit, dispatch, state }, { formId, userView, deletedOnly = false, createdBy = '' }) {
       try {
         commit('SET_SUBMISSIONLIST', []);
         // Get list of active submissions for this form (for either all submissions, or just single user)
         const fields = state.userFormPreferences &&
-          state.userFormPreferences.preferences ? state.userFormPreferences.preferences.columnList : undefined;
+          state.userFormPreferences.preferences ? state.userFormPreferences.preferences.columns : undefined;
         const response = userView
           ? await rbacService.getUserSubmissions({ formId: formId })
-          : await formService.listSubmissions(formId, { deleted: deletedOnly, fields: fields });
+          : await formService.listSubmissions(formId, { deleted: deletedOnly, fields: fields, createdBy: createdBy  });
         commit('SET_SUBMISSIONLIST', response.data);
       } catch (error) {
         dispatch('notifications/addNotification', {
