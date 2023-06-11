@@ -8,30 +8,20 @@ const referer = 'https://chefs.nrs.gov.bc.ca';
 
 describe('_appUrl', () => {
   it('should format the url', () => {
-    expect(
-      emailService._appUrl(
-        'https://chefs-dev.apps.silver.devops.gov.bc.ca/pr-139/form/success?s=13978f3b-056b-4022-9a30-60d3b63ec459'
-      )
-    ).toEqual('https://chefs-dev.apps.silver.devops.gov.bc.ca/pr-139');
-    expect(
-      emailService._appUrl(
-        'https://chefs.nrs.gov.bc.ca/app/form/success?s=13978f3b-056b-4022-9a30-60d3b63ec459'
-      )
-    ).toEqual('https://chefs.nrs.gov.bc.ca/app');
+    expect(emailService._appUrl('https://chefs-dev.apps.silver.devops.gov.bc.ca/pr-139/form/success?s=13978f3b-056b-4022-9a30-60d3b63ec459')).toEqual(
+      'https://chefs-dev.apps.silver.devops.gov.bc.ca/pr-139'
+    );
+    expect(emailService._appUrl('https://chefs.nrs.gov.bc.ca/app/form/success?s=13978f3b-056b-4022-9a30-60d3b63ec459')).toEqual('https://chefs.nrs.gov.bc.ca/app');
   });
 
   it('should rethrow exceptions', () => {
-    expect(() => emailService._appUrl('notaurl')).toThrow(
-      'Invalid URL'
-    );
+    expect(() => emailService._appUrl('notaurl')).toThrow('Invalid URL');
   });
 });
 
 describe('_mergeEmailTemplate', () => {
   it('should merge two html files', () => {
-    mockedReadFileSync
-      .mockReturnValueOnce('<!-- BODY END -->')
-      .mockReturnValueOnce('<h1>New Body</h1>');
+    mockedReadFileSync.mockReturnValueOnce('<!-- BODY END -->').mockReturnValueOnce('<h1>New Body</h1>');
 
     const result = emailService._mergeEmailTemplate('test-file.html');
 
@@ -57,9 +47,7 @@ describe('_sendEmailTemplate', () => {
   };
 
   beforeEach(() => {
-    mockedReadFileSync
-      .mockReturnValueOnce('<!-- BODY END -->')
-      .mockReturnValueOnce('<h1>New Body</h1>');
+    mockedReadFileSync.mockReturnValueOnce('<!-- BODY END -->').mockReturnValueOnce('<h1>New Body</h1>');
   });
 
   afterEach(() => {
@@ -70,12 +58,7 @@ describe('_sendEmailTemplate', () => {
     chesService.merge = jest.fn().mockReturnValue('sent');
     emailService._mergeEmailTemplate = jest.fn().mockReturnValue('merged');
 
-    const result = emailService._sendEmailTemplate(
-      'sendStatusAssigned',
-      configData,
-      submission,
-      referer
-    );
+    const result = emailService._sendEmailTemplate('sendStatusAssigned', configData, submission, referer);
 
     expect(result).toBeTruthy();
     expect(chesService.merge).toHaveBeenCalledTimes(1);
@@ -85,12 +68,7 @@ describe('_sendEmailTemplate', () => {
     chesService.merge = jest.fn().mockReturnValue('sent');
     emailService._mergeEmailTemplate = jest.fn().mockReturnValue('merged');
 
-    const result = emailService._sendEmailTemplate(
-      'sendSubmissionConfirmation',
-      configData,
-      submission,
-      referer
-    );
+    const result = emailService._sendEmailTemplate('sendSubmissionConfirmation', configData, submission, referer);
 
     expect(result).toBeTruthy();
     expect(chesService.merge).toHaveBeenCalledTimes(1);
@@ -100,12 +78,7 @@ describe('_sendEmailTemplate', () => {
     chesService.merge = jest.fn().mockReturnValue('sent');
     emailService._mergeEmailTemplate = jest.fn().mockReturnValue('merged');
 
-    const result = emailService._sendEmailTemplate(
-      'sendSubmissionReceived',
-      configData,
-      submission,
-      referer
-    );
+    const result = emailService._sendEmailTemplate('sendSubmissionReceived', configData, submission, referer);
 
     expect(result).toBeTruthy();
     expect(chesService.merge).toHaveBeenCalledTimes(1);
@@ -121,11 +94,11 @@ describe('public methods', () => {
     id: 'xxx-yyy',
     showSubmissionConfirmation: true,
     name: '123',
-    submissionReceivedEmails: ['a@b.com','z@y.com'],
+    submissionReceivedEmails: ['a@b.com', 'z@y.com'],
     identityProviders: [
       {
         idp: 'public',
-      }
+      },
     ],
   };
   const submission = {
@@ -144,13 +117,7 @@ describe('public methods', () => {
     formService.readForm = jest.fn().mockReturnValue(form);
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
-    const result = await emailService.statusAssigned(
-      '123',
-      currentStatus,
-      assignmentNotificationEmail,
-      emailContent,
-      referer
-    );
+    const result = await emailService.statusAssigned('123', currentStatus, assignmentNotificationEmail, emailContent, referer);
     const configData = {
       bodyTemplate: 'send-status-assigned-email-body.html',
       title: `${form.name} Submission Assignment`,
@@ -171,7 +138,7 @@ describe('public methods', () => {
         emailContent: 'Email Content',
         title: '123 Submission Assignment'
       },
-      to: ['x@y.com']
+      to: ['x@y.com'],
     }];
 
     expect(result).toEqual('ret');
@@ -183,13 +150,7 @@ describe('public methods', () => {
     formService.readForm = jest.fn().mockReturnValue(form);
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
-    const result = await emailService.statusRevising(
-      '123',
-      currentStatus,
-      assignmentNotificationEmail,
-      emailContent,
-      referer
-    );
+    const result = await emailService.statusRevising('123', currentStatus, assignmentNotificationEmail, emailContent, referer);
     const configData = {
       bodyTemplate: 'send-status-revising-email-body.html',
       title: `${form.name} Submission Revision Requested`,
@@ -210,7 +171,7 @@ describe('public methods', () => {
         emailContent: 'Email Content',
         title: `${form.name} Submission Revision Requested`
       },
-      to: ['x@y.com']
+      to: ['x@y.com'],
     }];
 
     expect(result).toEqual('ret');
@@ -222,13 +183,7 @@ describe('public methods', () => {
     formService.readForm = jest.fn().mockReturnValue(form);
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
-    const result = await emailService.statusCompleted(
-      '123',
-      currentStatus,
-      assignmentNotificationEmail,
-      emailContent,
-      referer
-    );
+    const result = await emailService.statusCompleted('123', currentStatus, assignmentNotificationEmail, emailContent, referer);
     const configData = {
       bodyTemplate: 'submission-completed.html',
       title: `${form.name} Has Been Completed`,
@@ -249,7 +204,7 @@ describe('public methods', () => {
         emailContent: 'Email Content',
         title: `${form.name} Has Been Completed`
       },
-      to: ['x@y.com']
+      to: ['x@y.com'],
     }];
 
     expect(result).toEqual('ret');
@@ -262,12 +217,7 @@ describe('public methods', () => {
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
 
-    const result = await emailService.submissionConfirmation(
-      form.id,
-      submission.id,
-      body,
-      referer
-    );
+    const result = await emailService.submissionConfirmation(form.id, submission.id, body, referer);
 
     const configData = {
       bodyTemplate: 'submission-received-confirmation-public.html',
@@ -290,7 +240,7 @@ describe('public methods', () => {
         emailContent: undefined,
         title: `${form.name} Accepted/Accepté`
       },
-      to: ['a@b.com']
+      to: ['a@b.com'],
     }];
 
     expect(result).toEqual('ret');
@@ -307,12 +257,7 @@ describe('public methods', () => {
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
 
-    const result = await emailService.submissionReceived(
-      form.id,
-      submission.id,
-      body,
-      referer
-    );
+    const result = await emailService.submissionReceived(form.id, submission.id, body, referer);
 
     const configData = {
       bodyTemplate: 'submission-confirmation.html',
@@ -335,7 +280,7 @@ describe('public methods', () => {
         emailContent: undefined,
         title: `${form.name} Submission`
       },
-      to: ['a@b.com', 'z@y.com']
+      to: ['a@b.com', 'z@y.com'],
     }];
 
     expect(result).toEqual('ret');
@@ -353,12 +298,7 @@ describe('public methods', () => {
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
 
-    const result = await emailService.submissionUnassigned(
-      form.id,
-      currentStatus,
-      assignmentNotificationEmail,
-      referer
-    );
+    const result = await emailService.submissionUnassigned(form.id, currentStatus, assignmentNotificationEmail, referer);
 
     const configData = {
       bodyTemplate: 'submission-unassigned.html',
@@ -380,7 +320,7 @@ describe('public methods', () => {
         emailContent: undefined,
         title: `Uninvited From ${form.name} Draft`
       },
-      to: ['x@y.com']
+      to: ['x@y.com'],
     }];
 
     expect(result).toEqual('ret');
@@ -395,12 +335,7 @@ describe('public methods', () => {
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
 
-    const result = await emailService.submissionAssigned(
-      form.id,
-      currentStatus,
-      assignmentNotificationEmail,
-      referer
-    );
+    const result = await emailService.submissionAssigned(form.id, currentStatus, assignmentNotificationEmail, referer);
 
     const configData = {
       bodyTemplate: 'submission-assigned.html',
@@ -422,7 +357,7 @@ describe('public methods', () => {
         emailContent: undefined,
         title: `Invited to ${form.name} Draft`
       },
-      to: ['x@y.com']
+      to: ['x@y.com'],
     }];
 
     expect(result).toEqual('ret');

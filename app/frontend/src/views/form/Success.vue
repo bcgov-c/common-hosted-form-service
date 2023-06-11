@@ -60,6 +60,6 @@ export default {
     FormViewer,
     RequestReceipt,
   },
-  computed: mapGetters('auth', ['email'])
+  computed: mapGetters('auth', ['email']),
 };
 </script>

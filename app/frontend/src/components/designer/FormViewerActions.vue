@@ -52,7 +52,10 @@
       <!-- Go to draft edit -->
       <!--
       <span v-if="submissionId" class="ml-2">
-        <ManageSubmissionUsers :isDraft="isDraft" :submissionId="submissionId" />
+        <ManageSubmissionUsers
+          :isDraft="isDraft"
+          :submissionId="submissionId"
+        />
       </span>
       -->
     </v-col>

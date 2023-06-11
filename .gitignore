@@ -16,6 +16,7 @@ node_modules
 
 
 
+
 # local env files
 local.*
 local-*.*
@@ -57,3 +58,4 @@ build
 
 !app/frontend/.env
 !local-infrastructure/.env
+.history

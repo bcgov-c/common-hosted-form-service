@@ -10,7 +10,9 @@
       <div class="dialog-body">
         <div v-if="showCloseButton">
           <v-spacer />
-          <v-icon color="primary" class="float-right m-3" @click="closeDialog">close</v-icon>
+          <v-icon color="primary" class="float-right m-3" @click="closeDialog"
+            >close</v-icon
+          >
         </div>
         <v-card-title class primary-title>
           <slot name="title"></slot>
@@ -68,6 +70,34 @@
             </slot>
           </v-btn>
         </div>
+        <div v-else-if="type === 'CUSTOM'">
+          <v-btn
+            class="mb-5 mr-5"
+            color="primary"
+            depressed
+            @click="continueDialog"
+          >
+            <slot name="button-text-continue">
+              <span>Continue</span>
+            </slot>
+          </v-btn>
+          <v-btn
+            class="mb-5 mr-5"
+            color="primary"
+            depressed
+            @click="customDialog"
+            v-if="enableCustomButton"
+          >
+            <slot name="button-text-custom">
+              <span>Custom</span>
+            </slot>
+          </v-btn>
+          <v-btn class="mb-5" outlined @click="closeDialog">
+            <slot name="button-text-cancel">
+              <span>Cancel</span>
+            </slot>
+          </v-btn>
+        </div>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -86,6 +116,9 @@ export default {
     deleteDialog() {
       this.$emit('delete-dialog');
     },
+    customDialog() {
+      this.$emit('custom-dialog');
+    },
   },
   props: {
     value: {
@@ -103,6 +136,10 @@ export default {
     width: {
       default: '500',
       type: String,
+    },
+    enableCustomButton: {
+      default: false,
+      type: Boolean,
     },
   },
 };

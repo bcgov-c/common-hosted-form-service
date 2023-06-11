@@ -1,5 +1,5 @@
 <template>
-  <BaseSecure :idp="IDP.IDIR">
+  <BaseSecure :idp="[IDP.IDIR]">
     <h1 class="my-6 text-center">Create New Form</h1>
     <v-stepper v-model="creatorStep" class="elevation-0">
       <v-stepper-header class="elevation-0 px-0">
@@ -33,13 +33,13 @@
             class="py-4"
             color="primary"
             :disabled="!settingsFormValid"
-            @click="creatorStep = 2"
+            @click="reRenderFormDesigner"
           >
             <span>Continue</span>
           </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2" class="pa-1">
-          <FormDesigner @create-stepper="creatorStep = 1"/>
+          <FormDesigner ref="formDesigner" />
           <v-btn class="my-4" outlined @click="creatorStep = 1">
             <span>Back</span>
           </v-btn>
@@ -50,7 +50,6 @@
 </template>
 
 <script>
-
 import { mapActions } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import FormDesigner from '@/components/designer/FormDesigner.vue';
@@ -79,10 +78,20 @@ export default {
     };
   },
   methods: {
-    ...mapActions('form', ['resetForm']),
+    ...mapActions('form', ['listFCProactiveHelp', 'resetForm']),
+    reRenderFormDesigner() {
+      this.creatorStep = 2;
+      this.$refs.formDesigner.onFormLoad();
+    },
   },
   created() {
     this.resetForm();
+  },
+  mounted() {
+    this.listFCProactiveHelp();
+    this.$nextTick(() => {
+      this.$refs.formDesigner.onFormLoad();
+    });
   },
   watch: {
     idps() {
@@ -94,13 +103,12 @@ export default {
   beforeRouteLeave(_to, _from, next) {
     this.isDirty
       ? next(
-        window.confirm(
-          'Do you really want to leave this page? Changes you made will not be saved.'
+          window.confirm(
+            'Do you really want to leave this page? Changes you made will not be saved.'
+          )
         )
-      )
       : next();
   },
-
 };
 </script>
 
