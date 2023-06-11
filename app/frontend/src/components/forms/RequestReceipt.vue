@@ -40,7 +40,6 @@
         <span v-if="lang === 'fr'">ENVOYER</span>
         <span v-else>SEND</span>
       </template>
-
     </BaseDialog>
   </div>
 </template>
@@ -110,8 +109,8 @@ export default {
     },
     lang: {
       type: String,
-      default: 'en'
-    }
+      default: 'en',
+    },
   },
 };
 </script>

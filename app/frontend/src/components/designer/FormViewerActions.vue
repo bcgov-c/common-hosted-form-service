@@ -7,7 +7,7 @@
       </v-btn>
     </v-col>
     -->
-    <v-col v-if="draftEnabled" class="text-right">
+    <v-col v-if="draftEnabled" class="text-right" />
     <v-col class="text-right">
       <!-- Bulk button -->
       <span v-if="allowSubmitterToUploadFile && !block" class="ml-2">
