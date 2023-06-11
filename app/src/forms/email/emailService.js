@@ -101,19 +101,21 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
 
   return {
     configData,
-    contexts: [{
-      context: {
-        allFormSubmissionUrl: `${service._appUrl(referer)}/user/submissions?f=${configData.form.id}`,
-        confirmationNumber: submission.confirmationId,
-        form: configData.form,
-        messageLinkText: configData.messageLinkText,
-        messageLinkUrl: `${service._appUrl(referer)}/${userTypePath}?s=${submission.id}`,
-        emailContent: additionalProperties.emailContent,
-        title: configData.title,
-        messageLinkTextFR: configData.messageLinkTextFR || '',
+    contexts: [
+      {
+        context: {
+          allFormSubmissionUrl: `${service._appUrl(referer)}/user/submissions?f=${configData.form.id}`,
+          confirmationNumber: submission.confirmationId,
+          form: configData.form,
+          messageLinkText: configData.messageLinkText,
+          messageLinkUrl: `${service._appUrl(referer)}/${userTypePath}?s=${submission.id}`,
+          emailContent: additionalProperties.emailContent,
+          title: configData.title,
+          messageLinkTextFR: configData.messageLinkTextFR || '',
+        },
+        to: contextToVal,
       },
-      to: contextToVal
-    }],
+    ],
   };
 };
 
