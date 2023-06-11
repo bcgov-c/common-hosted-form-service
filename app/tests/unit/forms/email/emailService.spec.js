@@ -127,19 +127,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: 'You have been assigned to a 123 submission. Please login to review it.',
-        messageLinkTextFR: '',
-        messageLinkUrl: 'https://form/view?s=123',
-        emailContent: 'Email Content',
-        title: '123 Submission Assignment'
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: 'You have been assigned to a 123 submission. Please login to review it.',
+          messageLinkTextFR: '',
+          messageLinkUrl: 'https://form/view?s=123',
+          emailContent: 'Email Content',
+          title: '123 Submission Assignment',
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com'],
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(emailService._sendEmailTemplate).toHaveBeenCalledTimes(1);
@@ -160,19 +162,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `You have been asked to revise a ${form.name} submission. Please login to review it.`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://user/view?s=${form.name}`,
-        emailContent: 'Email Content',
-        title: `${form.name} Submission Revision Requested`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `You have been asked to revise a ${form.name} submission. Please login to review it.`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://user/view?s=${form.name}`,
+          emailContent: 'Email Content',
+          title: `${form.name} Submission Revision Requested`,
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com'],
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(emailService._sendEmailTemplate).toHaveBeenCalledTimes(1);
@@ -193,19 +197,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `Your submission from ${form.name} has been Completed.`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://user/view?s=${form.name}`,
-        emailContent: 'Email Content',
-        title: `${form.name} Has Been Completed`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `Your submission from ${form.name} has been Completed.`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://user/view?s=${form.name}`,
+          emailContent: 'Email Content',
+          title: `${form.name} Has Been Completed`,
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com'],
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(emailService._sendEmailTemplate).toHaveBeenCalledTimes(1);
@@ -229,19 +235,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
-        messageLinkTextFR: `Merci de l’envoi de votre formulaire de ${form.name}. Vous pouvez visualiser vos renseignements envoyés en suivant les liens suivants:`,
-        messageLinkUrl: `https://form/success?s=${form.name}`,
-        emailContent: undefined,
-        title: `${form.name} Accepted/Accepté`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
+          messageLinkTextFR: `Merci de l’envoi de votre formulaire de ${form.name}. Vous pouvez visualiser vos renseignements envoyés en suivant les liens suivants:`,
+          messageLinkUrl: `https://form/success?s=${form.name}`,
+          emailContent: undefined,
+          title: `${form.name} Accepted/Accepté`,
+        },
+        to: ['a@b.com'],
       },
-      to: ['a@b.com'],
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(formService.readForm).toHaveBeenCalledTimes(1);
@@ -269,19 +277,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `There is a new ${form.name} submission. Please login to review it.`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://form/view?s=${form.name}`,
-        emailContent: undefined,
-        title: `${form.name} Submission`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `There is a new ${form.name} submission. Please login to review it.`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://form/view?s=${form.name}`,
+          emailContent: undefined,
+          title: `${form.name} Submission`,
+        },
+        to: ['a@b.com', 'z@y.com'],
       },
-      to: ['a@b.com', 'z@y.com'],
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(formService.readForm).toHaveBeenCalledTimes(1);
@@ -309,19 +319,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `You have been uninvited from ${form.name} submission draft.`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://user/view?s=${form.name}`,
-        emailContent: undefined,
-        title: `Uninvited From ${form.name} Draft`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `You have been uninvited from ${form.name} submission draft.`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://user/view?s=${form.name}`,
+          emailContent: undefined,
+          title: `Uninvited From ${form.name} Draft`,
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com'],
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(formService.readForm).toHaveBeenCalledTimes(1);
@@ -346,19 +358,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `You have been invited to a ${form.name} submission draft. You can review your submission draft details by visiting the following links:`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://user/view?s=${form.name}`,
-        emailContent: undefined,
-        title: `Invited to ${form.name} Draft`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `You have been invited to a ${form.name} submission draft. You can review your submission draft details by visiting the following links:`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://user/view?s=${form.name}`,
+          emailContent: undefined,
+          title: `Invited to ${form.name} Draft`,
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com'],
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(formService.readForm).toHaveBeenCalledTimes(1);
