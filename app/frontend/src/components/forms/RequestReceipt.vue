@@ -36,10 +36,6 @@
       <template v-slot:button-text-continue>
         <span>{{ $t('trans.requestReceipt.send') }}</span>
       </template>
-      <template v-slot:button-text-continue>
-        <span v-if="lang === 'fr'">ENVOYER</span>
-        <span v-else>SEND</span>
-      </template>
     </BaseDialog>
   </div>
 </template>

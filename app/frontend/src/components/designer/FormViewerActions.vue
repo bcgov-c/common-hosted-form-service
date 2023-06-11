@@ -89,7 +89,6 @@
 
 <script>
 import { FormPermissions } from '@/utils/constants';
-import ManageSubmissionUsers from '@/components/forms/submission/ManageSubmissionUsers.vue';
 import PrintOptions from '@/components/forms/PrintOptions.vue';
 
 export default {

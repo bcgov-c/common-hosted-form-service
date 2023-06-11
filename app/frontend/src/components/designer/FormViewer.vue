@@ -20,7 +20,7 @@
       </template>
     </div>
 
-    <slot name="alert" v-bind:form="form" v-bind:submission="submission" />
+    <!-- <slot name="alert" v-bind:form="form" v-bind:submission="submission" /> -->
     <div v-else>
       <div v-if="displayTitle">
         <div v-if="!isFormPublic(form)">
