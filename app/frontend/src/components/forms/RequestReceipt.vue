@@ -2,8 +2,7 @@
   <div>
     <v-btn color="primary" text small @click="displayDialog">
       <v-icon class="mr-1">email</v-icon>
-      <span v-if="lang === 'en' || lang === ''">Email a receipt of this submission</span>
-      <span v-if="lang === 'fr'">Envoyer un courriel de confirmation de cet envoi</span>
+      <span>{{ $t('trans.requestReceipt.emailReceipt') }}</span>
     </v-btn>
 
     <BaseDialog
@@ -27,16 +26,15 @@
             flat
             solid
             outlined
-            :label="lang === 'fr' ? 'Envoyer à l\'adresse courriel' : 'Send to E-mail Address'"
+            :label="$t('trans.requestReceipt.sendToEmailAddress')"
             :rules="emailRules"
             v-model="to"
             data-test="text-form-to"
           />
         </v-form>
       </template>
-      <template v-slot:button-text-cancel>
-        <span v-if="lang === 'fr'">ANNULER</span>
-        <span v-else>CANCEL</span>
+      <template v-slot:button-text-continue>
+        <span>{{ $t('trans.requestReceipt.send') }}</span>
       </template>
       <template v-slot:button-text-continue>
         <span v-if="lang === 'fr'">ENVOYER</span>
@@ -56,7 +54,7 @@ import { formService } from '@/services';
 export default {
   name: 'RequestReceipt',
   data: () => ({
-    emailRules: [(v) => !!v || 'E-mail is required'],
+    emailRules: [(v) => !!v || this.$t('trans.requestReceipt.emailRequired')],
     showDialog: false,
     to: '',
     valid: false,
@@ -73,13 +71,16 @@ export default {
             to: this.to,
           });
           this.addNotification({
-            message: this.lang === 'fr' ? `Un courriel a été envoyé à ${this.to}.` : `An email has been sent to ${this.to}.`,
+            message: this.$t('trans.requestReceipt.emailSent', { to: this.to }),
             ...NotificationTypes.SUCCESS,
           });
         } catch (error) {
           this.addNotification({
-            message: 'An error occured while attempting to send your email.',
-            consoleError: `Email confirmation to ${this.to} failed: ${error}`,
+            message: this.$t('trans.requestReceipt.sendingEmailErrMsg'),
+            consoleError: this.$t(
+              'trans.requestReceipt.sendingEmailConsErrMsg',
+              { to: this.to, error: error }
+            ),
           });
         } finally {
           this.showDialog = false;

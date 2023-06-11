@@ -7,13 +7,13 @@
         <v-col cols="12" sm="6" order="2" order-sm="1">
           <h1>{{ form.name }}</h1>
           <p>
-            <strong>Submitted:</strong>
+            <strong>{{ $t('trans.formSubmission.submitted') }}</strong>
             {{ formSubmission.createdAt | formatDateLong }}
             <br />
-            <strong>Confirmation ID:</strong>
+            <strong>{{ $t('trans.formSubmission.confirmationID') }}</strong>
             {{ formSubmission.confirmationId }}
             <br />
-            <strong>Submitted By:</strong>
+            <strong>{{ $t('trans.formSubmission.submittedBy') }}</strong>
             {{ formSubmission.createdBy }}
             <br />
           </p>
@@ -47,7 +47,7 @@
                   </v-btn>
                 </router-link>
               </template>
-              <span>View All Submissions</span>
+              <span>{{ $t('trans.formSubmission.viewAllSubmissions') }}</span>
             </v-tooltip>
           </span>
           -->
@@ -66,15 +66,16 @@
         <v-alert
           :value="!submissionReadOnly"
           :class="'d-print-none ' + NOTIFICATIONS_TYPES.INFO.class"
-          :color="NOTIFICATIONS_TYPES.INFO.color"
           :icon="NOTIFICATIONS_TYPES.INFO.icon"
           transition="scale-transition"
-          >After editing, re-submit the form to save your changes.</v-alert
+          >{{ $t('trans.formSubmission.alertInfo') }}</v-alert
         >
         <v-card outlined class="review-form">
           <v-row no-gutters>
             <v-col cols="12" sm="6">
-              <h2 class="review-heading">Submission</h2>
+              <h2 class="review-heading">
+                {{ $t('trans.formSubmission.submission') }}
+              </h2>
             </v-col>
             <v-spacer />
             <v-col
@@ -99,7 +100,9 @@
                       <v-icon>mode_edit</v-icon>
                     </v-btn>
                   </template>
-                  <span>Edit This Submission</span>
+                  <span>{{
+                    $t('trans.formSubmission.editThisSubmission')
+                  }}</span>
                 </v-tooltip>
               </span>
               <v-btn
@@ -108,7 +111,7 @@
                 color="textLink"
                 @click="toggleSubmissionEdit(false)"
               >
-                <span>CANCEL</span>
+                <span>{{ $t('trans.formSubmission.cancel') }}</span>
               </v-btn>
             </v-col>
           </v-row>
@@ -133,7 +136,9 @@
         order-md="last"
       >
         <v-card outlined class="review-form" :disabled="!submissionReadOnly">
-          <h2 class="review-heading">Status</h2>
+          <h2 class="review-heading">
+            {{ $t('trans.formSubmission.status') }}
+          </h2>
           <StatusPanel
             :submissionId="submissionId"
             :formId="form.id"

@@ -21,7 +21,7 @@
                 <v-icon>view_column</v-icon>
               </v-btn>
             </template>
-            <span>Select Columns</span>
+            <span>{{ $t('trans.submissionsTable.selectColumns') }}</span>
           </v-tooltip>
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
@@ -38,10 +38,27 @@
                 </v-btn>
               </router-link>
             </template>
-            <span>Manage Form</span>
+            <span>{{ $t('trans.submissionsTable.manageForm') }}</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <router-link
+                :to="{ name: 'SubmissionsExport', query: { f: formId } }"
+              >
+                <v-btn
+                  class="mx-1"
+                  color="primary"
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon>get_app</v-icon>
+                </v-btn>
+              </router-link>
+            </template>
+            <span>{{ $t('trans.submissionsTable.submissionsToFiles') }}</span>
           </v-tooltip>
         </span>
-        <ExportSubmissions />
       </v-col>
     </v-row>
 
@@ -51,7 +68,7 @@
         <v-checkbox
           class="pl-3"
           v-model="deletedOnly"
-          label="Show deleted submissions"
+          :label="$t('trans.submissionsTable.showDeletedSubmissions')"
           @click="refreshSubmissions"
         />
       </v-col>
@@ -59,7 +76,7 @@
         <v-checkbox
           class="pl-3"
           v-model="currentUserOnly"
-          label="Show my submissions"
+          :label="$t('trans.submissionsTable.showMySubmissions')"
           @click="refreshSubmissions"
         />
       </v-col>
@@ -69,7 +86,7 @@
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            :label="$t('trans.submissionsTable.search')"
             single-line
             hide-details
             class="pb-5"
@@ -88,8 +105,8 @@
       :loading="loading"
       :show-select="!switchSubmissionView"
       v-model="selectedSubmissions"
-      loading-text="Loading... Please wait"
-      no-data-text="There are no submissions for this form"
+      :loading-text="$t('trans.submissionsTable.loadingText')"
+      :no-data-text="$t('trans.submissionsTable.noDataText')"
     >
       <template v-slot:[`header.event`]>
         <span v-if="!deletedOnly">
@@ -105,7 +122,9 @@
                   >remove_circle</v-icon
                 >
               </template>
-              <span>Delete selected submissions</span>
+              <span>{{
+                $t('trans.submissionsTable.delSelectedSubmissions')
+              }}</span>
             </v-tooltip>
           </v-btn>
         </span>
@@ -124,7 +143,9 @@
                   >restore_from_trash</v-icon
                 >
               </template>
-              <span>Restore selected submissions</span>
+              <span>{{
+                $t('trans.submissionsTable.resSelectedSubmissions')
+              }}</span>
             </v-tooltip>
           </v-btn>
         </span>
@@ -137,7 +158,11 @@
         {{ item.status }}
       </template>
       <template #[`item.lateEntry`]="{ item }">
-        {{ item.lateEntry === true ? 'Yes' : 'No' }}
+        {{
+          item.lateEntry === true
+            ? $t('trans.submissionsTable.yes')
+            : $t('trans.submissionsTable.no')
+        }}
       </template>
       <template #[`item.actions`]="{ item }">
         <v-tooltip bottom>
@@ -155,7 +180,7 @@
               </v-btn>
             </router-link>
           </template>
-          <span>View Submission</span>
+          <span>{{ $t('trans.submissionsTable.viewSubmission') }}</span>
         </v-tooltip>
       </template>
       <template #[`item.event`]="{ item }">
@@ -176,7 +201,7 @@
                 <v-icon>remove_circle</v-icon>
               </v-btn>
             </template>
-            <span>Delete Submission</span>
+            <span>{{ $t('trans.submissionsTable.deleteSubmission') }}</span>
           </v-tooltip>
         </span>
         <span v-if="item.deleted">
@@ -196,7 +221,7 @@
                 <v-icon>restore_from_trash</v-icon>
               </v-btn>
             </template>
-            <span>Restore</span>
+            <span>{{ $t('trans.submissionsTable.restore') }}</span>
           </v-tooltip>
         </span>
       </template>
@@ -213,7 +238,7 @@
         {{ singleSubmissionDelete ? singleDeleteMessage : multiDeleteMessage }}
       </template>
       <template #button-text-continue>
-        <span>Delete</span>
+        <span>{{ $t('trans.submissionsTable.delete') }}</span>
       </template>
     </BaseDialog>
     <BaseDialog
@@ -222,29 +247,34 @@
       @close-dialog="showRestoreDialog = false"
       @continue-dialog="restoreSub"
     >
-      <template #title>Confirm Restoration</template>
+      <template #title>{{
+        $t('trans.submissionsTable.confirmRestoration')
+      }}</template>
       <template #text>
         {{
           singleSubmissionRestore ? singleRestoreMessage : multiRestoreMessage
         }}
       </template>
       <template #button-text-continue>
-        <span>Restore</span>
+        <span>{{ $t('trans.submissionsTable.restore') }}</span>
       </template>
     </BaseDialog>
 
     <v-dialog v-model="showColumnsDialog" width="700">
       <BaseFilter
-        inputFilterPlaceholder="Search submission fields"
+        :inputFilterPlaceholder="
+          $t('trans.submissionsTable.searchSubmissionFields')
+        "
         inputItemKey="value"
-        inputSaveButtonText="Save"
+        :inputSaveButtonText="$t('trans.submissionsTable.save')"
         :inputData="FILTER_HEADERS"
+        :preselectedData="PRESELECTED_DATA"
         @saving-filter-data="updateFilter"
         @cancel-filter-data="showColumnsDialog = false"
       >
-        <template #filter-title
-          >Search and select columns to show under your dashboard</template
-        >
+        <template #filter-title>{{
+          $t('trans.submissionsTable.searchTitle')
+        }}</template>
       </BaseFilter>
     </v-dialog>
   </div>
@@ -254,7 +284,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import { FormManagePermissions } from '@/utils/constants';
 import moment from 'moment';
-import ExportSubmissions from '@/components/forms/ExportSubmissions.vue';
 
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -262,9 +291,6 @@ library.add(faTrash);
 
 export default {
   name: 'SubmissionsTable',
-  components: {
-    ExportSubmissions,
-  },
   props: {
     formId: {
       type: String,
@@ -296,20 +322,29 @@ export default {
       submissionsCheckboxes: [],
       showDeleteDialog: false,
       selectedSubmissions: [],
-      multiDeleteMessage:
-        'Are you sure you wish to delete selected submissions?',
-      singleDeleteMessage: 'Are you sure you wish to delete this submission?',
-      multiRestoreMessage:
-        'Are you sure you wish to restore these submissions?',
-      singleRestoreMessage: 'Are you sure you wish to restore this submission?',
+
       singleSubmissionDelete: false,
       singleSubmissionRestore: false,
       deleteItem: {},
       switchSubmissionView: false,
-      switchSubmissionViewMessage: 'Show Deleted submissions',
     };
   },
   computed: {
+    multiDeleteMessage() {
+      return this.$t('trans.submissionsTable.multiDelWarning');
+    },
+    singleDeleteMessage() {
+      return this.$t('trans.submissionsTable.singleDelWarning');
+    },
+    multiRestoreMessage() {
+      return this.$t('trans.submissionsTable.multiRestoreWarning');
+    },
+    singleRestoreMessage() {
+      return this.$t('trans.submissionsTable.singleRestoreWarning');
+    },
+    switchSubmissionViewMessage() {
+      return this.$t('trans.submissionsTable.showDeletedSubmissions');
+    },
     ...mapGetters('form', [
       'form',
       'formFields',
@@ -327,25 +362,79 @@ export default {
 
     DEFAULT_HEADERS() {
       let headers = [
-        { text: 'Confirmation ID', align: 'start', value: 'confirmationId' },
-        { text: 'Submission Date', align: 'start', value: 'date' },
-        { text: 'Submitter', align: 'start', value: 'submitter' },
+        {
+          text: this.$t('trans.submissionsTable.confirmationID'),
+          align: 'start',
+          value: 'confirmationId',
+        },
       ];
+
+      if (this.userFormPreferences?.preferences?.columns) {
+        if (this.userFormPreferences.preferences.columns.includes('date')) {
+          headers = [
+            ...headers,
+            {
+              text: this.$t('trans.submissionsTable.submissionDate'),
+              align: 'start',
+              value: 'date',
+            },
+          ];
+        }
+
+        if (
+          this.userFormPreferences.preferences.columns.includes('submitter')
+        ) {
+          headers = [
+            ...headers,
+            {
+              text: this.$t('trans.submissionsTable.submitter'),
+              align: 'start',
+              value: 'submitter',
+            },
+          ];
+        }
+
+        if (this.userFormPreferences.preferences.columns.includes('status')) {
+          headers = [
+            ...headers,
+            {
+              text: this.$t('trans.submissionsTable.status'),
+              align: 'start',
+              value: 'status',
+            },
+          ];
+        }
+      } else {
+        headers = [
+          ...headers,
+          {
+            text: this.$t('trans.submissionsTable.submissionDate'),
+            align: 'start',
+            value: 'date',
+          },
+          {
+            text: this.$t('trans.submissionsTable.submitter'),
+            align: 'start',
+            value: 'submitter',
+          },
+          {
+            text: this.$t('trans.submissionsTable.status'),
+            align: 'start',
+            value: 'status',
+          },
+        ];
+      }
 
       if (this.form && this.form.schedule && this.form.schedule.enabled) {
         //push new header for late submission if Form is setup for scheduling
         headers = [
           ...headers,
-          { text: 'Late Submission', align: 'start', value: 'lateEntry' },
+          {
+            text: this.$t('trans.submissionsTable.lateSubmission'),
+            align: 'start',
+            value: 'lateEntry',
+          },
         ];
-      }
-      // If status flow enabled add that column
-      if (this.showStatus) {
-        headers.splice(3, 0, {
-          text: 'Status',
-          align: 'start',
-          value: 'status',
-        });
       }
 
       // Add any custom columns if the user has them
@@ -363,7 +452,7 @@ export default {
 
       // Actions column at the end
       headers.push({
-        text: 'View',
+        text: this.$t('trans.submissionsTable.view'),
         align: 'end',
         value: 'actions',
         filterable: false,
@@ -373,7 +462,7 @@ export default {
 
       // Actions column at the end
       headers.push({
-        text: 'event',
+        text: this.$t('trans.submissionsTable.event'),
         align: 'end',
         value: 'event',
         filterable: false,
@@ -403,12 +492,50 @@ export default {
         })
       );
 
+      filteredHeader = [
+        {
+          text: this.$t('trans.submissionsTable.submissionDate'),
+          align: 'start',
+          value: 'date',
+        },
+        {
+          text: this.$t('trans.submissionsTable.submitter'),
+          align: 'start',
+          value: 'submitter',
+        },
+        {
+          text: this.$t('trans.submissionsTable.status'),
+          align: 'start',
+          value: 'status',
+        },
+        ...filteredHeader,
+      ];
+
       return filteredHeader.filter(function (item, index, inputArray) {
         return (
           inputArray.findIndex((arrayItem) => arrayItem.value === item.value) ==
           index
         );
       });
+    },
+    PRESELECTED_DATA() {
+      let preselectedData = [];
+      if (this.userFormPreferences?.preferences?.columns) {
+        preselectedData = this.userFormPreferences.preferences.columns.map(
+          (column) => {
+            return {
+              align: 'end',
+              text: column,
+              value: column,
+            };
+          }
+        );
+      } else {
+        preselectedData = this.DEFAULT_HEADERS.filter(
+          (h) => !this.filterIgnore.some((fd) => fd.value === h.value)
+        );
+      }
+      return preselectedData;
     },
     showStatus() {
       return this.form && this.form.enableStatusUpdates;
@@ -567,15 +694,20 @@ export default {
         this.getFormRolesForUser(this.formId),
         this.getFormPermissionsForUser(this.formId),
         this.fetchForm(this.formId).then(async () => {
-          await this.fetchFormFields({
-            formId: this.formId,
-            formVersionId: this.form.versions[0].id,
-          });
+          if (this.form.versions?.length > 0) {
+            await this.fetchFormFields({
+              formId: this.formId,
+              formVersionId: this.form.versions[0].id,
+            });
+          }
         }),
-      ]).then(async () => {
-        await this.populateSubmissionsTable();
-      });
-      this.selectedSubmissions = [];
+      ])
+        .then(async () => {
+          await this.populateSubmissionsTable();
+        })
+        .finally(() => {
+          this.selectedSubmissions = [];
+        });
     },
 
     async restoreSingleSub() {

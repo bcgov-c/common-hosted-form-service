@@ -6,6 +6,7 @@ import {
   IdentityMode,
   IdentityProviders,
 } from '@/utils/constants';
+import i18n from '@/internationalization';
 
 //
 // Utility Functions for determining permissions
@@ -59,6 +60,26 @@ export function checkSubmissionView(userForm) {
 }
 
 /**
+ * @function getErrorMessage
+ * Gets the message to display for preflight errors. Expand this to add
+ * friendlier messages for other errors.
+ * @param {Object} options - The Object containing preflight request details.
+ * @param {Error} error - The error that was produced.
+ * @returns {string|undefined} - The error message to display, or undefined to
+ *    use the default message.
+ */
+function getErrorMessage(options, error) {
+  let errorMessage = undefined;
+  if (options.formId) {
+    const status = error?.response?.status;
+    if (status === 404 || status === 422) {
+      errorMessage = i18n.t('trans.permissionUtils.formNotAvailable');
+    }
+  }
+  return errorMessage;
+}
+
+/**
  * @function preFlightAuth
  * Determines whether to enter a route based on user authentication state and idpHint
  * @param {Object} options Object containing either a formId or submissionId attribute
@@ -84,14 +105,29 @@ export async function preFlightAuth(options = {}, next) {
       );
       idpHint = getIdpHint(data.form.idpHints);
     } else {
-      throw new Error('Options missing both formId and submissionId');
+      throw new Error(i18n.t('trans.permissionUtils.missingFormIdAndSubmssId'));
     }
   } catch (error) {
-    store.dispatch('notifications/addNotification', {
-      message: 'An error occurred while loading this form.',
-      consoleError: `Error while loading ${JSON.stringify(options)}: ${error}`,
-    });
-    store.dispatch('auth/errorNavigate'); // Halt user with error page
+    // Halt user with error page, use alertNavigate for "friendly" messages.
+    const message = getErrorMessage(options, error);
+    if (message) {
+      // Don't display the 'An error has occurred...' popup notification.
+      store.dispatch('auth/alertNavigate', {
+        message: message,
+        type: 'error',
+      });
+    } else {
+      store.dispatch('notifications/addNotification', {
+        message: i18n.t('trans.permissionUtils.loadingFormErrMsg'),
+        consoleError: i18n.t('trans.permissionUtils.loadingForm', {
+          options: options,
+          error: error,
+        }),
+      });
+
+      store.dispatch('auth/errorNavigate');
+    }
+
     return; // Short circuit this function - no point executing further logic
   }
 
@@ -103,10 +139,12 @@ export async function preFlightAuth(options = {}, next) {
     } else if (isValidIdp(idpHint) && userIdp === idpHint) {
       next(); // Permit navigation if idps match
     } else {
-      const msg = `This form requires ${idpHint.toUpperCase()} authentication. Please re-login and try again.`;
+      const msg = i18n.t('trans.permissionUtils.idpHintMsg', {
+        idpHint: idpHint.toUpperCase(),
+      });
       store.dispatch('notifications/addNotification', {
         message: msg,
-        consoleError: `Form IDP mismatch. Form requires ${idpHint} but user has ${userIdp}.`,
+        consoleError: '-----',
       });
       store.dispatch('auth/errorNavigate', msg); // Halt user with idp mismatch error page
     }

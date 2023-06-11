@@ -4,7 +4,7 @@
       <v-row class="mt-6" no-gutters>
         <!-- page title -->
         <v-col cols="12" sm="6" order="2" order-sm="1">
-          <h1>Previous Submissions</h1>
+          <h1>{{ $t('trans.mySubmissionsTable.previousSubmissions') }}</h1>
         </v-col>
         <!-- buttons -->
         <v-col class="text-right" cols="12" sm="6" order="1" order-sm="2">
@@ -21,7 +21,7 @@
                 <v-icon>view_column</v-icon>
               </v-btn>
             </template>
-            <span>Select Columns</span>
+            <span>{{ $t('trans.mySubmissionsTable.selectColumns') }}</span>
           </v-tooltip>
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
@@ -42,7 +42,9 @@
                 </v-btn>
               </router-link>
             </template>
-            <span>Create a New Submission</span>
+            <span>{{
+              $t('trans.mySubmissionsTable.createNewSubmission')
+            }}</span>
           </v-tooltip>
         </v-col>
         <!-- form name -->
@@ -60,7 +62,7 @@
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            :label="$t('trans.mySubmissionsTable.search')"
             single-line
             hide-details
             class="pb-5"
@@ -76,17 +78,18 @@
       :items="submissionTable"
       :search="search"
       :loading="loading"
-      loading-text="Loading... Please wait"
-      no-data-text="You have no submissions"
+      :loading-text="$t('trans.mySubmissionsTable.loadingText')"
+      :no-data-text="$t('trans.mySubmissionsTable.noDataText')"
     >
       <template #[`item.lastEdited`]="{ item }">
-        {{ item.lastEdited | formatDateLong(false) }}
+        {{ item.lastEdited | formatDateLong }}
       </template>
       <template #[`item.submittedDate`]="{ item }">
-        {{ item.submittedDate | formatDateLong(false) }}
+        {{ item.submittedDate | formatDateLong }}
       </template>
+
       <template #[`item.completedDate`]="{ item }">
-        {{ item.completedDate | formatDateLong(false) }}
+        {{ item.completedDate | formatDateLong }}
       </template>
       <template #[`item.actions`]="{ item }">
         <MySubmissionsActions
@@ -101,20 +104,23 @@
     </v-data-table>
     <v-dialog v-model="showColumnsDialog" width="700">
       <BaseFilter
-        inputFilterPlaceholder="Search submission fields"
+        :inputFilterPlaceholder="
+          $t('trans.mySubmissionsTable.searchSubmissionFields')
+        "
         inputItemKey="value"
-        inputSaveButtonText="Save"
+        :inputSaveButtonText="$t('trans.mySubmissionsTable.save')"
         :inputData="
           DEFAULT_HEADERS.filter(
             (h) => !filterIgnore.some((fd) => fd.value === h.value)
           )
         "
+        :preselectedData="PRESELECTED_DATA"
         @saving-filter-data="updateFilter"
         @cancel-filter-data="showColumnsDialog = false"
       >
-        <template #filter-title
-          >Search and select columns to show under your dashboard</template
-        >
+        <template #filter-title>{{
+          $t('trans.mySubmissionsTable.filterTitle')
+        }}</template>
       </BaseFilter>
     </v-dialog>
   </div>
@@ -160,33 +166,33 @@ export default {
     DEFAULT_HEADERS() {
       let headers = [
         {
-          text: 'Confirmation Id',
+          text: this.$t('trans.mySubmissionsTable.confirmationId'),
           align: 'start',
           value: 'confirmationId',
           sortable: true,
         },
         {
-          text: 'Created By',
+          text: this.$t('trans.mySubmissionsTable.createdBy'),
           value: 'createdBy',
           sortable: true,
         },
         {
-          text: 'Status Updated By',
+          text: this.$t('trans.mySubmissionsTable.statusUpdatedBy'),
           value: 'username',
           sortable: true,
         },
         {
-          text: 'Status',
+          text: this.$t('trans.mySubmissionsTable.status'),
           value: 'status',
           sortable: true,
         },
         {
-          text: 'Submission Date',
+          text: this.$t('trans.mySubmissionsTable.submissionDate'),
           value: 'submittedDate',
           sortable: true,
         },
         {
-          text: 'Actions',
+          text: this.$t('trans.mySubmissionsTable.actions'),
           align: 'end',
           value: 'actions',
           filterable: false,
@@ -196,7 +202,13 @@ export default {
       ];
       if (this.showDraftLastEdited || !this.formId) {
         headers.splice(headers.length - 1, 0, {
-          text: 'Draft Last Edited',
+          text: this.$t('trans.mySubmissionsTable.draftUpdatedBy'),
+          align: 'start',
+          value: 'updatedBy',
+          sortable: true,
+        });
+        headers.splice(headers.length - 1, 0, {
+          text: this.$t('trans.mySubmissionsTable.draftLastEdited'),
           align: 'start',
           value: 'lastEdited',
           sortable: true,
@@ -214,6 +226,11 @@ export default {
         );
       return headers;
     },
+    PRESELECTED_DATA() {
+      return this.DEFAULT_HEADERS.filter(
+        (h) => !this.filterIgnore.some((fd) => fd.value === h.value)
+      );
+    },
     showStatus() {
       return this.form && this.form.enableStatusUpdates;
     },
@@ -229,7 +246,8 @@ export default {
 
     // Status columns in the table
     getCurrentStatus(record) {
-      // Current status is most recent status (top in array, query returns in status created desc)
+      // Current status is most recent status (top in array, query returns in
+      // status created desc)
       const status =
         record.submissionStatus && record.submissionStatus[0]
           ? record.submissionStatus[0].code
@@ -260,13 +278,14 @@ export default {
         const tableRows = this.submissionList.map((s) => {
           return {
             confirmationId: s.confirmationId,
-            lastEdited: s.draft ? s.updatedAt : undefined,
             name: s.name,
             permissions: s.permissions,
             status: this.getCurrentStatus(s),
             submissionId: s.formSubmissionId,
             submittedDate: this.getStatusDate(s, 'SUBMITTED'),
             createdBy: s.submission.createdBy,
+            updatedBy: s.draft ? s.submission.updatedBy : undefined,
+            lastEdited: s.draft ? s.submission.updatedAt : undefined,
             username:
               s.submissionStatus && s.submissionStatus.length > 0
                 ? s.submissionStatus[0].createdBy

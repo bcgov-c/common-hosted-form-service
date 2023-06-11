@@ -1,11 +1,10 @@
 import 'nprogress/nprogress.css';
 import '@bcgov/bc-sans/css/BCSans.css';
 import '@/assets/scss/style.scss';
-
+import i18n from '@/internationalization';
 import axios from 'axios';
 import NProgress from 'nprogress';
 import Vue from 'vue';
-
 import App from '@/App.vue';
 import '@/filters';
 import auth from '@/store/modules/auth.js';
@@ -24,9 +23,12 @@ Formio.use(BcGovFormioComponents);
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 /* add font awesome icon component */
 Vue.component('font-awesome-icon', FontAwesomeIcon);
+import VueBlobJsonCsv from 'vue-blob-json-csv';
+Vue.use(VueBlobJsonCsv);
 
 import VueKeycloakJs from '@/plugins/keycloak';
 import vuetify from '@/plugins/vuetify';
+
 Vue.config.productionTip = false;
 
 NProgress.configure({ showSpinner: false });
@@ -69,6 +71,7 @@ function initializeApp(kcSuccess = false, basePath = '/') {
 
   new Vue({
     router: getRouter(basePath),
+    i18n,
     store,
     vuetify,
     render: (h) => h(App),
