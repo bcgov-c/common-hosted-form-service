@@ -94,7 +94,7 @@ import PrintOptions from '@/components/forms/PrintOptions.vue';
 export default {
   name: 'MySubmissionsActions',
   components: {
-    PrintOptions
+    PrintOptions,
   },
   props: {
     block: {
