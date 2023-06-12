@@ -31,7 +31,6 @@
             >{{ $t('trans.bCGovNavBar.feedback') }}</a
           >
         </li>
-        -->
         <!-- <li>
           <router-link :to="{ name: 'User' }">User (TBD)</router-link>
         </li> -->

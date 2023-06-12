@@ -47,6 +47,7 @@
     "components"
   ],
   "dependencies": {
+    "@formio/contrib": "^2.0.0",
     "autocompleter": "^7.0.1",
     "formiojs": "^4.14.6",
     "lodash": "^4.17.21",
