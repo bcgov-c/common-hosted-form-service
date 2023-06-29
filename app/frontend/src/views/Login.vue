@@ -36,7 +36,7 @@ export default {
         IdentityProviders.IDIR,
         IdentityProviders.BCEIDBUSINESS,
         IdentityProviders.BCEIDBASIC,
-        IdentityProviders.BCEIDBOTH
+        IdentityProviders.BCEIDBOTH,
       ],
     },
   },
