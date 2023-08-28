@@ -34,8 +34,6 @@ export default {
       type: Array,
       default: () => [
         IdentityProviders.IDIR,
-        IdentityProviders.BCEIDBUSINESS,
-        IdentityProviders.BCEIDBASIC,
         IdentityProviders.BCEIDBOTH,
       ],
     },
@@ -55,16 +53,7 @@ export default {
         disabled: false,
         label: 'Basic or Business BCeID',
         type: IdentityProviders.BCEIDBOTH,
-      },
-      {
-        disabled: false,
-        label: 'Basic BCeID',
-        type: IdentityProviders.BCEIDBASIC,
-      },
-      {
-        label: 'Business BCeID',
-        type: IdentityProviders.BCEIDBUSINESS,
-      },
+      }
     ],
     IDPS() {
       return IdentityProviders;
