@@ -50,7 +50,6 @@ export default {
         type: IdentityProviders.IDIR,
       },
       {
-        disabled: false,
         label: 'Basic or Business BCeID',
         type: IdentityProviders.BCEIDBOTH,
       }
@@ -62,6 +61,7 @@ export default {
   methods: {
     ...mapActions('auth', ['login']),
     buttonEnabled(type) {
+      console.log(this.idpHint);
       return this.idpHint ? this.idpHint.includes(type) : false;
     },
   },

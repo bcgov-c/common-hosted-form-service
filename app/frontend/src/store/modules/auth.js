@@ -127,7 +127,7 @@ export default {
           const router = getRouter(Vue.prototype.$config.basePath);
           router.replace({
             name: 'Login',
-            params: { idpHint: ['idir', 'bceid-business', 'bceid-basic'] },
+            params: { idpHint: ['idir', 'bceid'] },
           });
         }
       }
