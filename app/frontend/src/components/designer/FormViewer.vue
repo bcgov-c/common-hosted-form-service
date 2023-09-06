@@ -823,7 +823,7 @@ export default {
       } else {
         // User created new submission
         this.$router.push({
-          name: 'FormSuccess',
+          name: 'FormView',
           query: {
             s: this.submissionRecord.id,
           },
