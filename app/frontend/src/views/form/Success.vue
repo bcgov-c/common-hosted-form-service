@@ -23,7 +23,7 @@
               :email="email"
               :formName="form.name"
               :submissionId="s"
-              :lang="submission.data.lang"
+              :lang="submission?.data?.lang"
             />
           </div>
           <hr />
