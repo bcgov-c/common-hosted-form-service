@@ -1106,7 +1106,7 @@ export default {
       } else {
         // User created new submission
         this.$router.push({
-          name: 'FormView',
+          name: 'FormSuccess',
           query: {
             s: this.submissionRecord.id,
           },
