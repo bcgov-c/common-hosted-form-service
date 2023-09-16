@@ -1,7 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
-
-const { Statuses } = require('../common/constants');
-const { Form, FormVersion, FormSubmission, FormSubmissionStatus, Note, SubmissionAudit, SubmissionMetadata } = require('../common/models');
+const axios = require('axios');
+const { Statuses, SubscriptionEvent } = require('../common/constants');
+const { Form, FormVersion, FormSubmission, FormSubmissionStatus, Note, SubmissionAudit, SubmissionMetadata, FormSubscription, } = require('../common/models');
+const log = require('../../components/log')(module.filename);
 const emailService = require('../email/emailService');
 const formService = require('../form/service');
 const permissionService = require('../permission/service');
@@ -55,9 +56,45 @@ const service = {
 
   readSubmissionData: (formSubmissionIds) => service._fetchSpecificSubmissionData(formSubmissionIds),
 
+  // Get the current subscription settings for a form
+  readFormSubscriptionDetails: (formId) => {
+    return FormSubscription.query().modify('filterFormId', formId).first();
+  },
+
+  postSubscriptionEvent: async (subscribe, formVersion, submissionId, subscriptionEvent) => {
+    try {
+      // Check if there are endpoints subscribed for form submission event
+      if (subscribe && subscribe.endpointUrl) {
+        const axiosOptions = { timeout: 10000 };
+        const axiosInstance = axios.create(axiosOptions);
+        const jsonData = { formId: formVersion.formId, formVersion: formVersion.id, submissionId: submissionId, subscriptionEvent: subscriptionEvent };
+
+        axiosInstance.interceptors.request.use(
+          (cfg) => {
+            cfg.headers = { [subscribe.key]: `${subscribe.endpointToken}` };
+            return Promise.resolve(cfg);
+          },
+          (error) => {
+            return Promise.reject(error);
+          }
+        );
+
+        axiosInstance.post(subscribe.endpointUrl, jsonData);
+
+        throw new Problem(401, jsonData);
+      }
+    } catch (err) {
+      log.error(err.message, err, {
+        function: 'postSubscriptionEvent',
+      });
+    }
+  },
+
   update: async (formSubmissionId, data, currentUser, referrer, etrx = undefined) => {
     let trx;
     try {
+      const formObj = await service.read(formSubmissionId)
+      const { subscribe } = formObj.form;
       trx = etrx ? etrx : await FormSubmission.startTransaction();
 
       // If we're restoring a submission
@@ -88,6 +125,13 @@ const service = {
       }
 
       if (!etrx) await trx.commit();
+
+      if (subscribe && subscribe.enabled) {
+        const subscribeConfig = await service.readFormSubscriptionDetails(formObj.form?.id);
+        const config = Object.assign({}, subscribe, subscribeConfig);
+        const formVersion = formObj.version;
+        service.postSubscriptionEvent(config, formVersion, formSubmissionId, SubscriptionEvent.FORM_SUBMITTED);
+      }
 
       return service.read(formSubmissionId);
     } catch (err) {
