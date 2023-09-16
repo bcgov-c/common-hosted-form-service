@@ -4,11 +4,11 @@
     :class="{ 'dir-rtl': isRTL }"
   >
     <div v-if="formId">
-      <v-btn outlined @click="goToAllSubmissionOrDraft">
+      <!-- <v-btn outlined @click="goToAllSubmissionOrDraft">
         <span :lang="lang"
           >{{ $t('trans.formViewerActions.viewAllSubmissions') }}
         </span>
-      </v-btn>
+      </v-btn> -->
     </div>
     <div>
       <!-- Bulk button -->
@@ -80,12 +80,12 @@
         </router-link>
       </span>
       <!-- Go to draft edit -->
-      <span v-if="submissionId && draftEnabled" class="ml-2">
+      <!-- <span v-if="submissionId && draftEnabled" class="ml-2">
         <ManageSubmissionUsers
           :isDraft="isDraft"
           :submissionId="submissionId"
         />
-      </span>
+      </span> -->
     </div>
   </div>
 </template>
