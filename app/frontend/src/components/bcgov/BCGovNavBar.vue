@@ -68,8 +68,8 @@ export default {
     ...mapGetters('auth', ['authenticated', 'isAdmin', 'identityProvider']),
     ...mapGetters('form', ['lang']),
     hideNavBar() {
-      // hide nav bar if user is on form submitter page
-      return this.$route && this.$route.meta && this.$route.meta.formSubmitMode;
+      // hide nav bar logic
+      return this.$route?.meta?.formSubmitMode || this.$route.query?.hideNav === "true" || this.$route.fullPath === "/"
     },
     hasPrivileges() {
       return this.identityProvider === IdentityProviders.IDIR;
