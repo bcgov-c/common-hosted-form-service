@@ -29,6 +29,10 @@ routes.put('/forms', hasFormPermissions(P.TEAM_UPDATE), async (req, res, next) =
   await controller.setFormUsers(req, res, next);
 });
 
+routes.put('/forms/multiple', hasFormPermissions(P.TEAM_UPDATE), async (req, res, next) => {
+  await controller.setMultipleFormUsers(req, res, next);
+});
+
 routes.get('/submissions', hasSubmissionPermissions(P.SUBMISSION_READ), async (req, res, next) => {
   await controller.getSubmissionUsers(req, res, next);
 });

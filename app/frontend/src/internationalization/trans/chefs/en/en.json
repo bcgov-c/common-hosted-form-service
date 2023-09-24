@@ -690,7 +690,7 @@
   "formViewer": {
     "lateFormSubmissions": "The form submission period has expired! You can still create a late submission by clicking the button below.",
     "createLateSubmission": "Create late submission",
-    "draftSaved": "Draft Saved",
+    "draftSaved": "Saved",
     "saving": "Saving",
     "pleaseConfirm": "Please Confirm",
     "submitFormWarningMsg": "Are you sure you wish to submit your form?",

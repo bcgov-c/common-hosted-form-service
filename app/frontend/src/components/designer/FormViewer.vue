@@ -1042,8 +1042,18 @@ export default {
         alert(this.$t('trans.formViewer.submissionsPreviewAlert'));
         return;
       }
-
+      
       const errors = await this.doSubmit(submission);
+      // let errors;
+      // if (submission.state === "draft") {
+      //   this.saved = true;
+      //   await this.saveDraft();
+      //   this.currentForm.events.emit('formio.saveDraft');
+      //   return;
+      // }
+      // else {
+      //   errors = await this.doSubmit(submission);
+      // }
 
       // if we are here, the submission has been saved to our db
       // the passed in submission is the formio submission, not our db persisted submission record...
@@ -1068,6 +1078,12 @@ export default {
       // we should do the actual submit here, and return any error that occurrs to handle in the submit event
       let errMsg = undefined;
       try {
+        // if (submission.state === "draft") {
+        //   //this.saveDraft(submission);
+
+        //   return errMsg;
+        // }
+        //const isDraft = submission.state === "draft"
         const response = await this.sendSubmission(false, submission);
 
         if ([200, 201].includes(response.status)) {
@@ -1115,6 +1131,10 @@ export default {
     },
 
     onCustomEvent(event) {
+      if (event.type === "saveDraft"){
+        this.saveDraft();
+        return
+      }
       alert(
         this.$t('trans.formViewer.customEventAlert', { event: event.type })
       );

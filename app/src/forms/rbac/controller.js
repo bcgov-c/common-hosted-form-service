@@ -76,6 +76,14 @@ module.exports = {
       next(error);
     }
   },
+  // setMultipleFormUsers: async (req, res, next) => {
+  //   try {
+  //     const response = await service.setMultipleFormUsers(req.query.formId, req.body, req.currentUser);
+  //     res.status(200).json(response);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
   removeMultiUsers: async (req, res, next) => {
     try {
       const response = await service.removeMultiUsers(req.query.formId, req.body);
