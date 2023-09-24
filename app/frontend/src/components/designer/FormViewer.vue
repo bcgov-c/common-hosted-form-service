@@ -1132,6 +1132,7 @@ export default {
 
     onCustomEvent(event) {
       if (event.type === "saveDraft"){
+        this.submission.data.customEvent = true;
         this.saveDraft();
         return
       }
