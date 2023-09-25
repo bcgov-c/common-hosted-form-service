@@ -211,6 +211,7 @@ import { isFormPublic } from '@/utils/permissionUtils';
 import { attachAttributesToLinks } from '@/utils/transformUtils';
 import { FormPermissions, NotificationTypes } from '@/utils/constants';
 import _ from 'lodash';
+import moment from 'moment';
 
 export default {
   name: 'FormViewer',
@@ -1131,8 +1132,11 @@ export default {
     },
 
     onCustomEvent(event) {
-      if (event.type === "saveDraft"){
+      if (event.type === "calculatorApprove"){
         this.submission.data.customEvent = true;
+        this.submission.data.approved = true;
+        this.submission.data.approvedBy = `${this.submission.data.userInfo.username}@${this.submission.data.userInfo.idp}`;
+        this.submission.data.approvedDate = new moment();
         this.saveDraft();
         return
       }
