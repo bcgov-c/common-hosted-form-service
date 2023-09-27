@@ -1,4 +1,6 @@
 const Problem = require('api-problem');
+const { v4: uuidv4 } = require('uuid');
+const RandExp = require('randexp');
 
 const { User, UserFormPreferences } = require('../common/models');
 const { IdentityProviders } = require('../common/constants');
@@ -28,6 +30,34 @@ const service = {
       .modify('filterEmail', params.email, exact)
       .modify('filterSearch', params.search)
       .modify('orderLastFirstAscending');
+  },
+
+  create: async (token, body) => {
+    let trx;
+    try {
+      if (!token?.content?.resource_access?.chefs?.roles.includes('admin')) {
+        throw new Problem(403, {
+          detail: 'Unauthorized',
+        });
+      }
+      if (!body || !body.guid) {
+        throw new Problem(422, {
+          detail: 'Could not create user. Invalid options provided',
+        });
+      }
+      trx = await User.startTransaction();
+      const obj = { // values will get overwritten when the user logs in for the first time (aside from id and idpUserId)
+        id: uuidv4(),
+        idpUserId: body.guid,
+        keycloakId: new RandExp(/^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}/).gen()
+      };
+      await User.query(trx).insert(obj);
+      await trx.commit();
+      return obj.id;
+    } catch (err) {
+      if (trx) await trx.rollback();
+      throw err;
+    }
   },
 
   read: (userId) => {
