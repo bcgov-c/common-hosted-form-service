@@ -922,6 +922,7 @@ export default {
               query: { ...this.$route.query, sv: true },
             });
           }
+          this.$router.go(0); // refresh
           this.saving = false;
         } else {
           // Creating a new submission in draft state
@@ -1241,7 +1242,6 @@ export default {
       this.showModal = true;
       await this.getFormSchema();
     }
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
   },
   beforeUpdate() {
     // This needs to be ran whenever we have a formSchema change
@@ -1250,7 +1250,6 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener('beforeunload', this.beforeWindowUnload);
   },
 };
 </script>
