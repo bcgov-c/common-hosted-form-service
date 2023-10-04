@@ -914,15 +914,24 @@ export default {
         const response = await this.sendSubmission(true, this.submission);
         this.formDataEntered = false;
         if (this.submissionId) {
+          // Custom calculator event - send to View page
+          if (this.calculatorEvent){
+            this.calculatorEvent = false; // reset
+            this.$router.push({
+              name: 'UserFormView',
+              query: {
+                s: this.$route.query.s
+              },
+            });
+          }
           // Editing an existing draft
           // Update this route with saved flag
-          if (!this.saved) {
+          else if (!this.saved) {
             this.$router.replace({
               name: 'UserFormDraftEdit',
               query: { ...this.$route.query, sv: true },
             });
           }
-          this.$router.go(0); // refresh
           this.saving = false;
         } else {
           // Creating a new submission in draft state
@@ -1134,11 +1143,12 @@ export default {
 
     onCustomEvent(event) {
       if (event.type === "calculatorApprove"){
+        this.calculatorEvent = true;
         this.submission.data.customEvent = true;
         this.submission.data.approved = true;
         if (this.submission.data.container){
         this.submission.data.container.approvedBy = `${this.submission.data.userInfo.username}@${this.submission.data.userInfo.idp}`;
-        this.submission.data.container.approvedDate = new moment();
+        this.submission.data.container.approvedDate = new moment().format("MMMM DD YYYY, h:mm:ssa");
         }
         this.saveDraft();
         return
