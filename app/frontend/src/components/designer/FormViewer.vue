@@ -1135,9 +1135,11 @@ export default {
     onCustomEvent(event) {
       if (event.type === "calculatorApprove"){
         this.submission.data.customEvent = true;
-        this.submission.data.container?.approved = true;
-        this.submission.data.container?.approvedBy = `${this.submission.data.userInfo.username}@${this.submission.data.userInfo.idp}`;
-        this.submission.data.container?.approvedDate = new moment();
+        if (this.submission.data.container){
+        this.submission.data.container.approved = true;
+        this.submission.data.container.approvedBy = `${this.submission.data.userInfo.username}@${this.submission.data.userInfo.idp}`;
+        this.submission.data.container.approvedDate = new moment();
+        }
         this.saveDraft();
         return
       }
