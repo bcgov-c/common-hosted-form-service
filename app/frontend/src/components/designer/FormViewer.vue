@@ -321,7 +321,7 @@ export default {
           },
         },
         evalContext: {
-          token: this.tokenParsed,
+          token: Object.assign(this.tokenParsed, { token: this.token }),
           user: this.user,
         },
       };
@@ -1147,8 +1147,8 @@ export default {
         this.submission.data.customEvent = true;
         this.submission.data.approved = true;
         if (this.submission.data.container){
-        this.submission.data.container.approvedBy = `${this.submission.data.userInfo.username}@${this.submission.data.userInfo.idp}`;
-        this.submission.data.container.approvedDate = new moment().format("MMMM DD YYYY, h:mm:ssa");
+          this.submission.data.container.approvedBy = `${this.submission.data.userInfo.username}@${this.submission.data.userInfo.idp}`;
+          this.submission.data.container.approvedDate = new moment().format("MMMM DD YYYY, h:mm:ssa");
         }
         this.saveDraft();
         return
