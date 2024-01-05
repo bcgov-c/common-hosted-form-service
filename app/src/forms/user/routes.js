@@ -30,6 +30,10 @@ routes.get('/', async (req, res, next) => {
   await controller.list(req, res, next);
 });
 
+routes.post('/', async (req, res, next) => {
+  await controller.create(req, res, next);
+});
+
 routes.get('/:userId', async (req, res, next) => {
   await controller.read(req, res, next);
 });

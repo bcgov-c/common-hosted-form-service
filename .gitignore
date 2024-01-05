@@ -10,8 +10,11 @@ dist
 **/cypress/**/screenshots
 **/cypress/**/videos
 node_modules
+
 # Ignore only top-level package-lock.json
 /package-lock.json
+
+
 
 
 # local env files
@@ -28,7 +31,6 @@ yarn-error.log*
 
 # Editor directories and files
 .idea
-.vscode
 *.iml
 *.suo
 *.ntvs*
@@ -36,6 +38,12 @@ yarn-error.log*
 *.sln
 *.sw?
 *.mp4
+
+# Visual Studio Code -- generally ignore, but allow shared configuration
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/README.md
 
 # temp office files
 ~$*
@@ -55,3 +63,4 @@ build
 
 !app/frontend/.env
 !local-infrastructure/.env
+.history

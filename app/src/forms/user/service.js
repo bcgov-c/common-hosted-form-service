@@ -1,44 +1,82 @@
 const Problem = require('api-problem');
+const { v4: uuidv4 } = require('uuid');
+const RandExp = require('randexp');
 
 const { User, UserFormPreferences } = require('../common/models');
+const { IdentityProviders } = require('../common/constants');
 
 const service = {
   //
   // User
   //
   list: (params) => {
+    let exact = false;
+    if (params.idpCode && (params.idpCode === IdentityProviders.BCEIDBASIC || params.idpCode === IdentityProviders.BCEIDBUSINESS)) {
+      if (!params.email && !params.username) {
+        throw new Problem(422, {
+          detail: 'Could not retrieve BCeID users. Invalid options provided.',
+        });
+      }
+      exact = true;
+    }
+
     return User.query()
-      .modify('filterRestricted')
-      .modify('filterKeycloakId', params.keycloakId)
+      .modify('filterIdpUserId', params.idpUserId)
       .modify('filterIdpCode', params.idpCode)
-      .modify('filterUsername', params.username)
+      .modify('filterUsername', params.username, exact)
       .modify('filterFullName', params.fullName)
       .modify('filterFirstName', params.firstName)
       .modify('filterLastName', params.lastName)
-      .modify('filterEmail', params.email)
+      .modify('filterEmail', params.email, exact)
       .modify('filterSearch', params.search)
       .modify('orderLastFirstAscending');
   },
 
+  create: async (token, body) => {
+    let trx;
+    try {
+      if (!token?.content?.resource_access?.chefs?.roles.includes('admin')) {
+        throw new Problem(403, {
+          detail: 'Unauthorized',
+        });
+      }
+      if (!body || !body.guid) {
+        throw new Problem(422, {
+          detail: 'Could not create user. Invalid options provided',
+        });
+      }
+      trx = await User.startTransaction();
+      const obj = { // values will get overwritten when the user logs in for the first time (aside from id and idpUserId)
+        id: uuidv4(),
+        idpUserId: body.guid,
+        keycloakId: new RandExp(/^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}/).gen()
+      };
+      await User.query(trx).insert(obj);
+      await trx.commit();
+      return obj.id;
+    } catch (err) {
+      if (trx) await trx.rollback();
+      throw err;
+    }
+  },
+
   read: (userId) => {
-    return User.query()
-      .findById(userId)
-      .throwIfNotFound();
+    return User.query().findById(userId).throwIfNotFound();
+  },
+
+  readSafe: (userId) => {
+    return User.query().modify('safeSelect').findById(userId).throwIfNotFound();
   },
 
   //
   // User Preferences
   //
   deleteUserPreferences: (currentUser) => {
-    return UserFormPreferences.query()
-      .delete()
-      .where('userId', currentUser.id)
-      .throwIfNotFound();
+    return UserFormPreferences.query().delete().where('userId', currentUser.id).throwIfNotFound();
   },
 
   readUserPreferences: (currentUser) => {
-    return UserFormPreferences.query()
-      .where('userId', currentUser.id);
+    return UserFormPreferences.query().where('userId', currentUser.id);
   },
 
   updateUserPreferences: async (currentUser, body) => {
@@ -46,7 +84,7 @@ const service = {
     try {
       if (!body || !body.forms || !Array.isArray(body.forms)) {
         throw new Problem(422, {
-          detail: 'Could not update user preferences. Invalid options provided'
+          detail: 'Could not update user preferences. Invalid options provided',
         });
       }
 
@@ -56,19 +94,17 @@ const service = {
         const current = await service.readUserFormPreferences(currentUser, form.formId);
 
         if (current) {
-          await UserFormPreferences.query(trx)
-            .patchAndFetchById([currentUser.id, form.formId], {
-              preferences: form.preferences,
-              updatedBy: currentUser.usernameIdp
-            });
+          await UserFormPreferences.query(trx).patchAndFetchById([currentUser.id, form.formId], {
+            preferences: form.preferences,
+            updatedBy: currentUser.usernameIdp,
+          });
         } else {
-          await UserFormPreferences.query(trx)
-            .insert({
-              userId: currentUser.id,
-              formId: form.formId,
-              preferences: form.preferences,
-              createdBy: currentUser.usernameIdp
-            });
+          await UserFormPreferences.query(trx).insert({
+            userId: currentUser.id,
+            formId: form.formId,
+            preferences: form.preferences,
+            createdBy: currentUser.usernameIdp,
+          });
         }
       });
 
@@ -84,15 +120,11 @@ const service = {
   // User Form Preferences
   //
   deleteUserFormPreferences: (currentUser, formId) => {
-    return UserFormPreferences.query()
-      .deleteById([currentUser.id, formId])
-      .throwIfNotFound();
+    return UserFormPreferences.query().deleteById([currentUser.id, formId]).throwIfNotFound();
   },
 
   readUserFormPreferences: (currentUser, formId) => {
-    return UserFormPreferences.query()
-      .findById([currentUser.id, formId])
-      .first();
+    return UserFormPreferences.query().findById([currentUser.id, formId]).first();
   },
 
   updateUserFormPreferences: async (currentUser, formId, preferences) => {
@@ -104,19 +136,17 @@ const service = {
       trx = await UserFormPreferences.startTransaction();
 
       if (current) {
-        result = await UserFormPreferences.query(trx)
-          .patchAndFetchById([currentUser.id, formId], {
-            preferences: preferences,
-            updatedBy: currentUser.usernameIdp
-          });
+        result = await UserFormPreferences.query(trx).patchAndFetchById([currentUser.id, formId], {
+          preferences: preferences,
+          updatedBy: currentUser.usernameIdp,
+        });
       } else {
-        result = await UserFormPreferences.query(trx)
-          .insertAndFetch({
-            userId: currentUser.id,
-            formId: formId,
-            preferences: preferences,
-            createdBy: currentUser.usernameIdp
-          });
+        result = await UserFormPreferences.query(trx).insertAndFetch({
+          userId: currentUser.id,
+          formId: formId,
+          preferences: preferences,
+          createdBy: currentUser.usernameIdp,
+        });
       }
 
       await trx.commit();
@@ -125,7 +155,7 @@ const service = {
       if (trx) await trx.rollback();
       throw err;
     }
-  }
+  },
 };
 
 module.exports = service;

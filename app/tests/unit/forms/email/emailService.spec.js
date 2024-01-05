@@ -8,30 +8,20 @@ const referer = 'https://chefs.nrs.gov.bc.ca';
 
 describe('_appUrl', () => {
   it('should format the url', () => {
-    expect(
-      emailService._appUrl(
-        'https://chefs-dev.apps.silver.devops.gov.bc.ca/pr-139/form/success?s=13978f3b-056b-4022-9a30-60d3b63ec459'
-      )
-    ).toEqual('https://chefs-dev.apps.silver.devops.gov.bc.ca/pr-139');
-    expect(
-      emailService._appUrl(
-        'https://chefs.nrs.gov.bc.ca/app/form/success?s=13978f3b-056b-4022-9a30-60d3b63ec459'
-      )
-    ).toEqual('https://chefs.nrs.gov.bc.ca/app');
+    expect(emailService._appUrl('https://chefs-dev.apps.silver.devops.gov.bc.ca/pr-139/form/success?s=13978f3b-056b-4022-9a30-60d3b63ec459')).toEqual(
+      'https://chefs-dev.apps.silver.devops.gov.bc.ca/pr-139'
+    );
+    expect(emailService._appUrl('https://chefs.nrs.gov.bc.ca/app/form/success?s=13978f3b-056b-4022-9a30-60d3b63ec459')).toEqual('https://chefs.nrs.gov.bc.ca/app');
   });
 
   it('should rethrow exceptions', () => {
-    expect(() => emailService._appUrl('notaurl')).toThrow(
-      'Invalid URL'
-    );
+    expect(() => emailService._appUrl('notaurl')).toThrow('Invalid URL');
   });
 });
 
 describe('_mergeEmailTemplate', () => {
   it('should merge two html files', () => {
-    mockedReadFileSync
-      .mockReturnValueOnce('<!-- BODY END -->')
-      .mockReturnValueOnce('<h1>New Body</h1>');
+    mockedReadFileSync.mockReturnValueOnce('<!-- BODY END -->').mockReturnValueOnce('<h1>New Body</h1>');
 
     const result = emailService._mergeEmailTemplate('test-file.html');
 
@@ -57,9 +47,7 @@ describe('_sendEmailTemplate', () => {
   };
 
   beforeEach(() => {
-    mockedReadFileSync
-      .mockReturnValueOnce('<!-- BODY END -->')
-      .mockReturnValueOnce('<h1>New Body</h1>');
+    mockedReadFileSync.mockReturnValueOnce('<!-- BODY END -->').mockReturnValueOnce('<h1>New Body</h1>');
   });
 
   afterEach(() => {
@@ -70,12 +58,7 @@ describe('_sendEmailTemplate', () => {
     chesService.merge = jest.fn().mockReturnValue('sent');
     emailService._mergeEmailTemplate = jest.fn().mockReturnValue('merged');
 
-    const result = emailService._sendEmailTemplate(
-      'sendStatusAssigned',
-      configData,
-      submission,
-      referer
-    );
+    const result = emailService._sendEmailTemplate('sendStatusAssigned', configData, submission, referer);
 
     expect(result).toBeTruthy();
     expect(chesService.merge).toHaveBeenCalledTimes(1);
@@ -85,12 +68,7 @@ describe('_sendEmailTemplate', () => {
     chesService.merge = jest.fn().mockReturnValue('sent');
     emailService._mergeEmailTemplate = jest.fn().mockReturnValue('merged');
 
-    const result = emailService._sendEmailTemplate(
-      'sendSubmissionConfirmation',
-      configData,
-      submission,
-      referer
-    );
+    const result = emailService._sendEmailTemplate('sendSubmissionConfirmation', configData, submission, referer);
 
     expect(result).toBeTruthy();
     expect(chesService.merge).toHaveBeenCalledTimes(1);
@@ -100,12 +78,7 @@ describe('_sendEmailTemplate', () => {
     chesService.merge = jest.fn().mockReturnValue('sent');
     emailService._mergeEmailTemplate = jest.fn().mockReturnValue('merged');
 
-    const result = emailService._sendEmailTemplate(
-      'sendSubmissionReceived',
-      configData,
-      submission,
-      referer
-    );
+    const result = emailService._sendEmailTemplate('sendSubmissionReceived', configData, submission, referer);
 
     expect(result).toBeTruthy();
     expect(chesService.merge).toHaveBeenCalledTimes(1);
@@ -121,11 +94,11 @@ describe('public methods', () => {
     id: 'xxx-yyy',
     showSubmissionConfirmation: true,
     name: '123',
-    submissionReceivedEmails: ['a@b.com','z@y.com'],
+    submissionReceivedEmails: ['a@b.com', 'z@y.com'],
     identityProviders: [
       {
         idp: 'public',
-      }
+      },
     ],
   };
   const submission = {
@@ -134,6 +107,9 @@ describe('public methods', () => {
   };
   const assignmentNotificationEmail = 'x@y.com';
   const body = { to: 'a@b.com' };
+  const body_high = { priority: 'high', to: 'a@b.com' };
+  const body_low = { priority: 'low', to: 'a@b.com' };
+  const body_normal = { priority: 'normal', to: 'a@b.com' };
   const emailContent = 'Email Content';
 
   afterEach(() => {
@@ -144,13 +120,7 @@ describe('public methods', () => {
     formService.readForm = jest.fn().mockReturnValue(form);
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
-    const result = await emailService.statusAssigned(
-      '123',
-      currentStatus,
-      assignmentNotificationEmail,
-      emailContent,
-      referer
-    );
+    const result = await emailService.statusAssigned('123', currentStatus, assignmentNotificationEmail, emailContent, referer);
     const configData = {
       bodyTemplate: 'send-status-assigned-email-body.html',
       title: `${form.name} Submission Assignment`,
@@ -160,19 +130,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: 'You have been assigned to a 123 submission. Please login to review it.',
-        messageLinkTextFR: '',
-        messageLinkUrl: 'https://form/view?s=123',
-        emailContent: 'Email Content',
-        title: '123 Submission Assignment'
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: 'You have been assigned to a 123 submission. Please login to review it.',
+          messageLinkTextFR: '',
+          messageLinkUrl: 'https://form/view?s=123',
+          emailContent: 'Email Content',
+          title: '123 Submission Assignment',
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com']
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(emailService._sendEmailTemplate).toHaveBeenCalledTimes(1);
@@ -183,13 +155,7 @@ describe('public methods', () => {
     formService.readForm = jest.fn().mockReturnValue(form);
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
-    const result = await emailService.statusRevising(
-      '123',
-      currentStatus,
-      assignmentNotificationEmail,
-      emailContent,
-      referer
-    );
+    const result = await emailService.statusRevising('123', currentStatus, assignmentNotificationEmail, emailContent, referer);
     const configData = {
       bodyTemplate: 'send-status-revising-email-body.html',
       title: `${form.name} Submission Revision Requested`,
@@ -199,19 +165,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `You have been asked to revise a ${form.name} submission. Please login to review it.`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://user/view?s=${form.name}`,
-        emailContent: 'Email Content',
-        title: `${form.name} Submission Revision Requested`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `You have been asked to revise a ${form.name} submission. Please login to review it.`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://user/view?s=${form.name}`,
+          emailContent: 'Email Content',
+          title: `${form.name} Submission Revision Requested`,
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com']
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(emailService._sendEmailTemplate).toHaveBeenCalledTimes(1);
@@ -222,13 +190,7 @@ describe('public methods', () => {
     formService.readForm = jest.fn().mockReturnValue(form);
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
-    const result = await emailService.statusCompleted(
-      '123',
-      currentStatus,
-      assignmentNotificationEmail,
-      emailContent,
-      referer
-    );
+    const result = await emailService.statusCompleted('123', currentStatus, assignmentNotificationEmail, emailContent, referer);
     const configData = {
       bodyTemplate: 'submission-completed.html',
       title: `${form.name} Has Been Completed`,
@@ -238,36 +200,73 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `Your submission from ${form.name} has been Completed.`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://user/view?s=${form.name}`,
-        emailContent: 'Email Content',
-        title: `${form.name} Has Been Completed`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `Your submission from ${form.name} has been Completed.`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://user/view?s=${form.name}`,
+          emailContent: 'Email Content',
+          title: `${form.name} Has Been Completed`,
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com']
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(emailService._sendEmailTemplate).toHaveBeenCalledTimes(1);
     expect(emailService._sendEmailTemplate).toHaveBeenCalledWith(configData, contexts);
   });
 
-  it('submissionConfirmation should call send a conf email', async () => {
+  it('submissionConfirmation should call send a low priority conf email', async () => {
     formService.readForm = jest.fn().mockReturnValue(form);
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
 
-    const result = await emailService.submissionConfirmation(
-      form.id,
-      submission.id,
-      body,
-      referer
-    );
+    const result = await emailService.submissionConfirmation(form.id, submission.id, body_low, referer);
+
+    const configData = {
+      bodyTemplate: 'submission-received-confirmation-public.html',
+      subject: `${form.name} Accepted`,
+      priority: 'low',
+      messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
+      title: `${form.name} Accepted`,
+      form,
+    };
+
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
+          messageLinkUrl: `https://form/success?s=${form.name}`,
+          revisionNotificationEmailContent: undefined,
+          title: `${form.name} Accepted`,
+        },
+        to: ['a@b.com'],
+      },
+    ];
+
+    expect(result).toEqual('ret');
+    expect(formService.readForm).toHaveBeenCalledTimes(1);
+    expect(formService.readForm).toHaveBeenCalledWith(form.id);
+    expect(formService.readSubmission).toHaveBeenCalledTimes(1);
+    expect(formService.readSubmission).toHaveBeenCalledWith(submission.id);
+    expect(emailService._sendEmailTemplate).toHaveBeenCalledTimes(1);
+    expect(emailService._sendEmailTemplate).toHaveBeenCalledWith(configData, contexts);
+  });
+
+  it('submissionConfirmation should call send a normal priority conf email', async () => {
+    formService.readForm = jest.fn().mockReturnValue(form);
+    formService.readSubmission = jest.fn().mockReturnValue(submission);
+    emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
+
+    const result = await emailService.submissionConfirmation(form.id, submission.id, body_normal, referer);
 
     const configData = {
       bodyTemplate: 'submission-received-confirmation-public.html',
@@ -279,19 +278,61 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
-        messageLinkTextFR: `Merci de l’envoi de votre formulaire de ${form.name}. Vous pouvez visualiser vos renseignements envoyés en suivant les liens suivants:`,
-        messageLinkUrl: `https://form/success?s=${form.name}`,
-        emailContent: undefined,
-        title: `${form.name} Accepted/Accepté`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
+          messageLinkTextFR: `Merci de l’envoi de votre formulaire de ${form.name}. Vous pouvez visualiser vos renseignements envoyés en suivant les liens suivants:`,
+          messageLinkUrl: `https://form/success?s=${form.name}`,
+          emailContent: undefined,
+          title: `${form.name} Accepted/Accepté`,
+        },
+        to: ['a@b.com'],
       },
-      to: ['a@b.com']
-    }];
+    ];
+
+    expect(result).toEqual('ret');
+    expect(formService.readForm).toHaveBeenCalledTimes(1);
+    expect(formService.readForm).toHaveBeenCalledWith(form.id);
+    expect(formService.readSubmission).toHaveBeenCalledTimes(1);
+    expect(formService.readSubmission).toHaveBeenCalledWith(submission.id);
+    expect(emailService._sendEmailTemplate).toHaveBeenCalledTimes(1);
+    expect(emailService._sendEmailTemplate).toHaveBeenCalledWith(configData, contexts);
+  });
+
+  it('submissionConfirmation should call send a high priority conf email', async () => {
+    formService.readForm = jest.fn().mockReturnValue(form);
+    formService.readSubmission = jest.fn().mockReturnValue(submission);
+    emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
+
+    const result = await emailService.submissionConfirmation(form.id, submission.id, body_high, referer);
+
+    const configData = {
+      bodyTemplate: 'submission-received-confirmation-public.html',
+      subject: `${form.name} Accepted`,
+      priority: 'high',
+      messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
+      title: `${form.name} Accepted`,
+      form,
+    };
+
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `Thank you for your ${form.name} submission. You can view your submission details by visiting the following links:`,
+          messageLinkUrl: `https://form/success?s=${form.name}`,
+          revisionNotificationEmailContent: undefined,
+          title: `${form.name} Accepted`,
+        },
+        to: ['a@b.com'],
+      },
+    ];
 
     expect(result).toEqual('ret');
     expect(formService.readForm).toHaveBeenCalledTimes(1);
@@ -307,12 +348,7 @@ describe('public methods', () => {
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
 
-    const result = await emailService.submissionReceived(
-      form.id,
-      submission.id,
-      body,
-      referer
-    );
+    const result = await emailService.submissionReceived(form.id, submission.id, body, referer);
 
     const configData = {
       bodyTemplate: 'submission-confirmation.html',
@@ -324,19 +360,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `There is a new ${form.name} submission. Please login to review it.`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://form/view?s=${form.name}`,
-        emailContent: undefined,
-        title: `${form.name} Submission`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `There is a new ${form.name} submission. Please login to review it.`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://form/view?s=${form.name}`,
+          emailContent: undefined,
+          title: `${form.name} Submission`,
+        },
+        to: ['a@b.com', 'z@y.com'],
       },
-      to: ['a@b.com', 'z@y.com']
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(formService.readForm).toHaveBeenCalledTimes(1);
@@ -353,12 +391,7 @@ describe('public methods', () => {
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
 
-    const result = await emailService.submissionUnassigned(
-      form.id,
-      currentStatus,
-      assignmentNotificationEmail,
-      referer
-    );
+    const result = await emailService.submissionUnassigned(form.id, currentStatus, assignmentNotificationEmail, referer);
 
     const configData = {
       bodyTemplate: 'submission-unassigned.html',
@@ -369,19 +402,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `You have been uninvited from ${form.name} submission draft.`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://user/view?s=${form.name}`,
-        emailContent: undefined,
-        title: `Uninvited From ${form.name} Draft`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `You have been uninvited from ${form.name} submission draft.`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://user/view?s=${form.name}`,
+          emailContent: undefined,
+          title: `Uninvited From ${form.name} Draft`,
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com']
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(formService.readForm).toHaveBeenCalledTimes(1);
@@ -395,12 +430,7 @@ describe('public methods', () => {
     formService.readSubmission = jest.fn().mockReturnValue(submission);
     emailService._sendEmailTemplate = jest.fn().mockReturnValue('ret');
 
-    const result = await emailService.submissionAssigned(
-      form.id,
-      currentStatus,
-      assignmentNotificationEmail,
-      referer
-    );
+    const result = await emailService.submissionAssigned(form.id, currentStatus, assignmentNotificationEmail, referer);
 
     const configData = {
       bodyTemplate: 'submission-assigned.html',
@@ -411,19 +441,21 @@ describe('public methods', () => {
       form,
     };
 
-    const contexts = [{
-      context: {
-        allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
-        confirmationNumber: 'abc',
-        form: form,
-        messageLinkText: `You have been invited to a ${form.name} submission draft. You can review your submission draft details by visiting the following links:`,
-        messageLinkTextFR: '',
-        messageLinkUrl: `https://user/view?s=${form.name}`,
-        emailContent: undefined,
-        title: `Invited to ${form.name} Draft`
+    const contexts = [
+      {
+        context: {
+          allFormSubmissionUrl: 'https://user/submissions?f=xxx-yyy',
+          confirmationNumber: 'abc',
+          form: form,
+          messageLinkText: `You have been invited to a ${form.name} submission draft. You can review your submission draft details by visiting the following links:`,
+          messageLinkTextFR: '',
+          messageLinkUrl: `https://user/view?s=${form.name}`,
+          emailContent: undefined,
+          title: `Invited to ${form.name} Draft`,
+        },
+        to: ['x@y.com'],
       },
-      to: ['x@y.com']
-    }];
+    ];
 
     expect(result).toEqual('ret');
     expect(formService.readForm).toHaveBeenCalledTimes(1);

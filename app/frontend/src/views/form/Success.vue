@@ -1,32 +1,20 @@
 <template>
   <div>
     <FormViewer :submissionId="s" :readOnly="true" displayTitle>
-      <template #alert="{ form, submission }">
-        <div class="mb-5">
-          <h1 v-if="submission.data.lang === 'fr'" class="mb-5">
+      <template #alert="{ form }">
+        <div class="mb-5" :class="{ 'dir-rtl': isRTL }">
+          <h1 class="mb-5" :lang="lang">
             <v-icon large color="success">check_circle</v-icon>
-            Votre formulaire a été envoyé avec succès
-          </h1>
-          <h1 v-else class="mb-5">
-            <v-icon large color="success">check_circle</v-icon>
-            Your form has been submitted successfully
+            {{ $t('trans.sucess.sucessFormSubmissn') }}
           </h1>
 
           <div v-if="form.showSubmissionConfirmation">
             <h3>
-              <span v-if="submission.data.lang === 'fr'" class="d-print-none">
-                Si vous souhaitez conserver un enregistrement de cet envoi, vous pouvez conserver l'identifiant de 
+              <span class="d-print-none" :lang="lang">
+                {{ $t('trans.sucess.keepRecord') }}
               </span>
-              <span v-else class="d-print-none">
-                If you wish to keep a record of this submission, you can keep
-                the following
-              </span>
-              <span v-if="submission.data.lang === 'fr'">
-                Confirmation suivant:
-                <mark>{{ s.substring(0, 8).toUpperCase() }}</mark>
-              </span>
-              <span v-else>
-                Confirmation ID:
+              <span :lang="lang">
+                {{ $t('trans.sucess.confirmationId') }}:
                 <mark>{{ s.substring(0, 8).toUpperCase() }}</mark>
               </span>
             </h3>
@@ -35,7 +23,7 @@
               :email="email"
               :formName="form.name"
               :submissionId="s"
-              :lang="submission.data.lang"
+              :lang="submission?.data?.lang"
             />
           </div>
           <hr />
@@ -60,6 +48,9 @@ export default {
     FormViewer,
     RequestReceipt,
   },
-  computed: mapGetters('auth', ['email'])
+  computed: {
+    ...mapGetters('auth', ['email']),
+    ...mapGetters('form', ['isRTL', 'lang']),
+  },
 };
 </script>
