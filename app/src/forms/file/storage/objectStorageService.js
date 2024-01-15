@@ -83,8 +83,17 @@ class ObjectStorageService {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-unused-vars
         this._s3.upload(params, (err, data) => {
-          if (err) {
-            reject(err);
+          if (err) { // retry once
+            this._s3.upload(params, (err, data) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve({
+                  path: data.Key,
+                  storage: StorageTypes.OBJECT_STORAGE,
+                });         
+              }
+            })
           } else {
             resolve({
               path: data.Key,
