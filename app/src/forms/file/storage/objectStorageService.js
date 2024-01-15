@@ -33,6 +33,7 @@ class ObjectStorageService {
       params: {
         Bucket: this._bucket,
       },
+      maxRetries: 3
     });
   }
 
