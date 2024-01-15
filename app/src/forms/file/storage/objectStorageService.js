@@ -84,10 +84,14 @@ class ObjectStorageService {
         // eslint-disable-next-line no-unused-vars
         this._s3.upload(params, (err, data) => {
           if (err) { // retry once
+            console.log("error uploading: ", err)
+            console.log("retrying...")
             this._s3.upload(params, (err, data) => {
               if (err) {
+                console.log("second error uploading: ", err)
                 reject(err);
               } else {
+                console.log("second upload successful")
                 resolve({
                   path: data.Key,
                   storage: StorageTypes.OBJECT_STORAGE,
@@ -95,6 +99,7 @@ class ObjectStorageService {
               }
             })
           } else {
+            console.log("upload successful")
             resolve({
               path: data.Key,
               storage: StorageTypes.OBJECT_STORAGE,
