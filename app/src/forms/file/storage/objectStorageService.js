@@ -88,17 +88,19 @@ class ObjectStorageService {
             if (err) { // retry once
               console.log("error uploading: ", err)
               console.log("retrying...")
-              this._s3.upload(params, (err, data) => {
-                if (err) {
-                  console.log("second error uploading: ", err)
-                  reject(err);
-                } else {
-                  console.log("second upload successful")
-                  resolve({
-                    path: data.Key,
-                    storage: StorageTypes.OBJECT_STORAGE,
-                  });         
-                }
+              delay(500).then(() => {
+                this._s3.upload(params, (err, data) => {
+                  if (err) {
+                    console.log("second error uploading: ", err)
+                    reject(err);
+                  } else {
+                    console.log("second upload successful")
+                    resolve({
+                      path: data.Key,
+                      storage: StorageTypes.OBJECT_STORAGE,
+                    });         
+                  }
+                })
               })
             } else {
               console.log("upload successful")
@@ -235,3 +237,7 @@ let objectStorageService = new ObjectStorageService({
   key: key,
 });
 module.exports = objectStorageService;
+
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
