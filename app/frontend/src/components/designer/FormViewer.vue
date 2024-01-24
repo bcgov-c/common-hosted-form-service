@@ -321,7 +321,7 @@ export default {
           },
         },
         evalContext: {
-          token: Object.assign(this.tokenParsed, { token: this.token }),
+          token: this.tokenParsed && this.token ? Object.assign(this.tokenParsed, { token: this.token }) : this.tokenParsed,
           user: this.user,
         },
       };
