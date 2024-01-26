@@ -10,7 +10,7 @@ export default {
 
     const defaultParams = {
       config: window.__BASEURL__ ? `${window.__BASEURL__}/config` : '/config',
-      init: { onLoad: 'login-required' },
+      init: { onLoad: 'login-required', checkLoginIframe: false },
     };
     const options = Object.assign({}, defaultParams, params);
     if (assertOptions(options).hasError)
