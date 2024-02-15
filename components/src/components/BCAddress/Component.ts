@@ -25,8 +25,8 @@ export default class Component extends (ParentComponent as any) {
             provider: 'custom',
             providerOptions: {
                 queryProperty: 'addressString',
-
-              url: process.env.VUE_APP_CHEFS_ADVANCE_GEO_ADDRESS_APIURL},
+                url: window.location.origin + "/" + process.env.VUE_APP_CHEFS_ADVANCE_GEO_ADDRESS_APIURL 
+            },
 
             queryParameters:{"echo": false,
             "brief": true,
