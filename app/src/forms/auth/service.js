@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const { Form, FormSubmissionUserPermissions, PublicFormAccess, SubmissionMetadata, User, UserFormAccess } = require('../common/models');
 const { queryUtils } = require('../common/utils');
-
+const samService = require('../../components/samService');
 const FORM_SUBMITTER = require('../common/constants').Permissions.FORM_SUBMITTER;
 
 const service = {
@@ -221,6 +221,16 @@ const service = {
       .modify('filterUserId', currentUser.id)
       .modify('filterByPermissions', permissions)
       .first();
+  },
+
+  checkCatchmentAccess: async (guid, catchment) => {
+    try {
+      const userData = await samService.getUserPermissions(guid);
+      const hasCatchmentAccess = userData.find(o => o.Application === "WGS" && o.Catchment === (catchment + 100).toString()) != null;
+      return hasCatchmentAccess;
+    } catch(e){
+      console.log(e);
+    }
   },
 
   getSubmissionForm: async (submissionId) => {
