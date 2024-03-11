@@ -144,19 +144,20 @@ const hasSubmissionPermissions = (permissions) => {
 
       // For catchment-protected forms, check the users permissions in SAM against the forms catchment
       const catchmentProtected = submissionForm.form.identityProviders.find((p) => p.code === 'bceid-catchment') !== undefined;
-      if (catchmentProtected){
+      if (catchmentProtected) {
         const userGuid = req.currentUser?.idpUserId;
         const catchment = submissionForm?.submission?.submission?.catchment;
-        const submissionCreatedAt = submissionForm?.submission?.createdAt;
+        const submissionCreated = submissionForm?.submission?.createdAt;
         const submissionCreatedDate = submissionCreatedAt ? new Date(submissionCreatedAt) : null;
-        const catchmentProtectionReleaseDate = new Date("2024-03-11");
-        if (submissionCreatedAt && (submissionCreatedDate < catchmentProtectionReleaseDate)){
+        const catchmentFormsRelease = config.get('serviceClient.oes.sam.catchmentFormsReleaseDate');
+        const catchmentFormsReleaseDate = new Date(catchmentFormsRelease);
+        if (submissionCreated && catchmentFormsRelease && (submissionCreatedDate < catchmentFormsReleaseDate)) {
           // for submissions created before the release of catchment-protected forms, check to see if the user has any wage sub access at all //
           const hasSAMAccess = await service.checkSAMAccess(userGuid);
           if (hasSAMAccess) return next();
         } 
-        else if (userGuid && catchment){ 
-          // if the submission was created after the release date, do the normal SAM catchment check //
+        else if (userGuid && catchment) { 
+          // if the submission was created after the release date, do a SAM catchment check //
           const hasCatchmentAccess = await service.checkCatchmentAccess(userGuid, catchment);
           if (hasCatchmentAccess) return next();
         }
