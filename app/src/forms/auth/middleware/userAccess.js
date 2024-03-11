@@ -148,9 +148,9 @@ const hasSubmissionPermissions = (permissions) => {
         const userGuid = req.currentUser?.idpUserId;
         const catchment = submissionForm?.submission?.submission?.catchment;
         const submissionCreated = submissionForm?.submission?.createdAt;
-        const submissionCreatedDate = submissionCreatedAt ? new Date(submissionCreatedAt) : null;
+        const submissionCreatedDate = submissionCreated ? new Date(submissionCreated) : null;
         const catchmentFormsRelease = config.get('serviceClient.oes.sam.catchmentFormsReleaseDate');
-        const catchmentFormsReleaseDate = new Date(catchmentFormsRelease);
+        const catchmentFormsReleaseDate = catchmentFormsRelease ? new Date(catchmentFormsRelease) : null;
         if (submissionCreated && catchmentFormsRelease && (submissionCreatedDate < catchmentFormsReleaseDate)) {
           // for submissions created before the release of catchment-protected forms, check to see if the user has any wage sub access at all //
           const hasSAMAccess = await service.checkSAMAccess(userGuid);
