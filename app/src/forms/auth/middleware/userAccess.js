@@ -6,6 +6,7 @@ const Permissions = require('../../common/constants').Permissions;
 const Roles = require('../../common/constants').Roles;
 const service = require('../service');
 const rbacService = require('../../rbac/service');
+const config = require('config');
 
 const getToken = (req) => {
   try {
