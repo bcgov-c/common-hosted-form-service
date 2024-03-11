@@ -142,17 +142,25 @@ const hasSubmissionPermissions = (permissions) => {
       const submissionPermission = await service.checkSubmissionPermission(req.currentUser, submissionId, permissions);
       if (submissionPermission) return next();
 
-      // for catchment-protected forms, also check the users permissions in SAM against the forms catchment
+      // For catchment-protected forms, check the users permissions in SAM against the forms catchment
       const catchmentProtected = submissionForm.form.identityProviders.find((p) => p.code === 'bceid-catchment') !== undefined;
       if (catchmentProtected){
-        const userGuid = req.currentUser.idpUserId;
-        const catchment = submissionForm.submission.submission.catchment;
-        if (userGuid && catchment){ // only check when catchment is set and a user guid is available
+        const userGuid = req.currentUser?.idpUserId;
+        const catchment = submissionForm?.submission?.submission?.catchment;
+        const submissionCreatedAt = submissionForm?.submission?.createdAt;
+        const submissionCreatedDate = submissionCreatedAt ? new Date(submissionCreatedAt) : null;
+        const catchmentProtectionReleaseDate = new Date("2024-03-11");
+        if (submissionCreatedAt && (submissionCreatedDate < catchmentProtectionReleaseDate)){
+          // for submissions created before the release of catchment-protected forms, check to see if the user has any wage sub access at all //
+          const hasSAMAccess = await service.checkSAMAccess(userGuid);
+          if (hasSAMAccess) return next();
+        } 
+        else if (userGuid && catchment){ 
+          // if the submission was created after the release date, do the normal SAM catchment check //
           const hasCatchmentAccess = await service.checkCatchmentAccess(userGuid, catchment);
           if (hasCatchmentAccess) return next();
         }
       }
-
 
       // no access to this submission...
       return next(new Problem(401, { detail: 'You do not have access to this submission.' }));

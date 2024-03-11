@@ -226,8 +226,18 @@ const service = {
   checkCatchmentAccess: async (guid, catchment) => {
     try {
       const userData = await samService.getUserPermissions(guid);
-      const hasCatchmentAccess = userData.find(o => o.Application === "WGS" && o.Catchment === (catchment + 100).toString()) != null;
+      const hasCatchmentAccess = userData.find(o => o.Application === "WGS" && o.Catchment === (catchment + 100).toString()) != null; // only check Wage Subsidy for now
       return hasCatchmentAccess;
+    } catch(e){
+      console.log(e);
+    }
+  },
+
+  checkSAMAccess: async (guid) => {
+    try {
+      const userData = await samService.getUserPermissions(guid);
+      const hasSAMAccess = userData.find(o => o.Application === "WGS") != null; // only check Wage Subsidy for now
+      return hasSAMAccess;
     } catch(e){
       console.log(e);
     }
