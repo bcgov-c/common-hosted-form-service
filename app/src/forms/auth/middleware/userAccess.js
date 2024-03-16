@@ -6,6 +6,7 @@ const Permissions = require('../../common/constants').Permissions;
 const Roles = require('../../common/constants').Roles;
 const service = require('../service');
 const rbacService = require('../../rbac/service');
+const config = require('config');
 
 const getToken = (req) => {
   try {
@@ -141,6 +142,27 @@ const hasSubmissionPermissions = (permissions) => {
       // check against the submission level permissions assigned to the user...
       const submissionPermission = await service.checkSubmissionPermission(req.currentUser, submissionId, permissions);
       if (submissionPermission) return next();
+
+      // For catchment-protected forms, check the users permissions in SAM against the forms catchment
+      const catchmentProtected = submissionForm.form.identityProviders.find((p) => p.code === 'bceid-catchment') !== undefined;
+      if (catchmentProtected) {
+        const userGuid = req.currentUser?.idpUserId;
+        const catchment = submissionForm?.submission?.submission?.catchment;
+        const submissionCreated = submissionForm?.submission?.createdAt;
+        const submissionCreatedDate = submissionCreated ? new Date(submissionCreated) : null;
+        const catchmentFormsRelease = config.get('serviceClient.oes.sam.catchmentFormsReleaseDate');
+        const catchmentFormsReleaseDate = catchmentFormsRelease ? new Date(catchmentFormsRelease) : null;
+        if (submissionCreated && catchmentFormsRelease && (submissionCreatedDate < catchmentFormsReleaseDate)) {
+          // for submissions created before the release of catchment-protected forms, check to see if the user has any wage sub access at all //
+          const hasSAMAccess = await service.checkSAMAccess(userGuid);
+          if (hasSAMAccess) return next();
+        } 
+        else if (userGuid && catchment) { 
+          // if the submission was created after the release date, do a SAM catchment check //
+          const hasCatchmentAccess = await service.checkCatchmentAccess(userGuid, catchment);
+          if (hasCatchmentAccess) return next();
+        }
+      }
 
       // no access to this submission...
       return next(new Problem(401, { detail: 'You do not have access to this submission.' }));

@@ -67,6 +67,14 @@
         "clientId": "SC_CS_CDOGS_CLIENT_ID",
         "clientSecret": "SC_CS_CDOGS_CLIENT_SECRET"
       }
+    },
+    "oes": {
+      "sam": {
+        "username": "SAM_USERNAME",
+        "password": "SAM_PASSWORD",
+        "apiUrl": "SAM_API_URL",
+        "catchmentFormsReleaseDate": "CATCHMENT_FORMS_RELEASE_DATE"
+      }
     }
   }
 }

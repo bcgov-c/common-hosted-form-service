@@ -88,7 +88,12 @@ function getErrorMessage(options, error) {
 export async function preFlightAuth(options = {}, next) {
   // Support lambda functions (Consider making them util functions?)
   const getIdpHint = (values) => {
-    return Array.isArray(values) && values.length ? values[0] : undefined;
+    if (Array.isArray(values) && values.length){
+      return values[0] === "bceid-catchment" ? "bceid" : values[0]; // bceid-catchment uses bceid
+    }
+    else {
+      return undefined;
+    }
   };
   const isValidIdp = (value) =>
     Object.values(IdentityProviders).includes(value);

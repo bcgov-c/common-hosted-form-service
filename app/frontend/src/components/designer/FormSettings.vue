@@ -102,6 +102,11 @@
                       <span :class="{ 'mr-2': isRTL }"> Basic or Business BCeID </span>
                     </template>
                   </v-radio>
+                  <v-radio class="mx-2" :value="ID_PROVIDERS.BCEIDBOTH_WITH_CATCHMENT">
+                    <template #label>
+                      <span :class="{ 'mr-2': isRTL }"> Basic or Business BCeID (Catchment Protected) </span>
+                    </template>
+                  </v-radio>
                   <!-- Mandatory BCeID process notification -->
                   <!--
                   <v-expand-transition>
