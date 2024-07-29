@@ -9,15 +9,16 @@ const service = require('../service');
  * Get the DB record for this file being accessed and store in request for use further down the chain
  * @returns {Function} a middleware function
  */
-const currentFileRecord = async (req, res, next) => {
-  let fileRecord = undefined;
+const currentFileRecord = async (req, _res, next) => {
+  let fileRecord;
   try {
     // Check if authed, can expand for API key access if needed
-    if (req.params.id && req.currentUser) {
-      fileRecord = await service.read(req.params.id);
+    if (req.params.fileId && (req.currentUser || req.apiUser)) {
+      // expanded for api user
+      fileRecord = await service.read(req.params.fileId);
     }
   } catch (error) {
-    log.error(`Failed to find file record for id ${req.params.id}. Error ${error}`);
+    log.error(`Failed to find file record for id ${req.params.fileId}. Error ${error}`);
   }
 
   if (!fileRecord) {
@@ -48,14 +49,18 @@ const hasFileCreate = (req, res, next) => {
  * Middleware to determine if the current user can do a specific permission on a file
  * This is generally based on the SUBMISSION permissions that the file is attached to
  * but has to handle management for files that are added before submit
- * @param {string} permissions the permission to require on this route
+ * @param {string[]} permissions the submission permissions to require on this route
  * @returns {Function} a middleware function
  */
 const hasFilePermissions = (permissions) => {
   return (req, res, next) => {
+    // skip for API users
+    if (req.apiUser) {
+      return next();
+    }
     // Guard against unauthed (or public) users
     if (!req.currentUser || !req.currentUser.idpUserId) {
-      return next(new Problem(403, { detail: 'Unauthorized to read file' }));
+      return next(new Problem(403, { detail: 'Unauthorized to read file.' }));
     }
 
     // Check to see if this has been associated with a submission...

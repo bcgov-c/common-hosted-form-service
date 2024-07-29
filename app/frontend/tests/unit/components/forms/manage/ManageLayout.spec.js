@@ -1,82 +1,127 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
-import i18n from '@/internationalization';
-import ManageLayout from '@/components/forms/manage/ManageLayout.vue';
+import { flushPromises, mount } from '@vue/test-utils';
+import { createTestingPinia } from '@pinia/testing';
+import { setActivePinia } from 'pinia';
+import { createRouter, createWebHistory } from 'vue-router';
+import { beforeEach, expect, vi } from 'vitest';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+import getRouter from '~/router';
+import ManageLayout from '~/components/forms/manage/ManageLayout.vue';
+import { useFormStore } from '~/store/form';
+import { FormPermissions } from '~/utils/constants';
+import { ref } from 'vue';
 
 describe('ManageLayout.vue', () => {
-  const mockFormGetter = jest.fn();
-  const mockPermissionsGetter = jest.fn();
-  let store;
-  const formActions = {
-    fetchDrafts: jest.fn(),
-    fetchForm: jest.fn(),
-    getFormPermissionsForUser: jest.fn(),
-  };
-
-  beforeEach(() => {
-    store = new Vuex.Store({
-      modules: {
-        form: {
-          namespaced: true,
-          getters: {
-            form: mockFormGetter,
-            permissions: mockPermissionsGetter,
-          },
-          actions: formActions,
-        },
-      },
-    });
+  const pinia = createTestingPinia();
+  const router = createRouter({
+    history: createWebHistory(),
+    routes: getRouter().getRoutes(),
   });
 
-  afterEach(() => {
-    mockFormGetter.mockReset();
-    mockPermissionsGetter.mockReset();
+  setActivePinia(pinia);
+  const formStore = useFormStore(pinia);
+
+  beforeEach(() => {
+    formStore.$reset();
   });
 
   it('renders', () => {
-    mockFormGetter.mockReturnValue({ name: 'myForm' });
-    mockPermissionsGetter.mockReturnValue(['design_read']);
-    const wrapper = shallowMount(ManageLayout, {
-      localVue,
-      propsData: { f: 'f' },
-      store,
-      stubs: ['ManageFormActions', 'ManageForm'],
-      i18n
+    const wrapper = mount(ManageLayout, {
+      props: {
+        f: 'f',
+      },
+      global: {
+        plugins: [router, pinia],
+        stubs: {
+          ManageFormActions: true,
+          ManageForm: true,
+        },
+      },
     });
 
-    expect(wrapper.html()).toMatch('Manage Form');
+    expect(wrapper.text()).toMatch('trans.manageLayout.manageForm');
   });
 
   it('calls the store actions', async () => {
-    mockFormGetter.mockReturnValue({ name: 'myForm' });
-    mockPermissionsGetter.mockReturnValue(['design_read']);
     const formId = '123-456';
-    await shallowMount(ManageLayout, {
-      localVue,
-      propsData: { f: formId },
-      store,
-      stubs: ['ManageFormActions', 'ManageForm'],
-      i18n
+    const fetchFormSpy = vi.spyOn(formStore, 'fetchForm');
+    const fetchDraftsSpy = vi.spyOn(formStore, 'fetchDrafts');
+    fetchDraftsSpy.mockImplementationOnce(() => {});
+    const getFormPermissionsForUserSpy = vi.spyOn(
+      formStore,
+      'getFormPermissionsForUser'
+    );
+    mount(ManageLayout, {
+      props: {
+        f: formId,
+      },
+      global: {
+        plugins: [router, pinia],
+        stubs: {
+          ManageFormActions: true,
+          ManageForm: true,
+        },
+      },
     });
 
-    expect(formActions.fetchForm).toHaveBeenCalledTimes(1);
-    expect(formActions.getFormPermissionsForUser).toHaveBeenCalledTimes(1);
+    await flushPromises();
+
+    expect(fetchFormSpy).toHaveBeenCalledTimes(1);
+    expect(getFormPermissionsForUserSpy).toHaveBeenCalledTimes(1);
+    expect(fetchDraftsSpy).toHaveBeenCalledTimes(0);
   });
 
-  it('shows the form name', () => {
-    mockFormGetter.mockReturnValue({ name: 'myForm' });
-    mockPermissionsGetter.mockReturnValue(['design_read']);
-    const wrapper = shallowMount(ManageLayout, {
-      localVue,
-      propsData: { f: 'f' },
-      store,
-      stubs: ['ManageFormActions', 'ManageForm'],
-      i18n
+  it('shows the form name', async () => {
+    formStore.fetchForm.mockImplementation(() => {
+      formStore.form.name = 'myForm';
+    });
+    formStore.getFormPermissionsForUser.mockImplementation(() => [
+      'design_read',
+    ]);
+    const wrapper = mount(ManageLayout, {
+      props: {
+        f: 'f',
+      },
+      global: {
+        plugins: [router, pinia],
+        stubs: {
+          ManageFormActions: true,
+          ManageForm: true,
+        },
+      },
     });
 
-    expect(wrapper.html()).toMatch('myForm');
+    await flushPromises();
+
+    expect(wrapper.html()).toContain('myForm');
+  });
+
+  it('calls the store actions also calls fetchDrafts if they have permissions to read the form design', async () => {
+    const formId = '123-456';
+    const fetchFormSpy = vi.spyOn(formStore, 'fetchForm');
+    const getFormPermissionsForUserSpy = vi.spyOn(
+      formStore,
+      'getFormPermissionsForUser'
+    );
+    const fetchDraftsSpy = vi.spyOn(formStore, 'fetchDrafts');
+    fetchDraftsSpy.mockImplementationOnce(() => {});
+    formStore.permissions = ref([FormPermissions.DESIGN_READ]);
+    mount(ManageLayout, {
+      props: {
+        f: formId,
+      },
+      global: {
+        plugins: [router, pinia],
+        stubs: {
+          ManageFormActions: true,
+          ManageForm: true,
+        },
+      },
+    });
+
+    await flushPromises();
+
+    expect(fetchFormSpy).toHaveBeenCalledTimes(1);
+    expect(getFormPermissionsForUserSpy).toHaveBeenCalledTimes(1);
+    expect(fetchDraftsSpy).toHaveBeenCalledTimes(1);
   });
 });

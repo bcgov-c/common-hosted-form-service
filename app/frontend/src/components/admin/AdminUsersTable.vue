@@ -1,3 +1,62 @@
+<script>
+import { mapActions, mapState } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+import { useAdminStore } from '~/store/admin';
+import { useFormStore } from '~/store/form';
+
+export default {
+  setup() {
+    const { t, locale } = useI18n({ useScope: 'global' });
+
+    return { t, locale };
+  },
+  data() {
+    return {
+      loading: true,
+      search: '',
+    };
+  },
+  computed: {
+    ...mapState(useAdminStore, ['userList']),
+    ...mapState(useFormStore, ['isRTL']),
+    headers() {
+      return [
+        {
+          title: this.$t('trans.adminUsersTable.fullName'),
+          align: 'start',
+          key: 'fullName',
+        },
+        {
+          title: this.$t('trans.adminUsersTable.userID'),
+          align: 'start',
+          key: 'username',
+        },
+        {
+          title: this.$t('trans.adminUsersTable.created'),
+          align: 'start',
+          key: 'created',
+        },
+        {
+          title: this.$t('trans.adminUsersTable.actions'),
+          align: 'end',
+          key: 'actions',
+          filterable: false,
+          sortable: false,
+        },
+      ];
+    },
+  },
+  async mounted() {
+    await this.getUsers();
+    this.loading = false;
+  },
+  methods: {
+    ...mapActions(useAdminStore, ['getUsers']),
+  },
+};
+</script>
+
 <template>
   <div>
     <v-row no-gutters>
@@ -10,13 +69,15 @@
         >
           <v-text-field
             v-model="search"
-            append-icon="mdi-magnify"
+            density="compact"
+            variant="underlined"
             :label="$t('trans.adminUsersTable.search')"
+            append-inner-icon="mdi-magnify"
             single-line
             hide-details
             class="pb-5"
             :class="{ 'dir-rtl': isRTL, label: isRTL }"
-            :lang="lang"
+            :lang="locale"
           />
         </div>
       </v-col>
@@ -25,22 +86,28 @@
     <!-- table header -->
     <v-data-table
       class="submissions-table"
+      hover
       :headers="headers"
       item-key="title"
       :items="userList"
       :search="search"
       :loading="loading"
       :loading-text="$t('trans.adminUsersTable.loadingText')"
-      :lang="lang"
+      :lang="locale"
     >
-      <template #[`item.created`]="{ item }">
-        {{ item.createdAt | formatDate }}
+      <template #item.created="{ item }">
+        {{ $filters.formatDate(item.createdAt) }}
       </template>
-      <template #[`item.actions`]="{ item }">
+      <template #item.actions="{ item }">
         <router-link :to="{ name: 'AdministerUser', query: { u: item.id } }">
-          <v-btn color="primary" text small>
-            <v-icon class="mr-1">build_circle</v-icon>
-            <span class="d-none d-sm-flex" :lang="lang">{{
+          <v-btn
+            color="primary"
+            variant="text"
+            size="small"
+            :title="$t('trans.adminUsersTable.admin')"
+          >
+            <v-icon class="mr-1" icon="mdi:mdi-wrench"></v-icon>
+            <span class="d-none d-sm-flex" :lang="locale">{{
               $t('trans.adminUsersTable.admin')
             }}</span>
           </v-btn>
@@ -49,59 +116,6 @@
     </v-data-table>
   </div>
 </template>
-
-<script>
-import { mapActions, mapGetters } from 'vuex';
-
-export default {
-  name: 'FormsTable',
-  data() {
-    return {
-      activeOnly: false,
-      loading: true,
-      search: '',
-    };
-  },
-  computed: {
-    ...mapGetters('admin', ['userList']),
-    ...mapGetters('form', ['isRTL', 'lang']),
-    headers() {
-      return [
-        {
-          text: this.$t('trans.adminUsersTable.fullName'),
-          align: 'start',
-          value: 'fullName',
-        },
-        {
-          text: this.$t('trans.adminUsersTable.userID'),
-          align: 'start',
-          value: 'username',
-        },
-        {
-          text: this.$t('trans.adminUsersTable.created'),
-          align: 'start',
-          value: 'created',
-        },
-        {
-          text: this.$t('trans.adminUsersTable.actions'),
-          align: 'end',
-          value: 'actions',
-          filterable: false,
-          sortable: false,
-        },
-      ];
-    },
-  },
-  methods: {
-    ...mapActions('admin', ['getUsers']),
-  },
-  async mounted() {
-    await this.getUsers();
-    this.loading = false;
-  },
-};
-</script>
-
 <style scoped>
 /* TODO: Global Style! */
 .submissions-search {
@@ -124,15 +138,11 @@ export default {
   clear: both;
 }
 @media (max-width: 1263px) {
-  .submissions-table >>> th {
+  .submissions-table :deep(th) {
     vertical-align: top;
   }
 }
-/* Want to use scss but the world hates me */
-.submissions-table >>> tbody tr:nth-of-type(odd) {
-  background-color: #f5f5f5;
-}
-.submissions-table >>> thead tr th {
+.submissions-table :deep(thead tr th) {
   font-weight: normal;
   color: #003366 !important;
   font-size: 1.1em;

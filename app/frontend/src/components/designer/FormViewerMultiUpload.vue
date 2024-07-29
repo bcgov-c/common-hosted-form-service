@@ -1,198 +1,82 @@
-<template>
-  <div class="file-upload" :class="{ 'dir-rtl': isRTL }">
-    <v-row>
-      <BaseInfoCard v-if="json_csv.data" class="mb-4">
-        <h4 class="primary--text" :lang="lang">
-          <v-icon class="mr-1" color="primary" :class="{ 'ml-2': isRTL }"
-            >info</v-icon
-          >{{ $t('trans.formViewerMultiUpload.important') }}!
-        </h4>
-        <p class="my-2" :lang="lang">
-          {{ $t('trans.formViewerMultiUpload.uploadSucessMsg') }}
-          <span class="link">
-            <vue-blob-json-csv
-              tag-name="b"
-              file-type="json"
-              :file-name="json_csv.file_name"
-              :title="$t('trans.formViewerMultiUpload.download')"
-              :data="json_csv.data"
-              :confirm="this.$t('trans.formViewerMultiUpload.confirmDownload')"
-              :lang="lang"
-            />
-            <v-icon class="mr-1" color="#003366">download</v-icon>
-          </span>
-        </p>
-      </BaseInfoCard>
-    </v-row>
-    <v-row class="mt-3">
-      <h3>{{ form.name }}</h3>
-
-      <div
-        v-if="!file"
-        class="drop-zone"
-        @click="handleFile"
-        v-cloak
-        @drop.prevent="addFile($event, 0)"
-        @dragover.prevent
-      >
-        <v-icon class="mr-1" color="#003366">upload</v-icon>
-        <h1 :lang="lang">
-          {{ this.$t('trans.formViewerMultiUpload.jsonFileUpload') }}
-        </h1>
-        <p :lang="lang">
-          {{ this.$t('trans.formViewerMultiUpload.dragNDrop') }}
-        </p>
-
-        <v-file-input
-          class="drop-zone__input"
-          ref="file"
-          accept=".json"
-          type="file"
-          @change="addFile($event, 1)"
-          name="file"
-          :label="this.$t('trans.formViewerMultiUpload.chooseAFile')"
-          show-size
-          :lang="lang"
-        >
-        </v-file-input>
-      </div>
-      <div v-if="file" class="worker-zone">
-        <div class="wz-top">
-          <v-progress-linear
-            v-model="value"
-            class="loading"
-            rounded
-            height="15"
-          >
-            <template v-slot:default="{ value }">
-              <strong>{{ value }}% </strong>
-            </template>
-          </v-progress-linear>
-          <v-row class="fileinfo">
-            <v-col cols="12" md="12">
-              <label class="label-left" v-bind:title="file.name">{{
-                fileName
-              }}</label>
-              <label class="label-right"
-                >{{ fileSize }}
-                <p v-if="index > 0 && Json.length > 0">
-                  {{ index + '/' + Json.length }}
-                </p>
-              </label>
-            </v-col>
-          </v-row>
-        </div>
-        <v-row class="p-1">
-          <v-col
-            cols="12"
-            md="12"
-            class="message-block"
-            v-if="!progress && response.upload_state == 10"
-          >
-            <hr v-if="response.error" />
-            <span>Report: </span>
-            <p :class="txt_color">
-              <v-icon v-if="response.error" color="red">close</v-icon>
-              <v-icon v-if="!response.error" color="green">check</v-icon>
-              {{ response.message }}
-            </p>
-          </v-col>
-          <v-col cols="12" md="12">
-            <p
-              style="text-align: justify; line-height: 1.2"
-              v-if="response.error && response.response.length > 0"
-              :lang="lang"
-            >
-              {{ this.$t('trans.formViewerMultiUpload.downloadDraftSubmns') }}
-              <br />
-              <span class="link">
-                <vue-blob-json-csv
-                  tag-name="b"
-                  file-type="csv"
-                  :file-name="response.file_name"
-                  :title="this.$t('trans.formViewerMultiUpload.downloadReport')"
-                  :data="response.response"
-                  :confirm="
-                    this.$t('trans.formViewerMultiUpload.doYouWantToDownload')
-                  "
-                  :lang="lang"
-                />
-                <v-icon class="mr-1" color="#003366">download</v-icon>
-              </span>
-            </p>
-          </v-col>
-          <v-col
-            cols="12"
-            md="12"
-            v-if="
-              file &&
-              !progress &&
-              response.error &&
-              response.response.length > 0
-            "
-          >
-            <span class="m-1 pull-right">
-              <v-btn @click="resetUpload" color="primary">
-                <span :lang="lang">{{
-                  this.$t('trans.formViewerMultiUpload.uploadNewFile')
-                }}</span>
-              </v-btn>
-            </span>
-          </v-col>
-        </v-row>
-      </div>
-    </v-row>
-    <v-row id="validateForm" class="displayNone"></v-row>
-  </div>
-</template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { Formio, Utils } from 'vue-formio';
-// import { nextTick } from 'process';
+import { Formio, Utils } from '@formio/vue';
 import _ from 'lodash';
+import { mapActions, mapState } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+import BaseInfoCard from '~/components/base/BaseInfoCard.vue';
+import { useAppStore } from '~/store/app';
+import { useFormStore } from '~/store/form';
+import { useNotificationStore } from '~/store/notification';
+
 export default {
-  name: 'FormViewerDownloadButton',
-  components: {},
+  components: {
+    BaseInfoCard,
+  },
   props: {
     formElement: undefined,
-    form: {},
-    formSchema: {},
-    formFields: [],
+    form: {
+      type: Object,
+      default: () => {},
+    },
+    formSchema: {
+      type: Object,
+      default: () => {},
+    },
+    formFields: {
+      type: Array,
+      default: () => [],
+    },
     block: Boolean,
     response: {
-      message: String,
-      error: Boolean,
-      upload_state: Number,
-      response: [],
-      file_name: String,
-      typeError: Number,
+      type: Object,
+      default: () => {
+        return {
+          message: '',
+          error: false,
+          upload_state: 0,
+          response: [],
+          file_name: '',
+        };
+      },
     },
-    json_csv: {
-      data: [],
-      file_name: String,
+    jsonCsv: {
+      type: Object,
+      default: () => {
+        return {
+          data: [],
+          file_name: '',
+        };
+      },
     },
+  },
+  emits: ['reset-message', 'save-bulk-data', 'set-error', 'toggleBlock'],
+  setup() {
+    const { t, locale } = useI18n({ useScope: 'global' });
+
+    return { t, locale };
   },
   data() {
     return {
-      vForm: {},
       file: undefined,
-      Json: [],
-      content: [],
-      parsed: false,
-      value: 0,
-      max: 100,
-      upload_state: 0,
-      index: 0,
       globalError: [],
-      progress: false,
-      report_file_name: undefined,
+      index: 0,
+      Json: [],
+      max: 100,
       max_file_size: 5,
+      percent: 0,
+      progress: false,
+      timeout: undefined,
+      upload_state: 0,
+      vForm: {},
     };
   },
   computed: {
-    ...mapGetters('form', ['isRTL', 'lang']),
-    txt_color() {
-      if (!this.error) return 'success-text';
+    ...mapState(useAppStore, ['config']),
+    ...mapState(useFormStore, ['isRTL']),
+
+    txt_colour() {
+      if (!this.response.error) return 'success-text';
       else return 'fail-text';
     },
     fileSize() {
@@ -210,8 +94,26 @@ export default {
       }
     },
   },
+  beforeUnmount() {
+    if (this.timeout) clearTimeout(this.timeout);
+  },
   methods: {
-    ...mapActions('notifications', ['addNotification']),
+    ...mapActions(useNotificationStore, ['addNotification']),
+    download(filename, data) {
+      if (
+        window.confirm(this.$t('trans.formViewerMultiUpload.confirmDownload'))
+      ) {
+        const blob = new Blob([JSON.stringify(data)], {
+          type: 'application/json',
+        });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }
+    },
+
     addFile(e, type) {
       if (this.block) {
         return;
@@ -219,7 +121,7 @@ export default {
 
       if (this.file != undefined) {
         this.addNotification({
-          message: this.$t('trans.formViewerMultiUpload.uploadMultipleFileErr'),
+          text: this.$t('trans.formViewerMultiUpload.uploadMultipleFileErr'),
           consoleError: this.$t(
             'trans.formViewerMultiUpload.uploadMultipleFileErr'
           ),
@@ -227,13 +129,13 @@ export default {
         return;
       }
       try {
-        let droppedFiles = type == 0 ? e.dataTransfer.files : [e];
+        let files = type == 0 ? e.dataTransfer.files : e.target.files;
 
-        if (!droppedFiles || droppedFiles == undefined) return;
+        if (!files || files == undefined) return;
 
-        if (droppedFiles.length > 1) {
+        if (files.length > 1) {
           this.addNotification({
-            message: this.$t('trans.formViewerMultiUpload.dragMultipleFileErr'),
+            text: this.$t('trans.formViewerMultiUpload.dragMultipleFileErr'),
             consoleError: this.$t(
               'trans.formViewerMultiUpload.dragMultipleFileErr'
             ),
@@ -241,26 +143,25 @@ export default {
           return;
         }
 
-        if (droppedFiles[0]['type'] != 'application/json') {
+        if (files[0]['type'] != 'application/json') {
           this.addNotification({
-            message: this.$t('trans.formViewerMultiUpload.fileFormatErr'),
+            text: this.$t('trans.formViewerMultiUpload.fileFormatErr'),
             consoleError: this.$t('trans.formViewerMultiUpload.fileFormatErr'),
           });
           return;
         }
-        let size = droppedFiles[0].size / (1024 * 1024);
-        if (size > this.max_file_size) {
+        if (files[0].size > this.config.uploads.fileMaxSizeBytes) {
           this.addNotification({
-            message: this.$t('trans.formViewerMultiUpload.fileSizeErr'),
+            text: this.$t('trans.formViewerMultiUpload.fileSizeErr'),
             consoleError: this.$t('trans.formViewerMultiUpload.fileSizeErr'),
           });
           return;
         }
-        this.file = droppedFiles[0];
+        this.file = files[0];
         this.parseFile();
       } catch (error) {
         this.addNotification({
-          message: this.$t('trans.formViewerMultiUpload.dragMultipleFileErr'),
+          text: this.$t('trans.formViewerMultiUpload.dragMultipleFileErr'),
           consoleError:
             this.$t('trans.formViewerMultiUpload.dragMultipleFileErr') +
             `${error}`,
@@ -270,7 +171,7 @@ export default {
     },
     handleFile() {
       if (this.file == undefined) {
-        this.$refs.file.$refs.input.click();
+        this.$refs.fileRef.click();
       }
     },
     removeFile(file) {
@@ -278,30 +179,65 @@ export default {
         return f != file;
       });
     },
+
     parseFile() {
       try {
         let reader = new FileReader();
         reader.onload = (e) => {
-          this.Json = JSON.parse(e.target.result);
+          this.Json = this.popFormLevelInfo(JSON.parse(e.target.result));
         };
         reader.onloadend = this.preValidateSubmission;
         reader.readAsText(this.file);
       } catch (e) {
         this.resetUpload();
         this.addNotification({
-          message: this.$t('trans.formViewerMultiUpload.parseJsonErr'),
+          text: this.$t('trans.formViewerMultiUpload.parseJsonErr'),
           consoleError: e,
         });
       }
+    },
+    popFormLevelInfo(jsonPayload = []) {
+      /** This function is purely made to remove un-necessery information
+       * from the json payload of submissions. It will also help to remove crucial data
+       * to be removed from the payload that should not be going to DB like confirmationId,
+       * formName,version,createdAt,fullName,username,email,status,assignee,assigneeEmail and
+       * lateEntry
+       * Example: Sometime end user use the export json file as a bulk
+       * upload payload that contains formId, confirmationId and User
+       * details as well so we need to remove those details from the payload.
+       *
+       */
+      if (jsonPayload.length) {
+        jsonPayload.forEach(function (submission) {
+          delete submission.submit;
+          delete submission.lateEntry;
+          if (Object.prototype.hasOwnProperty.call(submission, 'form')) {
+            const propsToRemove = [
+              'confirmationId',
+              'formName',
+              'version',
+              'createdAt',
+              'fullName',
+              'username',
+              'email',
+              'status',
+              'assignee',
+              'assigneeEmail',
+            ];
+            propsToRemove.forEach((key) => delete submission.form[key]);
+          }
+        });
+      }
+      return jsonPayload;
     },
     async preValidateSubmission() {
       try {
         if (!Array.isArray(this.Json)) {
           this.resetUpload();
           this.addNotification({
-            message: this.$t('trans.formViewerMultiUpload.jsonObjNotArray'),
+            text: this.$t('trans.formViewerMultiUpload.jsonObjNotArray'),
             consoleError: this.$t(
-              'trans.formViewerMultiUpload.jsonObjNotArrayConsEr'
+              'trans.formViewerMultiUpload.jsonObjNotArrayConsErr'
             ),
           });
           return;
@@ -309,7 +245,7 @@ export default {
         if (this.Json.length == 0) {
           this.resetUpload();
           this.addNotification({
-            message: this.$t('trans.formViewerMultiUpload.jsonArrayEmpty'),
+            text: this.$t('trans.formViewerMultiUpload.jsonArrayEmpty'),
             consoleError: this.$t('trans.formViewerMultiUpload.fileIsEmpty'),
           });
           return;
@@ -387,10 +323,10 @@ export default {
         this.resetUpload();
         this.$emit('set-error', {
           error: true,
-          message: this.$t('trans.formViewerMultiUpload.errorWhileValidate'),
+          text: this.$t('trans.formViewerMultiUpload.errorWhileValidate'),
         });
         this.addNotification({
-          message: this.$t('trans.formViewerMultiUpload.errorWhileValidate'),
+          text: this.$t('trans.formViewerMultiUpload.errorWhileValidate'),
           consoleError: error,
         });
         return;
@@ -477,7 +413,7 @@ export default {
       if (check.shouldContinueValidation) {
         this.$nextTick(() => {
           this.index++;
-          this.value = this.percentage(this.index);
+          this.percent = this.percentage(this.index);
         });
         delete check.shouldContinueValidation;
         this.$nextTick(() => {
@@ -508,12 +444,13 @@ export default {
     },
     delay(ms) {
       return new Promise((resolve) => {
-        const c = setTimeout(() => {
-          clearTimeout(c);
+        this.timeout = setTimeout(() => {
+          clearTimeout(this.timeout);
           resolve();
         }, ms);
       });
     },
+
     percentage(i) {
       let number_of_submission = this.Json.length;
       if (number_of_submission > 0 && i > 0) {
@@ -521,6 +458,7 @@ export default {
       }
       return 0;
     },
+
     endValidation(errors) {
       this.progress = false;
       this.globalError = errors;
@@ -531,7 +469,7 @@ export default {
       } else {
         this.$emit('toggleBlock', false);
         this.$emit('set-error', {
-          message: this.$t('trans.formViewerMultiUpload.errAfterValidate'),
+          text: this.$t('trans.formViewerMultiUpload.errAfterValidate'),
           error: true,
           upload_state: 10,
           response: {
@@ -544,14 +482,13 @@ export default {
         });
       }
     },
+
     resetUpload() {
       this.globalError = [];
       this.file = undefined;
       this.Json = [];
-      this.value = 0;
+      this.percent = 0;
       this.upload_state = 0;
-      this.error = false;
-      this.report = [];
       this.index = 0;
       this.globalError = [];
       this.progress = false;
@@ -560,6 +497,170 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="file-upload" :class="{ 'dir-rtl': isRTL }">
+    <v-container fluid class="file-upload">
+      <BaseInfoCard v-if="jsonCsv.data" class="mb-4">
+        <h4 class="text-primary" :lang="locale">
+          <v-icon
+            :class="isRTL ? 'ml-1' : 'mr-1'"
+            color="primary"
+            icon="mdi:mdi-information"
+          ></v-icon
+          >{{ $t('trans.formViewerMultiUpload.important') }}!
+        </h4>
+        <p class="my-2" :lang="locale">
+          {{ $t('trans.formViewerMultiUpload.uploadSucessMsg') }}
+          <span class="link">
+            <a
+              :lang="locale"
+              @click="
+                download(
+                  jsonCsv.file_name,
+                  jsonCsv.data,
+                  $t('trans.formViewerMultiUpload.confirmDownload')
+                )
+              "
+              >{{ $t('trans.formViewerMultiUpload.download') }}</a
+            >
+            <v-icon
+              class="mr-1"
+              color="#003366"
+              icon="mdi:mdi-download"
+            ></v-icon>
+          </span>
+        </p>
+      </BaseInfoCard>
+    </v-container>
+    <v-container fluid>
+      <h3>{{ form.name }}</h3>
+      <div
+        v-if="!file"
+        v-cloak
+        class="drop-zone"
+        @click="handleFile"
+        @drop.prevent="addFile($event, 0)"
+        @dragover.prevent
+      >
+        <v-icon class="mr-1" color="#003366" icon="mdi:mdi-upload" />
+        <h1 :lang="locale">
+          {{ $t('trans.formViewerMultiUpload.jsonFileUpload') }}
+        </h1>
+        <p :lang="locale">{{ $t('trans.formViewerMultiUpload.dragNDrop') }}</p>
+
+        <v-file-input
+          ref="fileRef"
+          class="drop-zone__input"
+          accept="application/json"
+          name="file"
+          :label="$t('trans.formViewerMultiUpload.chooseAFile')"
+          show-size
+          :lang="locale"
+          @change="addFile($event, 1)"
+        >
+        </v-file-input>
+      </div>
+      <div v-if="file" class="worker-zone">
+        <div class="wz-top">
+          <v-progress-linear
+            v-model="percent"
+            class="loading"
+            rounded
+            height="15"
+          >
+            <template #default="{ value }">
+              <strong>{{ value }}%</strong>
+            </template>
+          </v-progress-linear>
+          <v-row class="fileinfo">
+            <v-col cols="12" md="12">
+              <label class="label-left">{{ file.name }}</label>
+              <label class="label-right">
+                {{ fileSize }}
+                <p v-if="index > 0 && Json.length > 0">
+                  {{ index + '/' + Json.length }}
+                </p>
+              </label>
+            </v-col>
+          </v-row>
+        </div>
+        <v-row class="p-1">
+          <v-col
+            v-if="!progress && response.upload_state == 10"
+            cols="12"
+            md="12"
+            class="message-block"
+          >
+            <hr v-if="response.error" />
+            <span>Report: </span>
+            <p :class="txt_colour">
+              <v-icon v-if="response.error" color="red" icon="mdi:mdi-close" />
+              <v-icon
+                v-if="!response.error"
+                color="green"
+                icon="mdi:mdi-check"
+              />
+              {{ response.message }}
+            </p>
+          </v-col>
+          <v-col cols="12" md="12">
+            <p
+              v-if="response.error && response.response.length > 0"
+              style="text-align: justify; line-height: 1.2"
+              :lang="locale"
+            >
+              {{ $t('trans.formViewerMultiUpload.downloadDraftSubmns') }}
+              <br />
+              <span class="link">
+                <a
+                  :lang="locale"
+                  @click="
+                    download(
+                      response.file_name,
+                      response.response,
+                      $t('trans.formViewerMultiUpload.doYouWantToDownload')
+                    )
+                  "
+                >
+                  {{ $t('trans.formViewerMultiUpload.downloadReport') }}</a
+                >
+                <v-icon
+                  class="mr-1"
+                  color="#003366"
+                  icon="mdi:mdi-download"
+                ></v-icon>
+              </span>
+            </p>
+          </v-col>
+          <v-col
+            v-if="
+              file &&
+              !progress &&
+              response.error &&
+              response.response.length > 0
+            "
+            cols="12"
+            md="12"
+          >
+            <span class="m-1 pull-right">
+              <v-btn
+                color="primary"
+                :title="$t('trans.formViewerMultiUpload.uploadNewFile')"
+                @click="resetUpload"
+              >
+                <span :lang="locale">{{
+                  $t('trans.formViewerMultiUpload.uploadNewFile')
+                }}</span>
+              </v-btn>
+            </span>
+          </v-col>
+        </v-row>
+        <v-row id="validateForm" class="displayNone"></v-row>
+      </div>
+    </v-container>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .displayNone,
@@ -588,9 +689,7 @@ export default {
   }
   .link {
     cursor: pointer;
-    b {
-      color: #003366;
-    }
+    color: #003366;
   }
   .worker-zone {
     width: 380px;

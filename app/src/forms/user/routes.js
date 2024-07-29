@@ -2,9 +2,9 @@ const routes = require('express').Router();
 const controller = require('./controller');
 
 const currentUser = require('../auth/middleware/userAccess').currentUser;
-const keycloak = require('../../components/keycloak');
+const jwtService = require('../../components/jwtService');
 
-routes.use(keycloak.protect());
+routes.use(jwtService.protect());
 routes.use(currentUser);
 
 //
@@ -21,6 +21,17 @@ routes.put('/preferences', async (req, res, next) => {
 
 routes.delete('/preferences', async (req, res, next) => {
   await controller.deleteUserPreferences(req, res, next);
+});
+
+//
+// User Labels
+//
+routes.get('/labels', async (req, res, next) => {
+  await controller.readUserLabels(req, res, next);
+});
+
+routes.put('/labels', async (req, res, next) => {
+  await controller.updateUserLabels(req, res, next);
 });
 
 //

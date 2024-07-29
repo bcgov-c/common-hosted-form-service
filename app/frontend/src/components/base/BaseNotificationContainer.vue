@@ -1,3 +1,12 @@
+<script setup>
+import { storeToRefs } from 'pinia';
+import { useFormStore } from '~/store/form';
+import { useNotificationStore } from '~/store/notification';
+
+const { notifications } = storeToRefs(useNotificationStore());
+const { isRTL } = storeToRefs(useFormStore());
+</script>
+
 <template>
   <div class="notification-container" :class="{ 'dir-rtl': isRTL }">
     <BaseNotificationBar
@@ -7,17 +16,6 @@
     />
   </div>
 </template>
-
-<script>
-import { mapState, mapGetters } from 'vuex';
-export default {
-  name: 'BaseNotificationContainer',
-  computed: {
-    ...mapState('notifications', ['notifications']),
-    ...mapGetters('form', ['isRTL']),
-  },
-};
-</script>
 
 <style scoped>
 .notification-container {

@@ -1,15 +1,15 @@
 const Problem = require('api-problem');
 const { ref } = require('objection');
 const { v4: uuidv4 } = require('uuid');
-const { validateScheduleObject } = require('../common/utils');
-const { SubscriptionEvent } = require('../common/constants');
-const axios = require('axios');
-const log = require('../../components/log')(module.filename);
-
+const { EmailTypes } = require('../common/constants');
+const eventService = require('../event/eventService');
+const moment = require('moment');
 const {
+  DocumentTemplate,
   FileStorage,
   Form,
   FormApiKey,
+  FormEmailTemplate,
   FormIdentityProvider,
   FormRoleUser,
   FormVersion,
@@ -23,23 +23,35 @@ const {
   FormComponentsProactiveHelp,
   FormSubscription,
 } = require('../common/models');
-const { falsey, queryUtils, checkIsFormExpired } = require('../common/utils');
+const { falsey, queryUtils, checkIsFormExpired, validateScheduleObject, typeUtils } = require('../common/utils');
 const { Permissions, Roles, Statuses } = require('../common/constants');
-const Rolenames = [Roles.OWNER, Roles.TEAM_MANAGER, Roles.FORM_DESIGNER, Roles.SUBMISSION_REVIEWER, Roles.FORM_SUBMITTER];
+const Rolenames = [Roles.OWNER, Roles.TEAM_MANAGER, Roles.FORM_DESIGNER, Roles.SUBMISSION_REVIEWER, Roles.FORM_SUBMITTER, Roles.SUBMISSION_APPROVER];
 
 const service = {
-  // Get the list of file IDs from the submission
   _findFileIds: (schema, data) => {
-    return (
-      schema.components
-        // Get the file controls
-        .filter((x) => x.type === 'simplefile')
-        // for the file controls, get their respective data element (skip if it's not in data)
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap#for_adding_and_removing_items_during_a_map
-        .flatMap((x) => (data.submission.data[x.key] ? data.submission.data[x.key] : []))
-        // get the id from the data
-        .map((x) => x.data.id)
-    );
+    const findFiles = (currentData) => {
+      let fileIds = [];
+      // Check if the current level is an array or an object
+      if (Array.isArray(currentData)) {
+        currentData.forEach((item) => {
+          fileIds = fileIds.concat(findFiles(item));
+        });
+      } else if (typeof currentData === 'object' && currentData !== null) {
+        Object.keys(currentData).forEach((key) => {
+          if (key === 'data' && currentData[key] && currentData[key].id) {
+            // Add the file ID if it exists
+            fileIds.push(currentData[key].id);
+          } else {
+            // Recurse into nested objects
+            fileIds = fileIds.concat(findFiles(currentData[key]));
+          }
+        });
+      }
+      return fileIds;
+    };
+
+    // Start the search from the top-level submission data
+    return findFiles(data.submission.data);
   },
 
   listForms: async (params) => {
@@ -68,6 +80,7 @@ const service = {
       obj.active = true;
       obj.labels = data.labels;
       obj.showSubmissionConfirmation = data.showSubmissionConfirmation;
+      obj.sendSubmissionReceivedEmail = data.sendSubmissionReceivedEmail;
       obj.submissionReceivedEmails = data.submissionReceivedEmails;
       obj.enableStatusUpdates = data.enableStatusUpdates;
       obj.enableSubmitterDraft = data.enableSubmitterDraft;
@@ -77,6 +90,11 @@ const service = {
       obj.subscribe = data.subscribe;
       obj.reminder_enabled = data.reminder_enabled;
       obj.enableCopyExistingSubmission = data.enableCopyExistingSubmission;
+      obj.wideFormLayout = data.wideFormLayout;
+      obj.deploymentLevel = data.deploymentLevel;
+      obj.ministry = data.ministry;
+      obj.apiIntegration = data.apiIntegration;
+      obj.useCase = data.useCase;
 
       await Form.query(trx).insert(obj);
       if (data.identityProviders && Array.isArray(data.identityProviders) && data.identityProviders.length) {
@@ -140,6 +158,7 @@ const service = {
         description: data.description,
         labels: data.labels ? data.labels : [],
         showSubmissionConfirmation: data.showSubmissionConfirmation,
+        sendSubmissionReceivedEmail: data.sendSubmissionReceivedEmail,
         submissionReceivedEmails: data.submissionReceivedEmails ? data.submissionReceivedEmails : [],
         enableStatusUpdates: data.enableStatusUpdates,
         enableSubmitterDraft: data.enableSubmitterDraft,
@@ -149,6 +168,11 @@ const service = {
         subscribe: data.subscribe,
         reminder_enabled: data.reminder_enabled,
         enableCopyExistingSubmission: data.enableCopyExistingSubmission,
+        deploymentLevel: data.deploymentLevel,
+        wideFormLayout: data.wideFormLayout,
+        ministry: data.ministry,
+        apiIntegration: data.apiIntegration,
+        useCase: data.useCase,
       };
 
       await Form.query(trx).patchAndFetchById(formId, upd);
@@ -216,7 +240,7 @@ const service = {
       .withGraphFetched('idpHints')
       .throwIfNotFound()
       .then((form) => {
-        form.idpHints = form.idpHints.map((idp) => idp.code);
+        form.idpHints = form.idpHints.map((idp) => idp.idp);
         return form;
       });
   },
@@ -239,6 +263,89 @@ const service = {
       });
   },
 
+  /**
+   * Creates a document template that can be used to generate a document from
+   * a form's submission data.
+   *
+   * @param {uuid} formId the identifier for the form.
+   * @param {object} data the data for the document template.
+   * @param {string} currentUsername the currently logged in user's username.
+   * @returns the created object.
+   */
+  documentTemplateCreate: async (formId, data, currentUsername) => {
+    let trx;
+
+    try {
+      const documentTemplate = {
+        id: uuidv4(),
+        formId: formId,
+        filename: data.filename,
+        template: data.template,
+        createdBy: currentUsername,
+      };
+
+      trx = await DocumentTemplate.startTransaction();
+      await DocumentTemplate.query(trx).insert(documentTemplate);
+      await trx.commit();
+
+      const result = await service.documentTemplateRead(documentTemplate.id);
+
+      return result;
+    } catch (error) {
+      if (trx) {
+        await trx.rollback();
+      }
+
+      throw error;
+    }
+  },
+
+  /**
+   * Deletes an active document template given its ID.
+   *
+   * @param {uuid} documentTemplateId the id of the document template.
+   * @param {string} currentUsername the currently logged in user's username.
+   * @throws an Error if the document template does not exist.
+   */
+  documentTemplateDelete: async (documentTemplateId, currentUsername) => {
+    let trx;
+    try {
+      trx = await DocumentTemplate.startTransaction();
+      await DocumentTemplate.query(trx).patchAndFetchById(documentTemplateId, {
+        active: false,
+        updatedBy: currentUsername,
+      });
+      await trx.commit();
+    } catch (error) {
+      if (trx) {
+        await trx.rollback();
+      }
+
+      throw error;
+    }
+  },
+
+  /**
+   * Gets the active document templates for a form.
+   *
+   * @param {uuid} formId the identifier for the form.
+   * @returns a Promise for the document templates belonging to a form.
+   */
+  documentTemplateList: (formId) => {
+    return DocumentTemplate.query().modify('filterFormId', formId).modify('filterActive', true);
+  },
+
+  /**
+   * Reads an active document template given its ID.
+   *
+   * @param {uuid} documentTemplateId the id of the document template.
+   * @returns a Promise for the document template.
+   * @throws an Error if the document template does not exist.
+   */
+  documentTemplateRead: (documentTemplateId) => {
+    return DocumentTemplate.query().findById(documentTemplateId).modify('filterActive', true).throwIfNotFound();
+  },
+
   listFormSubmissions: async (formId, params) => {
     const query = SubmissionMetadata.query()
       .where('formId', formId)
@@ -249,14 +356,17 @@ const service = {
       .modify('filterCreatedBy', params.createdBy)
       .modify('filterFormVersionId', params.formVersionId)
       .modify('filterVersion', params.version)
+      .modify('filterformSubmissionStatusCode', params.filterformSubmissionStatusCode)
       .modify('orderDefault', params.sortBy && params.page ? true : false, params);
-    if (params.createdAt && Array.isArray(params.createdAt) && params.createdAt.length == 2) {
+
+    if (params.createdAt && Array.isArray(params.createdAt) && params.createdAt.length === 2) {
       query.modify('filterCreatedAt', params.createdAt[0], params.createdAt[1]);
     }
+
     const selection = ['confirmationId', 'createdAt', 'formId', 'formSubmissionStatusCode', 'submissionId', 'deleted', 'createdBy', 'formVersionId'];
 
+    let fields = [];
     if (params.fields && params.fields.length) {
-      let fields = [];
       if (typeof params.fields !== 'string' && params.fields.includes('updatedAt')) {
         selection.push('updatedAt');
       }
@@ -268,41 +378,80 @@ const service = {
       } else {
         fields = params.fields.split(',').map((s) => s.trim());
       }
-      // remove updatedAt and updatedBy from custom selected field so they won't be pulled from submission columns
-      fields = fields.filter((f) => f !== 'updatedAt' && f !== 'updatedBy');
 
-      fields.push('lateEntry');
-      query.select(
-        selection,
-        fields.map((f) => ref(`submission:data.${f}`).as(f.split('.').slice(-1)))
-      );
-    } else {
-      query.select(
-        selection,
-        ['lateEntry'].map((f) => ref(`submission:data.${f}`).as(f.split('.').slice(-1)))
-      );
+      // Remove updatedAt and updatedBy so they won't be pulled from submission
+      // columns. Also remove empty values to handle the case of trailing commas
+      // and other malformed data too.
+      fields = fields.filter((f) => f !== 'updatedAt' && f !== 'updatedBy' && f.trim() !== '');
     }
 
-    if (params.page) {
-      return await service.processPaginationData(
-        query,
-        params.page,
-        params.itemsPerPage,
-        params.filterformSubmissionStatusCode,
-        params.totalSubmissions,
-        params.sortBy,
-        params.sortDesc
-      );
+    fields.push('lateEntry');
+
+    if (params.sortBy?.column && !selection.includes(params.sortBy.column) && !fields.includes(params.sortBy.column)) {
+      throw new Problem(400, {
+        details: `orderBy column '${params.sortBy.column}' not in selected columns`,
+      });
     }
+
+    query.select(
+      selection,
+      fields.map((f) => ref(`submission:data.${f}`).as(f.split('.').slice(-1)))
+    );
+
+    if (params.paginationEnabled) {
+      return await service.processPaginationData(query, parseInt(params.page), parseInt(params.itemsPerPage), params.totalSubmissions, params.search, params.searchEnabled);
+    }
+
     return query;
   },
 
-  async processPaginationData(query, page, itemsPerPage, filterformSubmissionStatusCode, totalSubmissions) {
-    await query.modify('filterformSubmissionStatusCode', filterformSubmissionStatusCode);
-    if (itemsPerPage && parseInt(itemsPerPage) === -1) {
-      return await query.page(parseInt(page), parseInt(totalSubmissions || 0));
-    } else if (itemsPerPage && parseInt(page) >= 0) {
-      return await query.page(parseInt(page), parseInt(itemsPerPage));
+  async processPaginationData(query, page, itemsPerPage, totalSubmissions, search, searchEnabled) {
+    let isSearchAble = typeUtils.isBoolean(searchEnabled) ? searchEnabled : searchEnabled !== undefined ? JSON.parse(searchEnabled) : false;
+    if (isSearchAble) {
+      let submissionsData = await query;
+      let result = {
+        results: [],
+        total: 0,
+      };
+      let searchedData = submissionsData.filter((data) => {
+        return Object.keys(data).some((key) => {
+          if (key !== 'submissionId' && key !== 'formVersionId' && key !== 'formId') {
+            if (!Array.isArray(data[key]) && !typeUtils.isObject(data[key])) {
+              if (
+                !typeUtils.isBoolean(data[key]) &&
+                !typeUtils.isNil(data[key]) &&
+                typeUtils.isDate(data[key]) &&
+                moment(new Date(data[key])).format('YYYY-MM-DD hh:mm:ss a').toString().includes(search)
+              ) {
+                result.total = result.total + 1;
+                return true;
+              }
+              if (typeUtils.isString(data[key]) && data[key].toLowerCase().includes(search.toLowerCase())) {
+                result.total = result.total + 1;
+                return true;
+              } else if (
+                (typeUtils.isNil(data[key]) || typeUtils.isBoolean(data[key]) || (typeUtils.isNumeric(data[key]) && typeUtils.isNumeric(search))) &&
+                parseFloat(data[key]) === parseFloat(search)
+              ) {
+                result.total = result.total + 1;
+                return true;
+              }
+            }
+            return false;
+          }
+          return false;
+        });
+      });
+      let start = page * itemsPerPage;
+      let end = page * itemsPerPage + itemsPerPage;
+      result.results = searchedData.slice(start, end);
+      return result;
+    } else {
+      if (itemsPerPage && parseInt(itemsPerPage) === -1) {
+        return await query.page(parseInt(page), parseInt(totalSubmissions || 0));
+      } else if (itemsPerPage && parseInt(page) >= 0) {
+        return await query.page(parseInt(page), parseInt(itemsPerPage));
+      }
     }
   },
 
@@ -328,6 +477,7 @@ const service = {
       });
 
       await trx.commit();
+      eventService.publishFormEvent(formId, formVersionId, publish);
 
       // return the published form/version...
       return await service.readPublishedForm(formId);
@@ -375,7 +525,7 @@ const service = {
     let trx;
     try {
       const formVersion = await service.readVersion(formVersionId);
-      const { identityProviders, subscribe } = await service.readForm(formVersion.formId);
+      const { identityProviders } = await service.readForm(formVersion.formId);
 
       trx = await FormSubmission.startTransaction();
 
@@ -429,11 +579,8 @@ const service = {
 
         await FormSubmissionStatus.query(trx).insert(stObj);
       }
-      if (subscribe && subscribe.enabled) {
-        const subscribeConfig = await service.readFormSubscriptionDetails(formVersion.formId);
-        const config = Object.assign({}, subscribe, subscribeConfig);
-        service.postSubscriptionEvent(config, formVersion, submissionId, SubscriptionEvent.FORM_SUBMITTED);
-      }
+
+      eventService.formSubmissionEventReceived(formVersion.formId, formVersion.id, submissionId, data);
 
       // does this submission contain any file uploads?
       // if so, we need to update the file storage records.
@@ -479,7 +626,7 @@ const service = {
         let recordsToInsert = [];
         let submissionId;
         // let's create multiple submissions with same metadata
-        submissionDataArray.map((singleData) => {
+        service.popFormLevelInfo(submissionDataArray).map((singleData) => {
           submissionId = uuidv4();
           recordsToInsert.push({
             ...recordWithoutData,
@@ -615,6 +762,8 @@ const service = {
       await FormVersionDraft.query().deleteById(formVersionDraftId);
       await trx.commit();
 
+      eventService.publishFormEvent(formId, version.id, version.published);
+
       // return the published version...
       return await service.readVersion(version.id);
     } catch (err) {
@@ -649,6 +798,7 @@ const service = {
           formId: formId,
           secret: uuidv4(),
           updatedBy: currentUser.usernameIdp,
+          filesApiAccess: false,
         });
       } else {
         // Add new API key for the form
@@ -656,7 +806,35 @@ const service = {
           formId: formId,
           secret: uuidv4(),
           createdBy: currentUser.usernameIdp,
+          filesApiAccess: false,
         });
+      }
+
+      await trx.commit();
+      return service.readApiKey(formId);
+    } catch (err) {
+      if (trx) await trx.rollback();
+      throw err;
+    }
+  },
+
+  // Set the filesApiAccess boolean for the api key
+  filesApiKeyAccess: async (formId, filesApiAccess) => {
+    let trx;
+    try {
+      if (typeof filesApiAccess !== 'boolean') {
+        throw new Problem(400, `filesApiAccess must be a boolean`);
+      }
+      const currentKey = await service.readApiKey(formId);
+      trx = await FormApiKey.startTransaction();
+
+      if (currentKey) {
+        await FormApiKey.query(trx).modify('filterFormId', formId).update({
+          formId: formId,
+          filesApiAccess: filesApiAccess,
+        });
+      } else {
+        throw new Problem(404, `No API key found for form ${formId}`);
       }
 
       await trx.commit();
@@ -685,35 +863,6 @@ const service = {
     let item = result.length > 0 ? result[0] : null;
     let imageUrl = item !== null ? 'data:' + item.imageType + ';' + 'base64' + ',' + item.image : '';
     return { url: imageUrl };
-  },
-
-  postSubscriptionEvent: async (subscribe, formVersion, submissionId, subscriptionEvent) => {
-    try {
-      // Check if there are endpoints subscribed for form submission event
-      if (subscribe && subscribe.endpointUrl) {
-        const axiosOptions = { timeout: 10000 };
-        const axiosInstance = axios.create(axiosOptions);
-        const jsonData = { formId: formVersion.formId, formVersion: formVersion.id, submissionId: submissionId, subscriptionEvent: subscriptionEvent };
-
-        axiosInstance.interceptors.request.use(
-          (cfg) => {
-            cfg.headers = { [subscribe.key]: `${subscribe.endpointToken}` };
-            return Promise.resolve(cfg);
-          },
-          (error) => {
-            return Promise.reject(error);
-          }
-        );
-
-        axiosInstance.post(subscribe.endpointUrl, jsonData);
-
-        throw new Problem(401, jsonData);
-      }
-    } catch (err) {
-      log.error(err.message, err, {
-        function: 'postSubscriptionEvent',
-      });
-    }
   },
 
   /**
@@ -779,6 +928,116 @@ const service = {
     } catch (err) {
       if (trx) await trx.rollback();
       throw err;
+    }
+  },
+
+  popFormLevelInfo: (jsonPayload = []) => {
+    /** This function is purely made to remove un-necessery information
+     * from the json payload of submissions. It will also help to remove crucial data
+     * to be removed from the payload that should not be going to DB like confirmationId,
+     * formName,version,createdAt,fullName,username,email,status,assignee,assigneeEmail and
+     * lateEntry
+     * Example: Sometime end user use the export json file as a bulk
+     * upload payload that contains formId, confirmationId and User
+     * details as well so we need to remove those details from the payload.
+     *
+     */
+    if (jsonPayload.length) {
+      jsonPayload.forEach(function (submission) {
+        delete submission.submit;
+        delete submission.lateEntry;
+        if (Object.prototype.hasOwnProperty.call(submission, 'form')) {
+          const propsToRemove = ['confirmationId', 'formName', 'version', 'createdAt', 'fullName', 'username', 'email', 'status', 'assignee', 'assigneeEmail'];
+
+          propsToRemove.forEach((key) => delete submission.form[key]);
+        }
+      });
+    }
+    return jsonPayload;
+  },
+
+  // -----------------------------------------------------------------------------
+  // Email Templates
+  // -----------------------------------------------------------------------------
+
+  _getDefaultEmailTemplate: (formId, type) => {
+    let template;
+
+    switch (type) {
+      case EmailTypes.SUBMISSION_CONFIRMATION:
+        template = {
+          body: 'Thank you for your {{ form.name }} submission. You can view your submission details by visiting the following links:',
+          formId: formId,
+          subject: '{{ form.name }} Accepted',
+          title: '{{ form.name }} Accepted',
+          type: type,
+        };
+        break;
+    }
+
+    return template;
+  },
+
+  // Get a specific email template for a form.
+  readEmailTemplate: async (formId, type) => {
+    let result = await FormEmailTemplate.query().modify('filterFormId', formId).modify('filterType', type).first();
+
+    if (result === undefined) {
+      result = service._getDefaultEmailTemplate(formId, type);
+    }
+
+    return result;
+  },
+
+  // Get all the email templates for a form
+  readEmailTemplates: async (formId) => {
+    const hasEmailTemplate = (emailTemplates, type) => {
+      return emailTemplates.find((t) => t.type === type) !== undefined;
+    };
+
+    let result = await FormEmailTemplate.query().modify('filterFormId', formId);
+
+    // In the case that there is no email template in the database, use the
+    // default values.
+    if (!hasEmailTemplate(result, EmailTypes.SUBMISSION_CONFIRMATION)) {
+      result.push(service._getDefaultEmailTemplate(formId, EmailTypes.SUBMISSION_CONFIRMATION));
+    }
+
+    return result;
+  },
+
+  createOrUpdateEmailTemplate: async (formId, data, currentUser) => {
+    let transaction;
+    try {
+      const emailTemplate = await service.readEmailTemplate(formId, data.type);
+      transaction = await FormEmailTemplate.startTransaction();
+
+      if (emailTemplate.id) {
+        // Update new email template settings for a form
+        await FormEmailTemplate.query(transaction)
+          .modify('filterId', emailTemplate.id)
+          .update({
+            ...data,
+            updatedBy: currentUser.usernameIdp,
+          });
+      } else {
+        // Add new email template settings for the form
+        await FormEmailTemplate.query(transaction).insert({
+          id: uuidv4(),
+          ...data,
+          createdBy: currentUser.usernameIdp,
+        });
+      }
+
+      await transaction.commit();
+
+      return service.readEmailTemplates(formId);
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+
+      throw error;
     }
   },
 };

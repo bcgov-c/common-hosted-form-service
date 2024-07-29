@@ -1,95 +1,73 @@
-<template>
-  <div class="text-center" style="z-index: 100">
-    <v-menu offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn dark outlined v-bind="attrs" v-on="on" class="ml-3">
-          <font-awesome-icon icon="fa-solid fa-globe" class="mr-1" />
-          {{ language }}
-          <font-awesome-icon icon="fa-solid fa-caret-down" class="ml-3" />
-        </v-btn>
-      </template>
-      <v-list style="height: 90vh; overflow-y: scroll">
-        <v-list-item-group color="primary" v-model="languageIndex">
-          <v-list-item
-            v-for="(item, i) in items"
-            :key="i"
-            @click="languageSelected(item)"
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-menu>
-  </div>
-</template>
+<script setup>
+import { computed } from 'vue';
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useLocale } from 'vuetify';
 
-<script>
-import { mapActions } from 'vuex';
-import { faCaretDown, faGlobe } from '@fortawesome/free-solid-svg-icons';
-import { library } from '@fortawesome/fontawesome-svg-core';
-library.add(faCaretDown, faGlobe);
+import { useFormStore } from '~/store/form';
 
-export default {
-  name: 'BaseInternationalization',
-  computed: {
-    hasLogin() {
-      return this.$route && this.$route.meta && this.$route.meta.hasLogin;
-    },
-  },
-  data: () => {
-    return {
-      language: 'English',
-      lang: 'en',
-      languageIndex: 0,
-      items: [
-        { title: 'English', keyword: 'en' },
-        { title: 'عربى (Arabic)', keyword: 'ar' },
-        { title: 'German (Germany)', keyword: 'de' },
-        { title: 'Español (Spanish)', keyword: 'es' },
-        { title: 'فارسی (Farsi)', keyword: 'fa' },
-        { title: 'Français (French)', keyword: 'fr' },
-        { title: 'हिंदी (Hindi)', keyword: 'hi' },
-        { title: 'Italian (Italy)', keyword: 'it' },
-        { title: '日本語 (Japanese)', keyword: 'ja' },
-        { title: '한국어 (Korean)', keyword: 'ko' },
-        { title: 'ਪੰਜਾਬੀ (Punjabi - Gurmukhi)', keyword: 'pa' },
-        { title: 'Portuguese (Portugal)', keyword: 'pt' },
-        { title: 'Русский (Russian)', keyword: 'ru' },
-        { title: 'Tagalog (Filipino)', keyword: 'tl' },
-        { title: 'Українська (Ukrainian)', keyword: 'uk' },
-        { title: 'Tiếng Việt (Vietnamese)', keyword: 'vi' },
-        { title: '简体中文 (Simplified Chinese)', keyword: 'zh' },
-        { title: '繁體中文 (Traditional Chinese)', keyword: 'zhTW' },
-      ],
-    };
-  },
+const { locale } = useI18n({ useScope: 'global' });
 
-  methods: {
-    ...mapActions('form', ['setMultiLanguage']),
-    languageSelected(lang) {
-      this.language = lang.title;
-      this.$root.$i18n.locale = lang.keyword;
-      this.$vuetify.lang.current =
-        lang.keyword == 'zh'
-          ? 'zhHans'
-          : lang.keyword == 'zh-TW'
-          ? 'zhHant'
-          : lang.keyword;
-      this.setMultiLanguage(lang.keyword);
-    },
-  },
-};
+const items = ref([
+  { title: 'English', keyword: 'en' },
+  { title: 'عربى (Arabic)', keyword: 'ar' },
+  { title: 'German (Germany)', keyword: 'de' },
+  { title: 'Español (Spanish)', keyword: 'es' },
+  { title: 'فارسی (Farsi)', keyword: 'fa' },
+  { title: 'Français (French)', keyword: 'fr' },
+  { title: 'हिंदी (Hindi)', keyword: 'hi' },
+  { title: 'Italian (Italy)', keyword: 'it' },
+  { title: '日本語 (Japanese)', keyword: 'ja' },
+  { title: '한국어 (Korean)', keyword: 'ko' },
+  { title: 'ਪੰਜਾਬੀ (Punjabi - Gurmukhi)', keyword: 'pa' },
+  { title: 'Portuguese (Portugal)', keyword: 'pt' },
+  { title: 'Русский (Russian)', keyword: 'ru' },
+  { title: 'Tagalog (Filipino)', keyword: 'tl' },
+  { title: 'Українська (Ukrainian)', keyword: 'uk' },
+  { title: 'Tiếng Việt (Vietnamese)', keyword: 'vi' },
+  { title: '简体中文 (Simplified Chinese)', keyword: 'zh' },
+  { title: '繁體中文 (Traditional Chinese)', keyword: 'zhTW' },
+]);
+
+const { current } = useLocale();
+
+function languageSelected(lang) {
+  current.value = lang == 'zh' ? 'zhHans' : lang == 'zhTW' ? 'zhHant' : lang;
+  useFormStore().$patch({
+    isRTL: lang === 'ar' || lang === 'fa' ? true : false,
+  });
+}
+
+const SELECTED_LANGUAGE_TITLE = computed(
+  () => items.value.find((language) => language.keyword === locale.value).title
+);
 </script>
 
-<style lang="scss" scoped>
-.select {
-  margin: 0px !important;
-  margin-left: 8px !important;
-  padding: 0px !important;
-  height: 30px !important;
-
-  float: right !important;
-}
-</style>
+<template>
+  <div class="text-center">
+    <v-select
+      v-model="$i18n.locale"
+      class="ml-3"
+      :items="$i18n.availableLocales"
+      prepend-inner-icon="mdi:mdi-web"
+      variant="outlined"
+      density="compact"
+      hide-details
+      :title="SELECTED_LANGUAGE_TITLE"
+      @update:model-value="languageSelected"
+    >
+      <template #selection="{ props, item }">
+        <v-list-item
+          v-bind="props"
+          :title="items.find((language) => language.keyword === item.raw).title"
+        ></v-list-item>
+      </template>
+      <template #item="{ props, item }">
+        <v-list-item
+          v-bind="props"
+          :title="items.find((language) => language.keyword === item.raw).title"
+        ></v-list-item>
+      </template>
+    </v-select>
+  </div>
+</template>

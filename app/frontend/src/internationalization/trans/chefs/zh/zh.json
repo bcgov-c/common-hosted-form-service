@@ -1,6 +1,23 @@
 {
+  "open": "打开",
   "date": {
     "date": "年-月-日"
+  },
+  "emailManagement": {
+    "emailManagement": "电子邮件管理",
+    "manageForm": "管理表格",
+    "submissionConfirmation": "提交确认"
+  },
+  "emailTemplate": {
+    "body": "身体",
+    "save": "节省",
+    "saveEmailTemplateConsoleErrMsg": "更新表单 {formId} 的电子邮件模板时出错：{error}",
+    "saveEmailTemplateErrMsg": "尝试更新电子邮件模板时发生错误。",
+    "subject": "主题",
+    "title": "标题",
+    "validBodyRequired": "请输入电子邮件正文",
+    "validSubjectRequired": "请输入电子邮件的主题行",
+    "validTitleRequired": "请输入电子邮件的标题"
   },
   "formsTable": {
     "myForms": "我的表格",
@@ -18,6 +35,10 @@
   "manageLayout": {
     "manageForm": "管理表格"
   },
+  "preview": {
+    "preview": "预览",
+    "previewToolTip": "这显示了提交者将看到的表单版本设计和行为的预览。您无法从此页面提交表格。"
+  },
   "shareForm": {
     "shareForm": "分享表格",
     "shareLink": "分享链接",
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "将 URL 复制到剪贴板"
   },
   "manageFormActions": {
+    "emailManagement": "电子邮件管理",
     "viewSubmissions": "查看提交内容",
     "teamManagement": "团队管理",
     "deleteForm": "删除表格",
@@ -47,7 +69,22 @@
     "status": "地位",
     "update": "更新",
     "cancel": "取消",
-    "eventSubscription": "E活动订阅"
+    "eventSubscription": "E活动订阅",
+    "cdogsTemplate": "CDOGS 模板"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "上传CDOGS模板",
+    "uploadTemplateFile": "上传模板文件",
+    "upload": "上传",
+    "delete": "删除",
+    "download": "下载",
+    "invalidFileMessage": "模板必须使用以下扩展名之一：.txt, .docx, .html, .odt, .pptx, .xlsx",
+    "uploadSuccess": "模板上传成功。",
+    "uploadError": "上传模板时发生错误。",
+    "deleteSuccess": "模板删除成功。",
+    "deleteError": "删除模板时发生错误。",
+    "fetchError": "获取模板时发生错误。",
+    "info": "上传模板以使用公共文档生成服务（CDOGS）"
   },
   "formSettings": {
     "pressToAddMultiEmail": "按<kbd>Enter</kbd>或<kbd>,</kbd>或<kbd>空格键</kbd>添加多个电子邮件地址",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "允许事件订阅",
     "eventSubscription": "E活动订阅",
     "validEndpointRequired": "请输入以以下开头的有效端点 https://",
-    "validBearerTokenRequired": "输入有效的不记名令牌示例: 89abddfb-2cff-4fda-83e6-13221f0c3d4f"
+    "validBearerTokenRequired": "输入有效的不记名令牌示例: 89abddfb-2cff-4fda-83e6-13221f0c3d4f",
+    "wideFormLayout": "宽表单布局"
+  },
+  "formProfile": {
+    "message": "CHEFS团队正在收集和组织信息，作为制定全面业务案例的关键输入。这些案例将在指导CHEFS未来几年的战略运作和持续改进中发挥关键作用。这一收集数据的倡议对于提供关键决策的信息和塑造CHEFS轨迹至关重要，确保其在应对不断变化的需求和挑战中的适应性和有效性。",
+    "ministryPrompt": "选择您所关联的部门",
+    "useCasePrompt": "选择表单的用例",
+    "deploymentPrompt": "请指定您的部署级别",
+    "APIPrompt": "指定您是否打算利用提供的API进行与第三方应用程序的集成",
+    "labelPrompt": "标签用作对可能属于共同组织或共享相关上下文的相似表单进行分类的手段。",
+    "useCaseToolTip": "如果您没有看到您的特定用例，请联系CHEFS团队进一步讨论其他选项",
+    "deploymentLevel": "部署级别",
+    "ministryName": "部门",
+    "label": "标签",
+    "useCase": "用例类型",
+    "development": "开发",
+    "test": "测试",
+    "production": "生产",
+    "Y": "是",
+    "N": "否",
+    "feedback": "反馈表，用于确定满意度、同意度、可能性或其他定性问题",
+    "application": "将进行评估并做出决策的应用程序",
+    "collection": "数据集的收集，数据提交",
+    "report": "通常定期或事件驱动的报告，如后续跟进",
+    "registration": "注册或注册 - 无评估",
+    "getLabelErr": "在尝试获取用户标签时发生错误。",
+    "getLabelConsErr": "获取标签时出错：",
+    "selectAPIErr": "请告诉我们您对API集成的选择",
+    "selectDeploymentErr": "请选择部署级别",
+    "selectMinistryErr": "请选择您的部门",
+    "selectUseCaseErr": "请输入您的表单用例",
+    "labelSizeErr": "标签不能超过 25 个字符"
+  },
+  "ministries": {
+    "AF": "农业与食品 (AF)",
+    "AG": "总检察长 (AG)",
+    "MCF": "儿童与家庭发展 (MCF)",
+    "CITZ": "公民服务 (CITZ)",
+    "ECC": "教育与儿童保育 (ECC)",
+    "EMCR": "紧急管理与气候准备 (EMCR)",
+    "EMLI": "能源、矿产和低碳创新 (EMLI)",
+    "ENV": "环境与气候变化战略 (ENV)",
+    "FIN": "财政 (FIN)",
+    "FOR": "森林 (FOR)",
+    "HLTH": "卫生 (HLTH)",
+    "HOUS": "住房 (HOUS)",
+    "IRR": "土著关系与和解 (IRR)",
+    "JEDI": "就业、经济发展与创新 (JEDI)",
+    "LBR": "劳动 (LBR)",
+    "MMHA": "心理健康与成瘾 (MMHA)",
+    "MUNI": "市政事务 (MUNI)",
+    "PSFS": "高等教育与未来技能 (PSFS)",
+    "PSSG": "公共安全与检察长 (PSSG)",
+    "SDPR": "社会发展与扶贫 (SDPR)",
+    "TACS": "旅游、艺术、文化和体育 (TACS)",
+    "MOTI": "交通与基础设施 (MOTI)",
+    "WLRS": "水域、土地和资源管理 (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "事件类型",
@@ -153,6 +246,7 @@
     "infoA": "确保您的 API 密钥秘密存储在安全位置（即密钥保管库）。",
     "infoB": "您的 API 密钥可以不受限制地访问您的表单。请勿将您的 API 密钥透露给任何人。",
     "infoC": "API 密钥只能用于自动化系统交互。请勿使用您的 API 密钥进行基于用户的访问",
+    "infoD": "如果您希望通过 API 密钥访问提交的文件，请在生成密钥后启用以下复选框。",
     "deleteKey": "删除键",
     "apiKey": "API密钥",
     "hideSecret": "隐藏秘密",
@@ -170,8 +264,7 @@
     "regenerate": "再生",
     "generate": "产生",
     "secret": "秘密",
-    "text": "文本",
-    "password": "密码"
+    "filesAPIAccess": "允许此 API 密钥访问提交的文件"
   },
   "manageVersions": {
     "important": "重要的！",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401：未授权。 :",
     "401ErrorMsg": "您的帐户设置不正确。<br />请联系",
     "403Forbidden": "403：禁止。 :",
-    "403ErrorMsg": "此页面需要 {idp} 身份验证。",
+    "403ErrorMsg": "此页面需要 {permission} 身份验证。",
     "401UnAuthorized": "401：未经授权。 :",
     "401UnAuthorizedErrMsg": "您没有权限访问此页面。"
   },
@@ -325,7 +418,8 @@
     "version": "版本",
     "save": "节省",
     "saving": "保存",
-    "notSaved": "未保存"
+    "notSaved": "未保存",
+    "fieldnameError": "您不能使用“form”关键字作为 {label} 字段名"
   },
   "formViewerMultiUpload": {
     "important": "重要的",
@@ -375,6 +469,7 @@
     "emailRequired": "电子邮件为必填项"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "未找到匹配的记录",
     "submissions": "意见书",
     "submissionsTable": "提交表",
     "selectColumns": "选择列",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "BCeID 的电子邮件搜索必须准确。",
     "getUsersErrMsg": "获取用户时出错：{error}",
     "exactEmailOrUsername": "输入准确的电子邮件或用户名。",
-    "requiredFiled": "输入姓名、电子邮件或用户名"
+    "requiredField": "输入姓名、电子邮件或用户名"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "查看此提交内容",
@@ -464,6 +559,7 @@
     "editThisDraft": "编辑本草稿"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "未找到匹配的记录",
     "previousSubmissions": "以前提交的内容",
     "selectColumns": "选择列",
     "createNewSubmission": "创建新提交",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "添加注释时出错：",
     "notes": "笔记",
     "note": "笔记",
-    "maxChars": "最多 4000 个字符"
+    "maxChars": "最多 4000 个字符",
+    "totalNotes": "总笔记:"
   },
   "statusPanel": {
     "currentStatus": "当前状态：",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "受让人为必填项",
     "assignToMe": "分配给我",
     "recipientEmail": "收件人电子邮件",
+    "recipientIsRequired": "需要收件人",
     "attachCommentToEmail": "将评论附加到电子邮件",
     "emailComment": "电子邮件评论",
     "maxChars": "最多 4000 个字符",
@@ -595,7 +693,16 @@
     "docGrnSucess": "文档生成成功",
     "failedDocGenErrMsg": "生成文档失败",
     "failedDocGenConsErrMsg": "提交模板时出错：{error}",
-    "cDogsTemplate": "CDOGS 模板"
+    "cDogsTemplate": "CDOGS 模板",
+    "uploadCdogsTemplate": "上传CDOGS模板",
+    "printOptions": "打印选项",
+    "expandtextFields": "扩展文本字段",
+    "moreInfo": "更多信息",
+    "defaultCdogsTemplate": "使用默认CDOGS模板",
+    "fileName": "文件名",
+    "uploadDate": "上传日期",
+    "upload": "上传",
+    "selectExportFileType": "选择导出文件类型"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "组件信息链接",
@@ -640,6 +747,7 @@
     "updatedBy": "修改者"
   },
   "teamManagement": {
+    "noMatchingRecordText": "未找到匹配的记录",
     "teamManagement": "团队管理",
     "selectColumns": "选择列",
     "manageForm": "管理表格",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "创建在线表单以收集客户的信息并改进您的工作流程。",
     "getStarted": "开始使用"
   },
-  "create": {
-    "createNewForm": "创建新表格",
+  "baseStepper": {
     "setUpForm": "设置表格",
     "designForm": "设计形式",
+    "manageForm": "管理表格"
+  },
+  "create": {
     "formSettings": "表单设置",
     "disclaimer": "免责声明",
     "disclaimerStmt": "我同意表单设计师的免责声明和责任声明",
@@ -794,11 +904,12 @@
     "resetColumns": "重置列"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "查看所有提交内容",
+    "viewMyDraftOrSubmissions": "查看我的草稿/提交内容",
     "saveAsADraft": "另存为草稿",
     "editThisDraft": "编辑本草稿",
     "switchSingleSubmssn": "切换到单一提交",
-    "switchMultiSubmssn": "切换到多次提交"
+    "switchMultiSubmssn": "切换到多次提交",
+    "wideLayout": "宽阔布局"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "链接已复制到剪贴板",
@@ -877,6 +988,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "获取表单生成器组件时出错：{error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "加载 {formId} 的电子邮件模板时出错：{error}",
+      "fetchEmailTemplatesErrMsg": "获取此表单的电子邮件模板时发生错误",
       "getCurrUserFormsErrMsg": "获取您的表单时发生错误。",
       "getCurrUserFormsConsErrMsg": "获取用户数据时出错：{error}",
       "getUserFormPermErrMsg": "获取此表单的用户数据时发生错误。",
@@ -887,7 +1000,7 @@
       "updCurrUserFormPrefConsErrMsg": "使用 formID {formId} 和首选项 {preferences} 更新用户表单首选项时出错：{error}",
       "getCurrUserFormPrefErrMsg": "获取您对此表单的首选项时发生错误。",
       "getCurrUserFormPrefConsErrMsg": "使用 formID {formId} 获取用户表单首选项时出错：{error}",
-      "delCurrformNotiMsg": "表单{name}已成功删除。",
+      "delCurrformNotiMsg": "表单 {name} 已成功删除。",
       "delCurrFormConsErMsg": "删除表单 {id} 时出错：{error}",
       "delDraftErrMsg": "删除此草稿时发生错误。",
       "delDraftConsErrMsg": "删除 {draftId} 时出错：{error}",
@@ -900,6 +1013,8 @@
       "publishDraftErrMsg": "发布时发生错误。",
       "publishDraftConsErrMsg": "发布 {draftId} 时出错：{error}",
       "toggleVersnPublConsErrMsg": "切换版本发布 {versionId} {publish} 时出错：{error}",
+      "updateEmailTemplateConsErrMsg": "更新表单 {formId} 的电子邮件模板时出错：{error}",
+      "updateEmailTemplateErrMsg": "更新此表单的电子邮件模板时出错。",
       "updateFormErrMsg": "更新此表单的设置时出错。",
       "updateFormConsErrMsg": "更新表单 {id} 时出错：{error}",
       "deleteSubmissionNotifyMsg": "提交删除成功。",

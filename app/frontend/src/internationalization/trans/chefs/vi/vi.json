@@ -1,6 +1,23 @@
 {
+  "open": "mở",
   "date": {
     "date": "yyyy-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "Quản lý email",
+    "manageForm": "Quản lý biểu mẫu",
+    "submissionConfirmation": "Chứng nhận thông tin"
+  },
+  "emailTemplate": {
+    "body": "Thân hình",
+    "save": "Cứu",
+    "saveEmailTemplateConsoleErrMsg": "Lỗi cập nhật mẫu email cho biểu mẫu {formId}: {error}",
+    "saveEmailTemplateErrMsg": "Đã xảy ra lỗi khi cố gắng cập nhật mẫu email.",
+    "subject": "Chủ thể",
+    "title": "Tiêu đề",
+    "validBodyRequired": "Vui lòng nhập Nội dung cho email",
+    "validSubjectRequired": "Vui lòng nhập dòng Chủ đề cho email",
+    "validTitleRequired": "Vui lòng nhập Tiêu đề cho email"
   },
   "formsTable": {
     "myForms": "biểu mẫu của tôi",
@@ -18,6 +35,10 @@
   "manageLayout": {
     "manageForm": "Quản lý biểu mẫu"
   },
+  "preview": {
+    "preview": "Xem trước",
+    "previewToolTip": "Điều này hiển thị bản xem trước của thiết kế và hành vi của phiên bản biểu mẫu khi người gửi của bạn sẽ nhìn thấy nó. Bạn không thể gửi biểu mẫu từ trang này."
+  },
   "shareForm": {
     "shareForm": "chia sẻ biểu mẫu",
     "shareLink": "Chia sẻ đường link",
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "Sao chép URL vào khay nhớ tạm"
   },
   "manageFormActions": {
+    "emailManagement": "Quản lý email",
     "viewSubmissions": "Xem bài nộp",
     "teamManagement": "quản lý nhóm",
     "deleteForm": "Xóa biểu mẫu",
@@ -47,7 +69,22 @@
     "status": "Trạng thái",
     "update": "Cập nhật",
     "cancel": "Hủy bỏ",
-    "eventSubscription": "Đăng ký sự kiện"
+    "eventSubscription": "Đăng ký sự kiện",
+    "cdogsTemplate": "mẫu CDOGS"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "Tải lên mẫu CDOGS",
+    "uploadTemplateFile": "Tải lên tệp mẫu",
+    "upload": "Tải lên",
+    "delete": "Xóa",
+    "download": "Tải xuống",
+    "invalidFileMessage": "Mẫu phải sử dụng một trong các phần mở rộng sau: .txt, .docx, .html, .odt, .pptx, .xlsx",
+    "uploadSuccess": "Tải lên mẫu thành công.",
+    "uploadError": "Có lỗi xảy ra khi tải lên mẫu.",
+    "deleteSuccess": "Xóa mẫu thành công.",
+    "deleteError": "Có lỗi xảy ra khi xóa mẫu.",
+    "fetchError": "Có lỗi xảy ra khi lấy mẫu.",
+    "info": "Tải lên một mẫu để sử dụng Dịch vụ Tạo Tài liệu Chung (CDOGS)"
   },
   "formSettings": {
     "pressToAddMultiEmail": "Nhấn <kbd>enter</kbd> hoặc <kbd>,</kbd> hoặc <kbd>dấu cách</kbd> để thêm nhiều địa chỉ email",
@@ -129,8 +166,64 @@
     "allowEventSubscription": "Cho phép đăng ký sự kiện",
     "eventSubscription": "Đăng ký sự kiện",
     "validEndpointRequired": "Vui lòng nhập một điểm cuối hợp lệ bắt đầu bằng https://",
-    "validBearerTokenRequired": "Nhập ví dụ về mã thông báo mang hợp lệ: 89abddfb-2cff-4fda-83e6-13221f0c3d4f"
+    "validBearerTokenRequired": "Nhập ví dụ về mã thông báo mang hợp lệ: 89abddfb-2cff-4fda-83e6-13221f0c3d4f",
+    "wideFormLayout": "Bố cục hình thức rộng"
   },
+  "formProfile": {
+    "message": "Đội ngũ CHEFS đang thu thập và tổ chức thông tin để phục vụ như một đầu vào quan trọng cho việc xây dựng các trường hợp kinh doanh toàn diện. Những trường hợp này sẽ đóng một vai trò quan trọng trong hướng dẫn vận hành chiến lược và cải tiến liên tục của CHEFS trong những năm sắp tới. Sáng kiến này để thu thập dữ liệu là quan trọng để thông tin quyết định quan trọng và định hình quỹ đạo của CHEFS, đảm bảo tính linh hoạt và hiệu quả trong đối mặt với những nhu cầu và thách thức đang thay đổi.",
+    "ministryPrompt": "Chọn bộ phận mà bạn liên kết",
+    "useCasePrompt": "Chọn mục đích của biểu mẫu bên dưới",
+    "deploymentPrompt": "Vui lòng chỉ định cấp độ triển khai của bạn",
+    "APIPrompt": "Chỉ định liệu bạn có ý định sử dụng API được cung cấp để tích hợp vào ứng dụng của bên thứ ba hay không",
+    "labelPrompt": "Nhãn phục vụ như một phương tiện để phân loại các biểu mẫu tương tự có thể thuộc về một tổ chức chung hoặc chia sẻ ngữ cảnh liên quan.",
+    "useCaseToolTip": "Nếu bạn không thấy trường hợp sử dụng cụ thể của mình, liên hệ với đội ngũ CHEFS để thảo luận về các tùy chọn khác",
+    "deploymentLevel": "Cấp Triển khai",
+    "ministryName": "Bộ",
+    "label": "Nhãn",
+    "useCase": "Loại Ứng dụng",
+    "development": "Phát triển",
+    "test": "Kiểm thử",
+    "production": "Sản xuất",
+    "Y": "Có",
+    "N": "Không",
+    "feedback": "Biểu mẫu Phản hồi để xác định sự hài lòng, đồng thuận, khả năng, hoặc các câu hỏi chất lượng khác",
+    "application": "Các ứng dụng sẽ được đánh giá sau đó là quyết định",
+    "collection": "Thu thập Dữ liệu, nộp dữ liệu",
+    "report": "Báo cáo thường theo lịch trình lặp lại hoặc sự kiện như theo dõi",
+    "registration": "Đăng ký hoặc Đăng nhập - không có đánh giá",
+    "selectDeploymentErr": "Vui lòng chọn cấp triển khai",
+    "selectMinistryErr": "Vui lòng chọn bộ của bạn",
+    "getLabelErr": "Đã xảy ra lỗi khi cố gắng lấy nhãn người dùng.",
+    "getLabelConsErr": "Lỗi khi lấy nhãn: ",
+    "selectAPIErr": "Vui lòng thông báo cho chúng tôi về sự lựa chọn về việc tích hợp API",
+    "selectUseCaseErr": "Vui lòng nhập mô tả ứng dụng của biểu mẫu",
+    "labelSizeErr": "Nhãn không được vượt quá 25 ký tự"
+  },
+  "ministries": {
+    "AF": "Nông nghiệp và Thực phẩm (AF)",
+    "AG": "Bộ Tư pháp (AG)",
+    "MCF": "Phát triển Trẻ em và Gia đình (MCF)",
+    "CITZ": "Dịch vụ Công dân (CITZ)",
+    "ECC": "Giáo dục và Chăm sóc Trẻ em (ECC)",
+    "EMCR": "Quản lý Khẩn cấp và Sẵn sàng với Biến đổi khí hậu (EMCR)",
+    "EMLI": "Năng lượng, Mỏ và Đổi mới Low Carbon (EMLI)",
+    "ENV": "Môi trường và Chiến lược Biến đổi khí hậu (ENV)",
+    "FIN": "Tài chính (FIN)",
+    "FOR": "Rừng (FOR)",
+    "HLTH": "Sức khỏe (HLTH)",
+    "HOUS": "Nhà ở (HOUS)",
+    "IRR": "Quan hệ và Hòa giải với Bộ tộc bản địa (IRR)",
+    "JEDI": "Việc làm, Phát triển Kinh tế và Đổi mới (JEDI)",
+    "LBR": "Lao động (LBR)",
+    "MMHA": "Sức khỏe Tâm thần và Nghiện (MMHA)",
+    "MUNI": "Công việc Đô thị (MUNI)",
+    "PSFS": "Giáo dục Sau cấp và Kỹ năng Tương lai (PSFS)",
+    "PSSG": "An toàn Công cộng và Tổng thư ký (PSSG)",
+    "SDPR": "Phát triển Xã hội và Giảm nghèo (SDPR)",
+    "TACS": "Du lịch, Nghệ thuật, Văn hóa và Thể thao (TACS)",
+    "MOTI": "Giao thông vận tải và Cơ sở hạ tầng (MOTI)",
+    "WLRS": "Quản lý Nước, Đất và Tài nguyên (WLRS)"
+  },  
   "subscribeEvent": {
     "eventType": "Loại sự kiện",
     "endpointUrl": "URL điểm cuối",
@@ -146,13 +239,14 @@
     "showSecret": "Hiển thị bí mật",
     "key": "Chìa khóa",
     "saveSettingsErrMsg": "Đã xảy ra lỗi khi cố cập nhật cài đặt cho biểu mẫu này.",
-    "updateSettingsConsoleErrMsg": "Lỗi khi cập nhật cài đặt cho biểu mẫu {formId} : {error}"
+    "updateSettingsConsoleErrMsg": "Lỗi khi cập nhật cài đặt cho biểu mẫu {formId}: {error}"
   },
   "apiKey": {
     "disclaimer": "từ chối trách nhiệm",
     "infoA": "Đảm bảo rằng khóa bí mật API của bạn được lưu trữ ở một vị trí an toàn (tức là kho khóa).",
     "infoB": "Khóa API của bạn cấp quyền truy cập không hạn chế vào biểu mẫu của bạn. Không cung cấp khóa API của bạn cho bất kỳ ai.",
     "infoC": "Khóa API CHỈ nên được sử dụng cho các tương tác hệ thống tự động. Không sử dụng khóa API của bạn để truy cập dựa trên người dùng",
+    "infoD": "Nếu bạn muốn truy cập các tệp đã gửi qua Khóa API, vui lòng bật hộp kiểm sau sau khi tạo khóa.",
     "deleteKey": "Phím xoá",
     "apiKey": "Mã API",
     "hideSecret": "Ẩn bí mật",
@@ -170,8 +264,7 @@
     "regenerate": "tái tạo",
     "generate": "Phát ra",
     "secret": "Bí mật",
-    "text": "chữ",
-    "password": "mật khẩu"
+    "filesAPIAccess": "Cho phép khóa API này truy cập vào các tệp đã gửi"
   },
   "manageVersions": {
     "important": "QUAN TRỌNG!",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: không được ủy quyền. :",
     "401ErrorMsg": "Tài khoản của bạn không được thiết lập chính xác.<br /> Vui lòng liên hệ",
     "403Forbidden": "403: Cấm. :",
-    "403ErrorMsg": "Trang này yêu cầu xác thực {idp}.",
+    "403ErrorMsg": "Trang này yêu cầu xác thực {permission}.",
     "401UnAuthorized": "401: Trái phép. :",
     "401UnAuthorizedErrMsg": "Bạn không có quyền truy cập trang này."
   },
@@ -325,7 +418,8 @@
     "version": "Phiên bản",
     "save": "Cứu",
     "saving": "Tiết kiệm",
-    "notSaved": "Chưa được lưu"
+    "notSaved": "Chưa được lưu",
+    "fieldnameError": "Bạn KHÔNG THỂ sử dụng từ khóa `form` làm tên trường {label}"
   },
   "formViewerMultiUpload": {
     "important": "QUAN TRỌNG",
@@ -375,6 +469,7 @@
     "emailRequired": "Email thì cần thiết"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "Không tìm thấy kết quả",
     "submissions": "đệ trình",
     "submissionsTable": "Đệ trìnhBảng",
     "selectColumns": "Chọn cột",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "Tìm kiếm email cho BCeID phải chính xác.",
     "getUsersErrMsg": "Lỗi nhận người dùng: {error}",
     "exactEmailOrUsername": "Nhập một e-mail hoặc tên người dùng chính xác.",
-    "requiredFiled": "Nhập tên, e-mail hoặc tên người dùng"
+    "requiredField": "Nhập tên, e-mail hoặc tên người dùng"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "Xem bài nộp này",
@@ -464,6 +559,7 @@
     "editThisDraft": "Chỉnh sửa bản nháp này"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "Không tìm thấy kết quả",
     "previousSubmissions": "Đệ trình trước",
     "selectColumns": "Chọn cột",
     "createNewSubmission": "Tạo bài nộp mới",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "Lỗi khi thêm ghi chú:",
     "notes": "ghi chú",
     "note": "Ghi chú",
-    "maxChars": "Tối đa 4000 ký tự"
+    "maxChars": "Tối đa 4000 ký tự",
+    "totalNotes": "Tổng Số Ghi Chú:"
   },
   "statusPanel": {
     "currentStatus": "Tình trạng hiện tại:",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "Người được ủy quyền là bắt buộc",
     "assignToMe": "GIAO CHO TÔI",
     "recipientEmail": "Người nhận E-mail",
+    "recipientIsRequired": "Người nhận là bắt buộc",
     "attachCommentToEmail": "Đính kèm Nhận xét vào Email",
     "emailComment": "Nhận xét email",
     "maxChars": "Tối đa 4000 ký tự",
@@ -595,7 +693,16 @@
     "docGrnSucess": "Tài liệu được tạo thành công",
     "failedDocGenErrMsg": "Không thể tạo tài liệu",
     "failedDocGenConsErrMsg": "Lỗi khi gửi mẫu: {error}",
-    "cDogsTemplate": "mẫu CDOGS"
+    "cDogsTemplate": "mẫu CDOGS",
+    "uploadCdogsTemplate": "Tải lên mẫu CDOGS",
+    "printOptions": "Tùy chọn In",
+    "expandtextFields": "Mở rộng trường văn bản",
+    "moreInfo": "Thêm thông tin",
+    "defaultCdogsTemplate": "Sử dụng mẫu CDOGS mặc định",
+    "fileName": "Tên tệp",
+    "uploadDate": "Ngày tải lên",
+    "upload": "Tải lên",
+    "selectExportFileType": "Chọn loại file xuất"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "Liên kết thông tin thành phần",
@@ -640,6 +747,7 @@
     "updatedBy": "sửa đổi bởi"
   },
   "teamManagement": {
+    "noMatchingRecordText": "Không tìm thấy kết quả",
     "teamManagement": "quản lý nhóm",
     "selectColumns": "Chọn cột",
     "manageForm": "Quản lý biểu mẫu",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "Tạo biểu mẫu trực tuyến để thu thập thông tin từ khách hàng của bạn và cải thiện quy trình làm việc của bạn.",
     "getStarted": "Bắt đầu"
   },
-  "create": {
-    "createNewForm": "Tạo biểu mẫu mới",
+  "baseStepper": {
     "setUpForm": "Thiết lập biểu mẫu",
     "designForm": "mẫu thiết kế",
+    "manageForm": "Quản lý biểu mẫu"
+  },
+  "create": {
     "formSettings": "Cài đặt biểu mẫu",
     "disclaimer": "từ chối trách nhiệm",
     "disclaimerStmt": "Tôi đồng ý với tuyên bố từ chối trách nhiệm và tuyên bố trách nhiệm đối với Nhà thiết kế biểu mẫu",
@@ -794,11 +904,12 @@
     "resetColumns": "Đặt lại cột"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "Xem tất cả bài dự thi",
+    "viewMyDraftOrSubmissions": "Xem bản nháp/bài nộp của tôi",
     "saveAsADraft": "Lưu dưới dạng Bản nháp",
     "editThisDraft": "Chỉnh sửa Bản nháp này",
     "switchSingleSubmssn": "Chuyển sang gửi một lần",
-    "switchMultiSubmssn": "Chuyển sang Gửi nhiều lần"
+    "switchMultiSubmssn": "Chuyển sang nhiều bài nộp",
+    "wideLayout": "Bố cục rộng"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "Liên kết được sao chép vào khay nhớ tạm",
@@ -820,9 +931,7 @@
     "loadingFormErrMsg": "Đã xảy ra lỗi khi tải biểu mẫu này.",
     "loadingForm": "Lỗi khi tải {options}: {error}",
     "idpHintMsg": "Biểu mẫu này yêu cầu xác thực {idpHint}. Vui lòng đăng nhập lại và thử lại.",
-    "formIdpMissMatch": "Mẫu IDP không khớp. Biểu mẫu yêu cầu {idpHint} nhưng người dùng có {userIdp}."
-  },
-  "download": {
+    "formIdpMissMatch": "Mẫu IDP không khớp. Biểu mẫu yêu cầu {idpHint} nhưng người dùng có {userIdp}.",
     "chefsDataExport": "Xuất dữ liệu CHEFS",
     "preparingForDownloading": "Đang chuẩn bị tải xuống...",
     "downloadInfoA": "Nếu tệp của bạn không tự động tải xuống",
@@ -877,6 +986,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "Lỗi khi nhận các thành phần của trình tạo biểu mẫu: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "Lỗi tải mẫu email cho {formId}: {error}",
+      "fetchEmailTemplatesErrMsg": "Đã xảy ra lỗi khi tìm nạp mẫu email cho biểu mẫu này",
       "getCurrUserFormsErrMsg": "Đã xảy ra lỗi khi tìm nạp biểu mẫu của bạn.",
       "getCurrUserFormsConsErrMsg": "Lỗi khi lấy dữ liệu người dùng: {error}",
       "getUserFormPermErrMsg": "Đã xảy ra lỗi khi tìm nạp dữ liệu người dùng của bạn cho biểu mẫu này.",
@@ -900,6 +1011,8 @@
       "publishDraftErrMsg": "Đã xảy ra lỗi khi xuất bản.",
       "publishDraftConsErrMsg": "Lỗi xuất bản {draftId}: {error}",
       "toggleVersnPublConsErrMsg": "Lỗi trong toggleVersionPublish {versionId} {publish}: {error}",
+      "updateEmailTemplateConsErrMsg": "Lỗi cập nhật mẫu email cho biểu mẫu {formId}: {error}",
+      "updateEmailTemplateErrMsg": "Đã xảy ra lỗi khi cập nhật mẫu email cho biểu mẫu này.",
       "updateFormErrMsg": "Đã xảy ra lỗi khi cập nhật cài đặt cho biểu mẫu này.",
       "updateFormConsErrMsg": "Lỗi khi cập nhật biểu mẫu {id}: {error}",
       "deleteSubmissionNotifyMsg": "Đã xóa bài đăng thành công.",

@@ -1,11 +1,27 @@
 const fs = require('fs');
+const Handlebars = require('handlebars');
 const path = require('path');
 
+const { getBaseUrl } = require('../common/utils');
 const chesService = require('../../components/chesService');
 const log = require('../../components/log')(module.filename);
 const { EmailProperties, EmailTypes } = require('../common/constants');
 const formService = require('../form/service');
 const moment = require('moment');
+
+/**
+ * Replace the {{ handlebar }} expressions in a string with the values from a
+ * context object.
+ * @param {string} format the string that is to have handlebars replaced
+ * @param {object} context the values used to replace the handlebar items
+ * @returns the format string with the handlebar items replaced
+ */
+const _replaceHandlebars = (format, context) => {
+  const template = Handlebars.compile(format);
+
+  return template(context);
+};
+
 /** Helper function used to build the email template based on email type and contents */
 const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, additionalProperties = 0) => {
   const form = await formService.readForm(formId);
@@ -70,7 +86,7 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
       form,
     };
   } else if (emailType === EmailTypes.SUBMISSION_RECEIVED) {
-    contextToVal = form.submissionReceivedEmails;
+    contextToVal = form.sendSubmissionReceivedEmail ? form.submissionReceivedEmails : [];
     userTypePath = 'form/view';
     configData = {
       body: additionalProperties.body,
@@ -88,6 +104,13 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
       form.identityProviders.length > 0 && form.identityProviders[0].idp === 'public'
         ? 'submission-received-confirmation-public.html'
         : 'submission-received-confirmation-login.html';
+    const emailTemplate = await formService.readEmailTemplate(form.id, emailType);
+
+    // The data that is allowed to be used in the templates. This is currently
+    // very restrictive due to PII concerns and keeping within the PIA allowable
+    // uses of data.
+    const handlebarsData = { form: { description: form.description, name: form.name } };
+
     configData = {
       bodyTemplate: bodyTemplate,
       title: `${form.name} Accepted/Accepté`,
@@ -99,16 +122,18 @@ const buildEmailTemplate = async (formId, formSubmissionId, emailType, referer, 
     };
   }
 
+  const baseUrl = getBaseUrl();
+
   return {
     configData,
     contexts: [
       {
         context: {
-          allFormSubmissionUrl: `${service._appUrl(referer)}/user/submissions?f=${configData.form.id}`,
+          allFormSubmissionUrl: `${baseUrl}/user/submissions?f=${configData.form.id}`,
           confirmationNumber: submission.confirmationId,
           form: configData.form,
           messageLinkText: configData.messageLinkText,
-          messageLinkUrl: `${service._appUrl(referer)}/${userTypePath}?s=${submission.id}`,
+          messageLinkUrl: `${baseUrl}/${userTypePath}?s=${submission.id}`,
           emailContent: additionalProperties.emailContent,
           title: configData.title,
           messageLinkTextFR: configData.messageLinkTextFR || '',
@@ -182,27 +207,6 @@ const buildEmailTemplateFormForReminder = async (form, emailType, users, report,
 };
 
 const service = {
-  /**
-   * @function _appUrl
-   * Attempts to parse out the base application url
-   * @param {string} referer
-   * @returns base url for the application
-   */
-  _appUrl: (referer) => {
-    try {
-      const url = new URL(referer);
-      const p = url.pathname.split('/')[1];
-      const u = url.href.substring(0, url.href.indexOf(`/${p}`));
-      return `${u}/${p}`;
-    } catch (err) {
-      log.error(err.message, {
-        function: '_appUrl',
-        referer: referer,
-      });
-      throw err;
-    }
-  },
-
   /**
    * @function _mergeEmailTemplate
    * Merges the template and body HTML files to allow dynamic content in the emails
@@ -423,6 +427,7 @@ const service = {
       throw e;
     }
   },
+
   /**
    * @function formOpen
    * Manual email confirmation after form has been submitted
@@ -446,13 +451,11 @@ const service = {
    * @function submissionExportLink
    * Email with the link to the Form submissions export file
    * @param {string} formId
-   * @param {string} submissionId
    * @param {object} body
-   * @param {string} referer
    * @param {string} fileId
    * @returns The result of the email merge operation
    */
-  submissionExportLink: async (formId, submissionId, body, referer, fileId) => {
+  submissionExportLink: async (formId, body, fileId) => {
     try {
       const form = await formService.readForm(formId);
       const contextToVal = [body.to];
@@ -471,7 +474,7 @@ const service = {
           context: {
             form: configData.form,
             messageLinkText: configData.messageLinkText,
-            messageLinkUrl: `${service._appUrl(referer)}/${userTypePath}?id=${fileId}`,
+            messageLinkUrl: getBaseUrl() + `/${userTypePath}?id=${fileId}`,
             title: configData.title,
           },
           to: contextToVal,
@@ -484,7 +487,6 @@ const service = {
         function: EmailTypes.SUBMISSION_EXPORT,
         formId: formId,
         body: body,
-        referer: referer,
       });
       throw e;
     }

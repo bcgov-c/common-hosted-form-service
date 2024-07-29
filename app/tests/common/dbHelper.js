@@ -41,7 +41,6 @@ MockModel.insert = jest.fn().mockReturnThis();
 MockModel.insertAndFetch = jest.fn().mockReturnThis();
 MockModel.insertGraph = jest.fn().mockReturnThis();
 MockModel.insertGraphAndFetch = jest.fn().mockReturnThis();
-MockModel.findById = jest.fn().mockReturnThis();
 MockModel.modify = jest.fn().mockReturnThis();
 MockModel.modifiers = jest.fn().mockReturnThis();
 MockModel.orderBy = jest.fn().mockReturnThis();
@@ -60,9 +59,11 @@ MockModel.then = jest.fn((done) => {
   done(returnValue);
 });
 MockModel.throwIfNotFound = jest.fn().mockReturnThis();
+MockModel.update = jest.fn().mockReturnThis();
 MockModel.where = jest.fn().mockReturnThis();
 MockModel.whereIn = jest.fn().mockReturnThis();
 MockModel.withGraphFetched = jest.fn().mockReturnThis();
+MockModel.select = jest.fn().mockReturnThis();
 
 // Utility Functions
 MockModel.mockClear = () => {

@@ -1,6 +1,23 @@
 {
+  "open": "يفتح",
   "date": {
     "date": "yyyy-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "إدارة البريد الإلكتروني",
+    "manageForm": "إدارة النموذج",
+    "submissionConfirmation": "تأكيد تقديم"
+  },
+  "emailTemplate": {
+    "body": "جسم",
+    "save": "يحفظ",
+    "saveEmailTemplateConsoleErrMsg": "خطأ في تحديث قالب البريد الإلكتروني للنموذج {formId}: {error}",
+    "saveEmailTemplateErrMsg": "حدث خطأ أثناء محاولة تحديث قالب البريد الإلكتروني.",
+    "subject": "موضوع",
+    "title": "عنوان",
+    "validBodyRequired": "الرجاء إدخال نص للبريد الإلكتروني",
+    "validSubjectRequired": "الرجاء إدخال سطر الموضوع للبريد الإلكتروني",
+    "validTitleRequired": "الرجاء إدخال عنوان للبريد الإلكتروني"
   },
   "formsTable": {
     "myForms": "نماذجي",
@@ -18,6 +35,10 @@
   "manageLayout": {
     "manageForm": "إدارة النموذج"
   },
+  "preview": {
+    "preview": "معاينة",
+    "previewToolTip": "يعرض هذا معاينة لتصميم إصدار النموذج وسلوكه كما يراه مقدموه. لا يمكنك تقديم النموذج من هذه الصفحة."
+  },
   "shareForm": {
     "shareForm": "نموذج المشاركة",
     "shareLink": "رابط المشاركة",
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "انسخ URL إلى الحافظة"
   },
   "manageFormActions": {
+    "emailManagement": "إدارة البريد الإلكتروني",
     "viewSubmissions": "مشاهدة عمليات الإرسال",
     "teamManagement": "ادارة فريق",
     "deleteForm": "حذف النموذج",
@@ -47,7 +69,22 @@
     "status": "حالة",
     "update": "تحديث",
     "cancel": "يلغي",
-    "eventSubscription": "اشتراك الحدث"
+    "eventSubscription": "اشتراك الحدث",
+    "cdogsTemplate": "قالب CDOGS"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "تحميل قالب CDOGS",
+    "uploadTemplateFile": "تحميل ملف القالب",
+    "upload": "تحميل",
+    "delete": "حذف",
+    "download": "تنزيل",
+    "invalidFileMessage": "يجب أن يستخدم القالب أحد الامتدادات التالية: .txt، .docx، .html، .odt، .pptx، .xlsx",
+    "uploadSuccess": "تم تحميل القالب بنجاح.",
+    "uploadError": "حدث خطأ أثناء تحميل القالب.",
+    "deleteSuccess": "تم حذف القالب بنجاح.",
+    "deleteError": "حدث خطأ أثناء حذف القالب.",
+    "fetchError": "حدث خطأ أثناء جلب القالب.",
+    "info": "قم بتحميل قالب لاستخدام خدمة توليد الوثائق المشتركة (CDOGS)"
   },
   "formSettings": {
     "pressToAddMultiEmail": "اضغط على <kbd>مفتاح الإدخال</kbd> أو <kbd>،</kbd> أو <kbd>مسافة</kbd> لإضافة عناوين بريد إلكتروني متعددة",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "السماح بالاشتراك في الحدث",
     "eventSubscription": "اشتراك الحدث",
     "validEndpointRequired": "الرجاء إدخال نقطة نهاية https://",
-    "validBearerTokenRequired": "89abddfb-2cff-4fda-83e6-13221f0c3d4f أدخل مثال رمز حامل صالح"
+    "validBearerTokenRequired": "89abddfb-2cff-4fda-83e6-13221f0c3d4f أدخل مثال رمز حامل صالح",
+    "wideFormLayout": "تخطيط نموذج واسع"
+  },
+  "formProfile": {
+    "message": "تقوم فرق CHEFS بجمع وتنظيم المعلومات لتكون مدخلات حاسمة لصياغة حالات أعمال شاملة. ستلعب هذه الحالات دورًا حيويًا في توجيه العمليات الاستراتيجية وتحسين CHEFS المستمر في السنوات القادمة. هذه المبادرة لجمع البيانات ضرورية لإعلام القرارات الحاسمة وتشكيل مسار CHEFS ، مما يضمن قابليتها للتكيف وفعاليتها في التعامل مع الاحتياجات والتحديات المتطورة.",
+    "ministryPrompt": "اختر الوزارة التي تنتمي إليها",
+    "useCasePrompt": "اختر حالة استخدام النموذج الخاص بك",
+    "deploymentPrompt": "يرجى تحديد مستوى نشرك",
+    "APIPrompt": "حدد ما إذا كنت تنوي استخدام واجهة برمجة التطبيقات (API) المقدمة للتكامل في تطبيق تابع طرف ثالث",
+    "labelPrompt": "تعتبر العلامات وسيلة لتصنيف النماذج المماثلة التي قد تنتمي إلى منظمة مشتركة أو تشترك في سياق ذي صلة.",
+    "useCaseToolTip": "إذا لم ترَ مشروع الاستخدام الخاص بك بشكل محدد، اتصل بفريق CHEFS لمناقشة خيارات إضافية",
+    "deploymentLevel": "مستوى النشر",
+    "ministryName": "وزارة",
+    "label": "الوسوم",
+    "useCase": "حالة الاستخدام",
+    "development": "تطوير",
+    "test": "اختبار",
+    "production": "إنتاج",
+    "Y": "نعم",
+    "N": "لا",
+    "application": "التطبيقات التي سيتم تقييمها تلاها قرار",
+    "collection": "جمع مجموعات البيانات، تقديم البيانات",
+    "feedback": "نموذج التعليقات لتحديد الرضا أو الموافقة أو الاحتمال أو أسئلة أخرى ذات طابع كيفي",
+    "report": "التقارير عادة على جدول زمني متكرر أو مستندة إلى الأحداث مثل متابعة",
+    "registration": "التسجيلات أو الاشتراك - بدون تقييم",
+    "getLabelErr": "حدث خطأ أثناء محاولة استرجاع تصنيفات المستخدم.",
+    "getLabelConsErr": "خطأ في استرجاع التصنيفات: ",
+    "selectAPIErr": "يرجى إبلاغنا بخيارك بخصوص استخدام تكامل واجهة برمجة التطبيقات (API)",
+    "selectDeploymentErr": "يرجى اختيار مستوى النشر",
+    "selectMinistryErr": "يرجى اختيار وزارتك",
+    "selectUseCaseErr": "يرجى إدخال حالة استخدام النموذج الخاص بك",
+    "labelSizeErr":"لا يمكن أن تتجاوز التسميات 25 حرفًا"
+  },
+  "ministries": {
+    "AF": "الزراعة والغذاء (AF)",
+    "AG": "النائب العام (AG)",
+    "MCF": "تنمية الأطفال والأسرة (MCF)",
+    "CITZ": "خدمات المواطنين (CITZ)",
+    "ECC": "التعليم ورعاية الطفل (ECC)",
+    "EMCR": "إدارة الطوارئ والتحضير للتغير المناخي (EMCR)",
+    "EMLI": "الطاقة والمناجم والابتكار منخفض الكربون (EMLI)",
+    "ENV": "البيئة واستراتيجية التغير المناخي (ENV)",
+    "FIN": "المالية (FIN)",
+    "FOR": "الغابات (FOR)",
+    "HLTH": "الصحة (HLTH)",
+    "HOUS": "الإسكان (HOUS)",
+    "IRR": "العلاقات والمصالحة الأصلية (IRR)",
+    "JEDI": "الوظائف وتنمية الاقتصاد والابتكار (JEDI)",
+    "LBR": "العمل (LBR)",
+    "MMHA": "الصحة العقلية وإدمان العقاقير (MMHA)",
+    "MUNI": "الشؤون البلدية (MUNI)",
+    "PSFS": "التعليم العالي والمهارات المستقبلية (PSFS)",
+    "PSSG": "الأمانة العامة للأمانة العامة والنائب العام (PSSG)",
+    "SDPR": "تنمية المجتمع والحد من الفقر (SDPR)",
+    "TACS": "السياحة والفنون والثقافة والرياضة (TACS)",
+    "MOTI": "النقل والبنية التحتية (MOTI)",
+    "WLRS": "رعاية الموارد الطبيعية والأراضي والمياه (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "نوع الحدث",
@@ -153,6 +246,7 @@
     "infoA": "تأكد من تخزين سر مفتاح واجهة برمجة التطبيقات في مكان آمن (أي مخزن المفاتيح).",
     "infoB": "يمنحك مفتاح API وصولاً غير مقيد إلى النموذج الخاص بك. لا تعطي مفتاح API الخاص بك لأي شخص.",
     "infoC": "يجب استخدام مفتاح API فقط لتفاعلات النظام المؤتمتة. لا تستخدم مفتاح API الخاص بك للوصول المستند إلى المستخدم",
+    "infoD": "إذا كنت ترغب في الوصول إلى الملفات المرسلة عبر مفتاح API، فيرجى تمكين مربع الاختيار التالي بعد إنشاء المفتاح.",
     "deleteKey": "مفتاح الحذف",
     "apiKey": "مفتاح API",
     "hideSecret": "إخفاء السر",
@@ -170,8 +264,7 @@
     "regenerate": "تجديد",
     "generate": "يولد",
     "secret": "سر",
-    "text": "نص",
-    "password": "كلمة المرور"
+    "filesAPIAccess":"السماح لمفتاح API هذا بالوصول إلى الملفات المرسلة"
   },
   "manageVersions": {
     "important": "مهم!",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: غير مصرح به. :",
     "401ErrorMsg": "لم يتم إعداد حسابك بشكل صحيح.<br /> الرجاء التواصل",
     "403Forbidden": "403 ممنوع. :",
-    "403ErrorMsg": "تتطلب هذه الصفحة مصادقة {idp}.",
+    "403ErrorMsg": "تتطلب هذه الصفحة مصادقة {permission}.",
     "401UnAuthorized": "401: غير مصرح به. :",
     "401UnAuthorizedErrMsg": "ليس لديك الصلاحية لدخول هذه الصفحة."
   },
@@ -325,7 +418,8 @@
     "version": "إصدار",
     "save": "يحفظ",
     "saving": "إنقاذ",
-    "notSaved": "يتم حفظ"
+    "notSaved": "يتم حفظ",
+    "fieldnameError": "لا يمكنك استخدام الكلمة الأساسية `form` كاسم حقل {label}."
   },
   "formViewerMultiUpload": {
     "important": "مهم",
@@ -375,6 +469,7 @@
     "emailRequired": "البريد الالكتروني مطلوب"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "لم يتم العثور على سجلات مطابقة",
     "submissions": "التقديمات",
     "submissionsTable": "الجدول",
     "selectColumns": "حدد الأعمدة",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "يجب أن تكون عمليات البحث في البريد الإلكتروني عن BCeID دقيقة.",
     "getUsersErrMsg": "خطأ في الحصول على المستخدمين: {error}",
     "exactEmailOrUsername": "أدخل البريد الإلكتروني أو اسم المستخدم بالضبط.",
-    "requiredFiled": "أدخل اسمًا أو بريدًا إلكترونيًا أو اسم مستخدم"
+    "requiredField": "أدخل اسمًا أو بريدًا إلكترونيًا أو اسم مستخدم"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "مشاهدة هذا التقديم",
@@ -464,6 +559,7 @@
     "editThisDraft": "تحرير هذه المسودة"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "لم يتم العثور على سجلات مطابقة",
     "previousSubmissions": "عمليات الإرسال السابقة",
     "selectColumns": "حدد الأعمدة",
     "createNewSubmission": "إنشاء إرسال جديد",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "خطأ في إضافة الملاحظة:",
     "notes": "ملحوظات",
     "note": "ملحوظة",
-    "maxChars": "4000 حرف كحد أقصى"
+    "maxChars": "4000 حرف كحد أقصى",
+    "totalNotes": "مجموع الملاحظات:"
   },
   "statusPanel": {
     "currentStatus": "الحالة الحالية:",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "مطلوب الوكيل",
     "assignToMe": "تعيين لي",
     "recipientEmail": "البريد الإلكتروني المستلم",
+    "recipientIsRequired": "المستلم مطلوب",
     "attachCommentToEmail": "إرفاق تعليق بالبريد الإلكتروني",
     "emailComment": "التعليق بالبريد الإلكتروني",
     "maxChars": "4000 حرف كحد أقصى",
@@ -595,7 +693,16 @@
     "docGrnSucess": "تم إنشاء المستند بنجاح",
     "failedDocGenErrMsg": "فشل إنشاء المستند",
     "failedDocGenConsErrMsg": "خطأ في إرسال النموذج: {error}",
-    "cDogsTemplate": "قالب CDOGS"
+    "cDogsTemplate": "قالب CDOGS",
+    "uploadCdogsTemplate": "تحميل قالب CDOGS",
+    "printOptions": "خيارات الطباعة",
+    "expandtextFields": "توسيع حقول النص",
+    "moreInfo": "المزيد من المعلومات",
+    "defaultCdogsTemplate": "استخدام قالب CDOGS الافتراضي",
+    "fileName": "اسم الملف",
+    "uploadDate": "تاريخ التحميل",
+    "upload": "تحميل",
+    "selectExportFileType": "اختر نوع ملف التصدير"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "رابط معلومات المكون",
@@ -640,6 +747,7 @@
     "updatedBy": "تم التعديل بواسطة"
   },
   "teamManagement": {
+    "noMatchingRecordText": "لم يتم العثور على سجلات مطابقة",
     "teamManagement": "ادارة فريق",
     "selectColumns": "حدد الأعمدة",
     "manageForm": "إدارة النموذج",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "قم بإنشاء نماذج عبر الإنترنت لجمع المعلومات من عملائك وتحسين سير العمل الخاص بك.",
     "getStarted": "البدء"
   },
-  "create": {
-    "createNewForm": "إنشاء نموذج جديد",
-    "setUpForm": "قم بإعداد النموذج",
+  "baseStepper": {
     "designForm": "نموذج التصميم",
+    "setUpForm": "قم بإعداد النموذج",
+    "manageForm": "إدارة النموذج"
+  },
+  "create": {
     "formSettings": "إعدادات النموذج",
     "disclaimer": "تنصل",
     "disclaimerStmt": "أوافق على إخلاء المسؤولية وبيان المسؤولية لمصممي النماذج",
@@ -794,11 +904,12 @@
     "resetColumns": "إعادة تعيين الأعمدة"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "عرض جميع عمليات الإرسال",
+    "viewMyDraftOrSubmissions": "عرض المسودة / التقديمات الخاصة بي",
     "saveAsADraft": "احفظ كمسودة",
     "editThisDraft": "قم بتحرير هذه المسودة",
     "switchSingleSubmssn": "التبديل إلى الإرسال الفردي",
-    "switchMultiSubmssn": "التبديل إلى الإرسال المتعدد"
+    "switchMultiSubmssn": "التبديل إلى تقديمات متعددة",
+    "wideLayout": "تخطيط واسع"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "تم نسخ الرابط إلى الحافظة",
@@ -832,7 +943,8 @@
     "submissnHistory": "تاريخ التقديم الخاص بك (يتم تحديده لاحقًا)"
   },
   "error": {
-    "logout": "تسجيل خروج"
+    "logout": "تسجيل خروج",
+    "somethingWentWrong": "خطأ: حدث خطأ ما... :("
   },
   "login": {
     "authenticateWith": "المصادقة مع:",
@@ -876,6 +988,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "خطأ في الحصول على مكونات منشئ النموذج: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "خطأ في تحميل قوالب البريد الإلكتروني لـ {formId}: {error}",
+      "fetchEmailTemplatesErrMsg": "حدث خطأ أثناء جلب نماذج البريد الإلكتروني لهذا النموذج",
       "getCurrUserFormsErrMsg": "حدث خطأ أثناء إحضار النماذج الخاصة بك.",
       "getCurrUserFormsConsErrMsg": "خطأ في الحصول على بيانات المستخدم: {error}",
       "getUserFormPermErrMsg": "حدث خطأ أثناء جلب بيانات المستخدم الخاصة بك لهذا النموذج.",
@@ -899,6 +1013,8 @@
       "publishDraftErrMsg": "حدث خطأ أثناء النشر.",
       "publishDraftConsErrMsg": "خطأ في نشر $ {draftId}: {error}",
       "toggleVersnPublConsErrMsg": "خطأ في toggleVersionPublish {versionId} {publish}: {error}",
+      "updateEmailTemplateConsErrMsg": "خطأ في تحديث قوالب البريد الإلكتروني للنموذج {formId}: {error}",
+      "updateEmailTemplateErrMsg": "حدث خطأ أثناء تحديث قوالب البريد الإلكتروني لهذا النموذج.",
       "updateFormErrMsg": "حدث خطأ أثناء تحديث إعدادات هذا النموذج.",
       "updateFormConsErrMsg": "خطأ في تحديث النموذج {id}: {error}",
       "deleteSubmissionNotifyMsg": "تم حذف الإرسال بنجاح.",

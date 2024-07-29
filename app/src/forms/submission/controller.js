@@ -1,6 +1,9 @@
-const { Statuses } = require('../common/constants');
 const cdogsService = require('../../components/cdogsService');
+
+const { Statuses } = require('../common/constants');
 const emailService = require('../email/emailService');
+const formService = require('../form/service');
+
 const service = require('./service');
 
 module.exports = {
@@ -119,10 +122,44 @@ module.exports = {
       next(error);
     }
   },
-  templateUploadAndRender: async (req, res, next) => {
+
+  /**
+   * Takes a document template ID and a form submission ID and renders the
+   * template into a document.
+   *
+   * @param {Object} req the Express object representing the HTTP request.
+   * @param {Object} res the Express object representing the HTTP response.
+   * @param {Object} next the Express chaining function.
+   */
+  templateRender: async (req, res, next) => {
     try {
       const submission = await service.read(req.params.formSubmissionId);
-      const templateBody = { ...req.body, data: submission.submission.submission.data };
+      const template = await formService.documentTemplateRead(req.params.documentTemplateId);
+      const fileName = template.filename.substring(0, template.filename.lastIndexOf('.'));
+      const fileExtension = template.filename.substring(template.filename.lastIndexOf('.') + 1);
+      const convertTo = req.query.convertTo || 'pdf';
+
+      const templateBody = {
+        data: {
+          ...submission.submission.submission.data,
+          chefs: {
+            confirmationId: submission.submission.confirmationId,
+            formVersion: submission.version.version,
+            submissionId: submission.submission.id,
+          },
+        },
+        options: {
+          convertTo: convertTo,
+          overwrite: true,
+          reportName: fileName,
+        },
+        template: {
+          content: template.template.toString(),
+          encodingType: 'base64',
+          fileType: fileExtension,
+        },
+      };
+
       const { data, headers, status } = await cdogsService.templateUploadAndRender(templateBody);
       const contentDisposition = headers['content-disposition'];
 
@@ -137,6 +174,52 @@ module.exports = {
       next(error);
     }
   },
+
+  /**
+   * Takes a document template file and a form submission ID and renders the
+   * template into a document.
+   *
+   * @param {Object} req the Express object representing the HTTP request.
+   * @param {Object} res the Express object representing the HTTP response.
+   * @param {Object} next the Express chaining function.
+   */
+  templateUploadAndRender: async (req, res, next) => {
+    try {
+      const submission = await service.read(req.params.formSubmissionId);
+      const templateBody = {
+        ...req.body,
+        data: {
+          ...submission.submission.submission.data,
+          chefs: {
+            confirmationId: submission.submission.confirmationId,
+            formVersion: submission.version.version,
+            submissionId: submission.submission.id,
+          },
+        },
+      };
+      const { data, headers, status } = await cdogsService.templateUploadAndRender(templateBody);
+      const contentDisposition = headers['content-disposition'];
+
+      res
+        .status(status)
+        .set({
+          'Content-Disposition': contentDisposition ? contentDisposition : 'attachment',
+          'Content-Type': headers['content-type'],
+        })
+        .send(data);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  /**
+   * Takes a document template file and a form submission object and renders the
+   * template into a document.
+   *
+   * @param {Object} req the Express object representing the HTTP request.
+   * @param {Object} res the Express object representing the HTTP response.
+   * @param {Object} next the Express chaining function.
+   */
   draftTemplateUploadAndRender: async (req, res, next) => {
     try {
       const templateBody = { ...req.body.template, data: req.body.submission.data };
@@ -154,6 +237,7 @@ module.exports = {
       next(error);
     }
   },
+
   listEdits: async (req, res, next) => {
     try {
       const response = await service.listEdits(req.params.formSubmissionId);

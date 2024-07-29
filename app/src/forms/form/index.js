@@ -1,7 +1,9 @@
-const dataErrors = require('../common/middleware').dataErrors;
 const routes = require('./routes');
 const setupMount = require('../common/utils').setupMount;
 
+const externalApiRoutes = require('./externalApi/routes');
+
 module.exports.mount = (app) => {
-  return setupMount('forms', app, routes, dataErrors);
+  const p = setupMount('forms', app, [routes, externalApiRoutes]);
+  return p;
 };

@@ -1,6 +1,23 @@
 {
+  "open": "باز کن",
   "date": {
     "date": "yyyy-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "مدیریت ایمیل",
+    "manageForm": "مدیریت فرم",
+    "submissionConfirmation": "تایید ارسال"
+  },
+  "emailTemplate": {
+    "body": "بدن",
+    "save": "صرفه جویی",
+    "saveEmailTemplateConsoleErrMsg": "خطا در به‌روزرسانی الگوی ایمیل برای فرم {formId}: {error}",
+    "saveEmailTemplateErrMsg": "هنگام تلاش برای به‌روزرسانی الگوی ایمیل، خطایی روی داد.",
+    "subject": "موضوع",
+    "title": "عنوان",
+    "validBodyRequired": "لطفاً یک متن برای ایمیل وارد کنید",
+    "validSubjectRequired": "لطفاً یک خط موضوع برای ایمیل وارد کنید",
+    "validTitleRequired": "لطفا یک عنوان برای ایمیل وارد کنید"
   },
   "formsTable": {
     "myForms": "فرم های من",
@@ -18,6 +35,10 @@
   "manageLayout": {
     "manageForm": "مدیریت فرم"
   },
+  "preview": {
+    "preview": "پیش نمایش",
+    "previewToolTip": "این یک پیش نمایش از طراحی و رفتار نسخه فرم را نشان می دهد که ارسال کنندگان شما آن را مشاهده می کنند. شما نمی توانید فرم را از این صفحه ارسال کنید."
+  },
   "shareForm": {
     "shareForm": "اشتراک گذاری فرم",
     "shareLink": "لینک را به اشتراک بگذارید",
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "URL را در کلیپ بورد کپی کنید"
   },
   "manageFormActions": {
+    "emailManagement": "مدیریت ایمیل",
     "viewSubmissions": "مشاهده موارد ارسالی",
     "teamManagement": "مدیریت تیم",
     "deleteForm": "حذف فرم",
@@ -47,7 +69,22 @@
     "status": "وضعیت",
     "update": "به روز رسانی",
     "cancel": "لغو کنید",
-    "eventSubscription": "اشتراک رویداد"
+    "eventSubscription": "اشتراک رویداد",
+    "cdogsTemplate": "قالب CDOGS"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "بارگذاری قالب CDOGS",
+    "uploadTemplateFile": "بارگذاری پرونده قالب",
+    "upload": "بارگذاری",
+    "delete": "حذف",
+    "download": "دانلود",
+    "invalidFileMessage": "قالب باید یکی از پسوندهای زیر را استفاده کند: .txt، .docx، .html، .odt، .pptx، .xlsx",
+    "uploadSuccess": "قالب با موفقیت بارگذاری شد.",
+    "uploadError": "خطایی در هنگام بارگذاری قالب رخ داد.",
+    "deleteSuccess": "قالب با موفقیت حذف شد.",
+    "deleteError": "خطایی در هنگام حذف قالب رخ داد.",
+    "fetchError": "خطایی در هنگام دریافت قالب رخ داد.",
+    "info": "قالبی را بارگذاری کنید تا از خدمات تولید سند مشترک (CDOGS) استفاده کنید"
   },
   "formSettings": {
     "pressToAddMultiEmail": "برای افزودن چندین آدرس ایمیل، <kbd>اینتر</kbd> یا <kbd>،</kbd> یا <kbd>فاصله</kbd> را فشار دهید",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "اجازه اشتراک رویداد",
     "eventSubscription": "اشتراک رویداد",
     "validEndpointRequired": "لطفاً یک نقطه پایان معتبر که با شروع آن شروع می شود وارد کنید https://",
-    "validBearerTokenRequired": "89abddfb-2cff-4fda-83e6-13221f0c3d4f یک نمونه توکن حامل معتبر وارد کنید"
+    "validBearerTokenRequired": "89abddfb-2cff-4fda-83e6-13221f0c3d4f یک نمونه توکن حامل معتبر وارد کنید",
+    "wideFormLayout": "طرح فرم گسترده"
+  },
+  "formProfile": {
+    "message": "تیم CHEFS اطلاعات را جمع آوری و سازماندهی می‌کند تا به عنوان ورودی حیاتی برای ساخت مورد کارهای تجاری جامع عمل کند. این موارد نقش کلیدی در راهنمایی عملیات استراتژیک و بهبود مستمر CHEFS در سال‌های آینده خواهند داشت. این اقدام برای جمع‌آوری داده‌ها برای اطلاع از تصمیمات حیاتی و شکل‌دهی مسیر CHEFS جهت اطمینان از قابلیت تطبیق و کارایی آن در مواجهه با نیازها و چالش‌های در حال تحول حیاتی است.",
+    "ministryPrompt": "انتخاب کنید که با کدام وزارتخانه مرتبط هستید",
+    "useCasePrompt": "مورد استفاده فرم خود را انتخاب کنید",
+    "deploymentPrompt": "لطفاً سطح پیاده‌سازی خود را مشخص کنید",
+    "APIPrompt": "مشخص کنید آیا قصد دارید از API ارائه شده برای ادغام در یک برنامه شخص ثالث استفاده کنید یا خیر",
+    "labelPrompt": "برچسب‌ها به عنوان یک وسیله برای دسته‌بندی فرم‌های مشابه که ممکن است به یک سازمان مشترک تعلق داشته باشند یا در یک زمینه مرتبط قرار داشته باشند، خدمت می‌کنند.",
+    "useCaseToolTip": "اگر مورد استفاده خاص خود را نمی‌بینید، با تیم CHEFS تماس بگیرید تا گزینه‌های بیشتری را بررسی کنید",
+    "deploymentLevel": "سطح نصب",
+    "ministryName": "وزارت",
+    "label": "برچسب‌ها",
+    "useCase": "نوع مورد کاربرد",
+    "development": "توسعه",
+    "test": "آزمایش",
+    "production": "تولید",
+    "Y": "بله",
+    "N": "خیر",
+    "application": "برنامه‌هایی که پس از آن تصمیم گیری می‌شود",
+    "collection": "جمع‌آوری مجموعه داده‌ها، ارسال داده",
+    "feedback": "فرم بازخورد برای تعیین رضایت، توافق، امکانات یا سوالات کیفی دیگر",
+    "report": "گزارش‌دهی معمولاً بر اساس یک برنامه تکراری یا موجبات مانند پیگیری‌ها انجام می‌شود",
+    "registration": "ثبت‌نام یا ورود - بدون ارزیابی",
+    "getLabelErr": "خطایی رخ داده است در هنگام تلاش برای دریافت برچسب‌های کاربر.",
+    "getLabelConsErr": "خطا در دریافت برچسب‌ها: ",
+    "selectAPIErr": "لطفاً گزینه خود را در مورد استفاده از ادغام API اطلاع دهید",
+    "selectDeploymentErr": "لطفاً یک سطح نصب را انتخاب کنید",
+    "selectMinistryErr": "لطفاً وزارت خود را انتخاب کنید",
+    "selectUseCaseErr": "لطفاً مورد کاربرد فرم خود را وارد کنید",
+    "labelSizeErr": "برچسب ها نمی توانند بیش از 25 کاراکتر باشند"
+  },
+  "ministries": {
+    "AF": "کشاورزی و غذا (AF)",
+    "AG": "وکالت عمومی (AG)",
+    "MCF": "توسعه کودکان و خانواده (MCF)",
+    "CITZ": "خدمات شهروندی (CITZ)",
+    "ECC": "آموزش و مراقبت از کودکان (ECC)",
+    "EMCR": "مدیریت اضطراری و آمادگی اقلیمی (EMCR)",
+    "EMLI": "انرژی، معادن و نوآوری کم کربن (EMLI)",
+    "ENV": "محیط زیست و استراتژی تغییرات آب و هوا (ENV)",
+    "FIN": "امور مالی (FIN)",
+    "FOR": "جنگل‌ها (FOR)",
+    "HLTH": "سلامت (HLTH)",
+    "HOUS": "مسکن (HOUS)",
+    "IRR": "روابط و تصالحات بومی (IRR)",
+    "JEDI": "شغل‌ها، توسعه اقتصادی و نوآوری (JEDI)",
+    "LBR": "کار (LBR)",
+    "MMHA": "سلامت روان و اعتیادها (MMHA)",
+    "MUNI": "شؤون شهری (MUNI)",
+    "PSFS": "آموزش عالی و مهارت‌های آینده (PSFS)",
+    "PSSG": "امنیت عمومی و دیوان عدالت عمومی (PSSG)",
+    "SDPR": "توسعه اجتماعی و کاهش فقر (SDPR)",
+    "TACS": "گردشگری، هنر، فرهنگ و ورزش (TACS)",
+    "MOTI": "حمل و نقل و زیرساخت (MOTI)",
+    "WLRS": "حفاظت از آب، زمین و منابع (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "نوع رویدادe",
@@ -153,6 +246,7 @@
     "infoA": "اطمینان حاصل کنید که رمز کلید API شما در یک مکان امن (به عنوان مثال صندوق کلید) ذخیره شده است.",
     "infoB": "کلید API شما به فرم شما دسترسی نامحدود می دهد. کلید API خود را به کسی ندهید.",
     "infoC": "کلید API فقط باید برای تعاملات سیستم خودکار استفاده شود. از کلید API خود برای دسترسی مبتنی بر کاربر استفاده نکنید",
+    "infoD": "اگر می‌خواهید از طریق کلید API به فایل‌های ارسالی دسترسی داشته باشید، لطفاً پس از تولید کلید، کادر زیر را فعال کنید.",
     "deleteKey": "حذف کلید",
     "apiKey": "کلید ای پی ای",
     "hideSecret": "پنهان کردن راز",
@@ -170,8 +264,7 @@
     "regenerate": "بازسازی کنید",
     "generate": "تولید می کنند",
     "secret": "راز",
-    "text": "متن",
-    "password": "کلمه عبور"
+    "filesAPIAccess":"به این کلید API اجازه دهید به فایل های ارسالی دسترسی داشته باشد"
   },
   "manageVersions": {
     "important": "مهم!",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: مجاز نیست. :",
     "401ErrorMsg": "حساب شما به درستی تنظیم نشده است.<br /> لطفا تماس بگیرید",
     "403Forbidden": "403: ممنوع. :",
-    "403ErrorMsg": "این صفحه به احراز هویت {idp} نیاز دارد.",
+    "403ErrorMsg": "این صفحه به احراز هویت {permission} نیاز دارد.",
     "401UnAuthorized": "401: غیر مجاز. :",
     "401UnAuthorizedErrMsg": "شما اجازه دسترسی به این صفحه را ندارید."
   },
@@ -325,7 +418,8 @@
     "version": "نسخه",
     "save": "صرفه جویی",
     "saving": "صرفه جویی در",
-    "notSaved": "ذخیره نشد"
+    "notSaved": "ذخیره نشد",
+    "fieldnameError": "شما نمی توانید از کلمه کلیدی «form» به عنوان نام فیلد {label} استفاده کنید"
   },
   "formViewerMultiUpload": {
     "important": "مهم",
@@ -375,6 +469,7 @@
     "emailRequired": "ایمیل الزامی است"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "هیچ رکورد منطبقی یافت نشد",
     "submissions": "موارد ارسالی",
     "submissionsTable": "جدول ارسالی",
     "selectColumns": "ستون ها را انتخاب کنید",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "جستجوی ایمیل برای BCeID باید دقیق باشد.",
     "getUsersErrMsg": "خطا در دریافت کاربران: {error}",
     "exactEmailOrUsername": "یک ایمیل یا نام کاربری دقیق وارد کنید.",
-    "requiredFiled": "یک نام، ایمیل یا نام کاربری وارد کنید"
+    "requiredField": "یک نام، ایمیل یا نام کاربری وارد کنید"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "مشاهده این ارسال",
@@ -464,6 +559,7 @@
     "editThisDraft": "این پیش نویس را ویرایش کنید"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "هیچ رکورد منطبقی یافت نشد",
     "previousSubmissions": "ارسالی های قبلی",
     "selectColumns": "ستون ها را انتخاب کنید",
     "createNewSubmission": "یک ارسال جدید ایجاد کنید",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "خطا در افزودن یادداشت:",
     "notes": "یادداشت",
     "note": "توجه داشته باشید",
-    "maxChars": "حداکثر 4000 کاراکتر"
+    "maxChars": "حداکثر 4000 کاراکتر",
+    "totalNotes": "کل یادداشت‌ها:"
   },
   "statusPanel": {
     "currentStatus": "وضعیت فعلی:",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "کارمند مورد نیاز است",
     "assignToMe": "به من اختصاص دهید",
     "recipientEmail": "ایمیل گیرنده",
+    "recipientIsRequired": "دریافت کننده الزامی است",
     "attachCommentToEmail": "نظر را به ایمیل ضمیمه کنید",
     "emailComment": "نظر ایمیل",
     "maxChars": "حداکثر 4000 کاراکتر",
@@ -595,7 +693,16 @@
     "docGrnSucess": "سند با موفقیت ایجاد شد",
     "failedDocGenErrMsg": "سند ایجاد نشد",
     "failedDocGenConsErrMsg": "خطا در ارسال الگو: {error}",
-    "cDogsTemplate": "قالب CDOGS"
+    "cDogsTemplate": "قالب CDOGS",
+    "uploadCdogsTemplate": "بارگذاری قالب CDOGS",
+    "printOptions": "گزینه‌های چاپ",
+    "expandtextFields": "گسترش فیلدهای متنی",
+    "moreInfo": "اطلاعات بیشتر",
+    "defaultCdogsTemplate": "استفاده از قالب پیش‌فرض CDOGS",
+    "fileName": "نام فایل",
+    "uploadDate": "تاریخ بارگذاری",
+    "upload": "بارگذاری",
+    "selectExportFileType": "نوع فایل صادرات را انتخاب کنید"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "لینک اطلاعات کامپوننت",
@@ -640,6 +747,7 @@
     "updatedBy": "تغییر داده شده توسط"
   },
   "teamManagement": {
+    "noMatchingRecordText": "هیچ رکورد منطبقی یافت نشد",
     "teamManagement": "مدیریت تیم",
     "selectColumns": "ستون ها را انتخاب کنید",
     "manageForm": "مدیریت فرم",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "فرم های آنلاین برای جمع آوری اطلاعات از مشتریان خود و بهبود گردش کار خود ایجاد کنید.",
     "getStarted": "شروع کنید"
   },
-  "create": {
-    "createNewForm": "ایجاد فرم جدید",
+  "baseStepper": {
     "setUpForm": "فرم را تنظیم کنید",
     "designForm": "فرم طراحی",
+    "manageForm": "مدیریت فرم"
+  },
+  "create": {
     "formSettings": "تنظیمات فرم",
     "disclaimer": "سلب مسئولیت",
     "disclaimerStmt": "من با سلب مسئولیت و بیانیه مسئولیت طراحان فرم موافقم",
@@ -794,11 +904,12 @@
     "resetColumns": "بازنشانی ستون ها"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "مشاهده همه موارد ارسالی",
+    "viewMyDraftOrSubmissions": "مشاهده پیش نویس/موارد ارسالی من",
     "saveAsADraft": "ذخیره به عنوان پیش نویس",
     "editThisDraft": "این پیش نویس را ویرایش کنید",
     "switchSingleSubmssn": "به ارسال تکی بروید",
-    "switchMultiSubmssn": "به ارسال چندگانه تغییر دهید"
+    "switchMultiSubmssn": "تغییر به ارسال های متعدد",
+    "wideLayout": "طرح واسع"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "پیوند در کلیپ بورد کپی شد",
@@ -877,6 +988,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "خطا در دریافت اجزای فرم ساز: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "خطا در بارگیری الگوهای ایمیل برای {formId}: {error}",
+      "fetchEmailTemplatesErrMsg": "هنگام واکشی الگوهای ایمیل برای این فرم خطایی روی داد",
       "getCurrUserFormsErrMsg": "هنگام واکشی فرم های شما خطایی روی داد.",
       "getCurrUserFormsConsErrMsg": "خطا در دریافت اطلاعات کاربر: {error}",
       "getUserFormPermErrMsg": "هنگام واکشی اطلاعات کاربر شما برای این فرم خطایی روی داد.",
@@ -900,6 +1013,8 @@
       "publishDraftErrMsg": "هنگام انتشار خطایی روی داد.",
       "publishDraftConsErrMsg": "خطا در انتشار {draftId}: {error}",
       "toggleVersnPublConsErrMsg": "خطا در toggleVersionPublish {versionId} {publish}: {error}",
+      "updateEmailTemplateConsErrMsg": "خطا در به‌روزرسانی الگوهای ایمیل برای فرم {formId}: {error}",
+      "updateEmailTemplateErrMsg": "هنگام به‌روزرسانی الگوهای ایمیل برای این فرم خطایی روی داد.",
       "updateFormErrMsg": "هنگام به روز رسانی تنظیمات این فرم خطایی روی داد.",
       "updateFormConsErrMsg": "خطا در به‌روزرسانی فرم {id}: {error}",
       "deleteSubmissionNotifyMsg": "ارسال با موفقیت حذف شد.",

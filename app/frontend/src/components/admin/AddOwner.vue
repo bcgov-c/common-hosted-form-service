@@ -1,41 +1,22 @@
-<template>
-  <v-form ref="addUserForm" v-model="valid">
-    <p :lang="lang">
-      {{ $t('trans.addOwner.infoA') }}
-    </p>
-    <v-row class="mt-4">
-      <v-col cols="9" sm="6" md="6" lg="4">
-        <v-text-field
-          :label="$t('trans.addOwner.label')"
-          v-model="userGuid"
-          :rules="userGuidRules"
-          :hint="$t('trans.addOwner.hint')"
-          persistent-hint
-          :lang="lang"
-        />
-      </v-col>
-      <v-col cols="3" md="2">
-        <v-btn color="primary" @click="addOwner" :disabled="!valid">
-          <span :lang="lang">{{ $t('trans.addOwner.addowner') }}</span>
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-form>
-</template>
-
 <script>
-import { mapActions } from 'vuex';
-
-import { FormRoleCodes } from '@/utils/constants';
+import { mapActions } from 'pinia';
 import { version as uuidVersion, validate as uuidValidate } from 'uuid';
+import { useI18n } from 'vue-i18n';
+
+import { useAdminStore } from '~/store/admin';
+import { FormRoleCodes } from '~/utils/constants';
 
 export default {
-  name: 'AddOwner',
   props: {
     formId: {
       type: String,
       required: true,
     },
+  },
+  setup() {
+    const { locale } = useI18n({ useScope: 'global' });
+
+    return { locale };
   },
   data() {
     return {
@@ -50,8 +31,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions('admin', ['addFormUser', 'readRoles']),
-    ...mapActions('form', ['lang']),
+    ...mapActions(useAdminStore, ['addFormUser', 'readRoles']),
     async addOwner() {
       if (this.$refs.addUserForm.validate()) {
         await this.addFormUser({
@@ -64,3 +44,33 @@ export default {
   },
 };
 </script>
+
+<template>
+  <v-form ref="addUserForm" v-model="valid">
+    <p :lang="locale">
+      {{ $t('trans.addOwner.infoA') }}
+    </p>
+    <v-row class="mt-4">
+      <v-col cols="9" sm="6" md="6" lg="4">
+        <v-text-field
+          v-model="userGuid"
+          :label="$t('trans.addOwner.label')"
+          :rules="userGuidRules"
+          :hint="$t('trans.addOwner.hint')"
+          persistent-hint
+          :lang="locale"
+        />
+      </v-col>
+      <v-col cols="3" md="2">
+        <v-btn
+          color="primary"
+          :disabled="!valid"
+          :title="$t('trans.addOwner.addowner')"
+          @click="addOwner"
+        >
+          <span :lang="locale">{{ $t('trans.addOwner.addowner') }}</span>
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-form>
+</template>

@@ -1,16 +1,91 @@
+<script>
+import { mapActions, mapState } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+import { useAdminStore } from '~/store/admin';
+import { useFormStore } from '~/store/form';
+
+export default {
+  setup() {
+    const { t, locale } = useI18n({ useScope: 'global' });
+
+    return { t, locale };
+  },
+  data() {
+    return {
+      showDeleted: false,
+      loading: false,
+      search: '',
+    };
+  },
+  computed: {
+    ...mapState(useAdminStore, ['formList']),
+    ...mapState(useFormStore, ['isRTL']),
+    calcHeaders() {
+      return this.headers.filter(
+        (x) => x.key !== 'updatedAt' || this.showDeleted
+      );
+    },
+    headers() {
+      return [
+        {
+          title: this.$t('trans.adminFormsTable.formTitle'),
+          align: 'start',
+          key: 'name',
+        },
+        {
+          title: this.$t('trans.adminFormsTable.created'),
+          align: 'start',
+          key: 'createdAt',
+        },
+        {
+          title: this.$t('trans.adminFormsTable.deleted'),
+          align: 'start',
+          key: 'updatedAt',
+        },
+        {
+          title: this.$t('trans.adminFormsTable.actions'),
+          align: 'end',
+          key: 'actions',
+          filterable: false,
+          sortable: false,
+        },
+      ];
+    },
+  },
+  watch: {
+    showDeleted() {
+      this.refreshForms();
+    },
+  },
+  async mounted() {
+    this.refreshForms();
+  },
+  methods: {
+    ...mapActions(useAdminStore, ['getForms']),
+    async refreshForms() {
+      this.loading = true;
+      await this.getForms(!this.showDeleted);
+      this.loading = false;
+    },
+  },
+};
+</script>
+
 <template>
   <div :class="{ 'dir-rtl': isRTL }">
     <v-row no-gutters>
       <v-col cols="12" sm="8">
         <v-checkbox
+          v-model="showDeleted"
           class="pl-3"
+          data-test="checkbox-show-deleted"
           :class="isRTL ? 'float-right' : 'float-left'"
-          v-model="activeOnly"
-          @click="refeshForms"
+          :label="t('trans.adminFormsTable.showDeletedForms')"
         >
           <template #label>
-            <span :class="{ 'mr-2': isRTL }" :lang="lang">
-              {{ $t('trans.adminFormsTable.showDeletedForms') }}
+            <span :class="{ 'mr-2': isRTL }" :lang="locale">
+              {{ t('trans.adminFormsTable.showDeletedForms') }}
             </span>
           </template>
         </v-checkbox>
@@ -24,9 +99,11 @@
         >
           <v-text-field
             v-model="search"
-            append-icon="mdi-magnify"
-            :lang="lang"
-            :label="$t('trans.adminFormsTable.search')"
+            density="compact"
+            variant="underlined"
+            :lang="locale"
+            :label="t('trans.adminFormsTable.search')"
+            append-inner-icon="mdi-magnify"
             single-line
             hide-details
             class="pb-5"
@@ -39,27 +116,35 @@
     <!-- table header -->
     <v-data-table
       class="submissions-table"
+      hover
       :headers="calcHeaders"
       item-key="title"
       :items="formList"
       :search="search"
       :loading="loading"
-      :lang="lang"
-      :loading-text="$t('trans.adminFormsTable.loadingText')"
-      :no-data-text="$t('trans.adminFormsTable.noDataText')"
+      :lang="locale"
+      :loading-text="t('trans.adminFormsTable.loadingText')"
+      :no-data-text="t('trans.adminFormsTable.noDataText')"
     >
-      <template #[`item.createdAt`]="{ item }">
-        {{ item.createdAt | formatDateLong }} - {{ item.createdBy }}
+      <template #item.createdAt="{ item }">
+        {{ $filters.formatDateLong(item.createdAt) }} -
+        {{ item.createdBy }}
       </template>
-      <template #[`item.updatedAt`]="{ item }">
-        {{ item.updatedAt | formatDateLong }} - {{ item.updatedBy }}
+      <template #item.updatedAt="{ item }">
+        {{ $filters.formatDateLong(item.updatedAt) }} -
+        {{ item.updatedBy }}
       </template>
-      <template #[`item.actions`]="{ item }">
+      <template #item.actions="{ item }">
         <router-link :to="{ name: 'AdministerForm', query: { f: item.id } }">
-          <v-btn color="primary" text small>
-            <v-icon class="mr-1">build_circle</v-icon>
-            <span class="d-none d-sm-flex" :lang="lang">{{
-              $t('trans.adminFormsTable.admin')
+          <v-btn
+            color="primary"
+            variant="text"
+            size="small"
+            :title="$t('trans.adminFormsTable.admin')"
+          >
+            <v-icon class="mr-1" icon="mdi:mdi-wrench"></v-icon>
+            <span class="d-none d-sm-flex" :lang="locale">{{
+              t('trans.adminFormsTable.admin')
             }}</span>
           </v-btn>
         </router-link>
@@ -71,10 +156,15 @@
           }"
           target="_blank"
         >
-          <v-btn color="primary" text small>
-            <v-icon class="mr-1">note_add</v-icon>
-            <span class="d-none d-sm-flex" :lang="lang">{{
-              $t('trans.adminFormsTable.launch')
+          <v-btn
+            color="primary"
+            variant="text"
+            size="small"
+            :title="$t('trans.adminFormsTable.launch')"
+          >
+            <v-icon class="mr-1" icon="mdi:mdi-note-plus"></v-icon>
+            <span class="d-none d-sm-flex" :lang="locale">{{
+              t('trans.adminFormsTable.launch')
             }}</span>
           </v-btn>
         </router-link>
@@ -82,70 +172,6 @@
     </v-data-table>
   </div>
 </template>
-
-<script>
-import { mapActions, mapGetters } from 'vuex';
-
-export default {
-  name: 'FormsTable',
-  data() {
-    return {
-      activeOnly: false,
-
-      loading: true,
-      search: '',
-    };
-  },
-  computed: {
-    ...mapGetters('admin', ['formList']),
-    ...mapGetters('form', ['isRTL', 'lang']),
-    calcHeaders() {
-      return this.headers.filter(
-        (x) => x.value !== 'updatedAt' || this.activeOnly
-      );
-    },
-    headers() {
-      return [
-        {
-          text: this.$t('trans.adminFormsTable.formTitle'),
-          align: 'start',
-          value: 'name',
-        },
-        {
-          text: this.$t('trans.adminFormsTable.created'),
-          align: 'start',
-          value: 'createdAt',
-        },
-        {
-          text: this.$t('trans.adminFormsTable.deleted'),
-          align: 'start',
-          value: 'updatedAt',
-        },
-        {
-          text: this.$t('trans.adminFormsTable.actions'),
-          align: 'end',
-          value: 'actions',
-          filterable: false,
-          sortable: false,
-        },
-      ];
-    },
-  },
-  methods: {
-    ...mapActions('admin', ['getForms']),
-    async refeshForms() {
-      this.loading = true;
-      await this.getForms(!this.activeOnly);
-      this.loading = false;
-    },
-  },
-  async mounted() {
-    await this.getForms();
-    this.loading = false;
-  },
-};
-</script>
-
 <style scoped>
 /* TODO: Global Style! */
 .submissions-search {
@@ -168,15 +194,11 @@ export default {
   clear: both;
 }
 @media (max-width: 1263px) {
-  .submissions-table >>> th {
+  .submissions-table :deep(th) {
     vertical-align: top;
   }
 }
-/* Want to use scss but the world hates me */
-.submissions-table >>> tbody tr:nth-of-type(odd) {
-  background-color: #f5f5f5;
-}
-.submissions-table >>> thead tr th {
+.submissions-table :deep(thead tr th) {
   font-weight: normal;
   color: #003366 !important;
   font-size: 1.1em;

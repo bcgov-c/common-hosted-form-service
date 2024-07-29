@@ -91,16 +91,20 @@
 </template>
 
 <script>
-import { FormPermissions } from '@/utils/constants';
-import ManageSubmissionUsers from '@/components/forms/submission/ManageSubmissionUsers.vue';
-import PrintOptions from '@/components/forms/PrintOptions.vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+import ManageSubmissionUsers from '~/components/forms/submission/ManageSubmissionUsers.vue';
+import PrintOptions from '~/components/forms/PrintOptions.vue';
+import { FormPermissions } from '~/utils/constants';
+import { useFormStore } from '~/store/form';
+
 export default {
-  name: 'MySubmissionsActions',
   components: {
     ManageSubmissionUsers,
     PrintOptions,
   },
+  inject: ['setWideLayout'],
   props: {
     block: {
       type: Boolean,
@@ -128,6 +132,7 @@ export default {
     },
     permissions: {
       type: Array,
+      default: () => [],
     },
     readOnly: {
       type: Boolean,
@@ -141,9 +146,24 @@ export default {
       type: Object,
       default: undefined,
     },
+    wideFormLayout: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  emits: ['save-draft', 'switchView', 'showdoYouWantToSaveTheDraftModal'],
+  setup() {
+    const { locale } = useI18n({ useScope: 'global' });
+
+    return { locale };
+  },
+  data() {
+    return {
+      isWideLayout: false,
+    };
   },
   computed: {
-    ...mapGetters('form', ['lang']),
+    ...mapState(useFormStore, ['isRTL']),
     canSaveDraft() {
       return !this.readOnly;
     },
@@ -153,31 +173,149 @@ export default {
         this.permissions.includes(FormPermissions.SUBMISSION_UPDATE)
       );
     },
-    ...mapGetters('form', ['isRTL']),
+  },
+  async mounted() {
+    // set wide layout
+    this.setWideLayout(this.isWideLayout);
   },
   methods: {
-    switchView() {
-      this.$emit('switchView');
-    },
-    goToAllSubmissionOrDraft() {
-      this.$emit('showdoYouWantToSaveTheDraftModal');
+    toggleWideLayout() {
+      this.isWideLayout = !this.isWideLayout;
+      this.setWideLayout(this.isWideLayout);
     },
   },
 };
 </script>
-<style lang="scss" scoped>
-ul#menu li {
-  display: inline;
-  margin: 1%;
-  font-size: 17px;
-}
-ul#menu li.active {
-  font-weight: bold;
-  border-bottom: 3px solid #fcba19;
-}
-.element-right {
-  button {
-    float: right;
-  }
-}
-</style>
+
+<template>
+  <div
+    class="mt-6 d-flex flex-md-row justify-space-between flex-sm-column-reverse flex-xs-column-reverse gapRow"
+    :class="{ 'dir-rtl': isRTL }"
+  >
+    <div v-if="formId">
+      <v-btn
+        color="primary"
+        variant="outlined"
+        :title="$t('trans.formViewerActions.viewMyDraftOrSubmissions')"
+        @click="$emit('showdoYouWantToSaveTheDraftModal')"
+      >
+        <span :lang="locale">{{
+          $t('trans.formViewerActions.viewMyDraftOrSubmissions')
+        }}</span>
+      </v-btn>
+    </div>
+    <div>
+      <!-- Bulk button -->
+      <span v-if="allowSubmitterToUploadFile && !block" class="ml-2">
+        <v-tooltip location="bottom">
+          <template #activator="{ props }">
+            <v-btn
+              color="primary"
+              icon
+              v-bind="props"
+              size="x-small"
+              :title="
+                bulkFile
+                  ? $t('trans.formViewerActions.switchSingleSubmssn')
+                  : $t('trans.formViewerActions.switchMultiSubmssn')
+              "
+              @click="$emit('switchView')"
+            >
+              <v-icon icon="mdi:mdi-repeat"></v-icon>
+            </v-btn>
+          </template>
+          <span :lang="locale">{{
+            bulkFile
+              ? $t('trans.formViewerActions.switchSingleSubmssn')
+              : $t('trans.formViewerActions.switchMultiSubmssn')
+          }}</span>
+        </v-tooltip>
+      </span>
+
+      <!-- Wide layout button -->
+      <span>
+        <v-tooltip location="bottom">
+          <template #activator="{ props }">
+            <v-btn
+              v-if="wideFormLayout"
+              class="ml-3"
+              color="primary"
+              v-bind="props"
+              size="x-small"
+              density="default"
+              icon="mdi:mdi-panorama-variant-outline"
+              :title="$t('trans.formViewerActions.wideLayout')"
+              @click="toggleWideLayout"
+            />
+          </template>
+          <span>{{ $t('trans.formViewerActions.wideLayout') }}</span>
+        </v-tooltip>
+      </span>
+
+      <span class="ml-2 d-print-none">
+        <PrintOptions
+          :submission="submission"
+          :submission-id="submissionId"
+          :f="formId"
+        />
+      </span>
+
+      <!-- Save a draft -->
+      <span v-if="canSaveDraft && draftEnabled && !bulkFile" class="ml-2">
+        <v-tooltip location="bottom">
+          <template #activator="{ props }">
+            <v-btn
+              color="primary"
+              icon
+              v-bind="props"
+              size="x-small"
+              :title="$t('trans.formViewerActions.saveAsADraft')"
+              @click="$emit('save-draft')"
+            >
+              <v-icon icon="mdi:mdi-content-save"></v-icon>
+            </v-btn>
+          </template>
+          <span :lang="locale">{{
+            $t('trans.formViewerActions.saveAsADraft')
+          }}</span>
+        </v-tooltip>
+      </span>
+
+      <!-- Go to draft edit -->
+      <span v-if="showEditToggle && isDraft && draftEnabled" class="ml-2">
+        <router-link
+          :to="{
+            name: 'UserFormDraftEdit',
+            query: {
+              s: submissionId,
+            },
+          }"
+        >
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <v-btn
+                color="primary"
+                icon="mdi:mdi-pencil"
+                size="x-small"
+                density="default"
+                v-bind="props"
+                :title="$t('trans.formViewerActions.editThisDraft')"
+              />
+            </template>
+            <span :lang="locale">{{
+              $t('trans.formViewerActions.editThisDraft')
+            }}</span>
+          </v-tooltip>
+        </router-link>
+      </span>
+
+      <!-- Go to draft edit -->
+      <span v-if="submissionId && draftEnabled" class="ml-2">
+        <ManageSubmissionUsers
+          :is-draft="isDraft"
+          :submission-id="submissionId"
+        />
+      </span>
+    </div>
+  </div>
+</template>

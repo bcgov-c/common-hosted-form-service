@@ -1,38 +1,39 @@
-<template>
-  <div>
-    <h3>{{ user.fullName }}</h3>
-    <h4 :lang="lang">{{ $t('trans.administerUser.userDetails') }}</h4>
-    <pre>{{ user }}</pre>
-
-    <v-btn color="primary" text small :href="userUrl" target="_blank">
-      <span :lang="lang">{{ $t('trans.administerUser.openSSOConsole') }}</span>
-    </v-btn>
-  </div>
-</template>
-
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+import { useAppStore } from '~/store/app';
+import { useAdminStore } from '~/store/admin';
 
 export default {
-  name: 'AdministerUser',
   props: {
     userId: {
       type: String,
       required: true,
     },
   },
-  computed: {
-    ...mapGetters('admin', ['user']),
-    ...mapGetters('form', ['lang']),
-    userUrl() {
-      return `${this.$config.keycloak.serverUrl}/admin/${this.$config.keycloak.realm}/console/#/realms/${this.$config.keycloak.realm}/users/${this.user.keycloakId}`;
-    },
+  setup() {
+    const { locale } = useI18n({ useScope: 'global' });
+
+    return { locale };
   },
-  methods: {
-    ...mapActions('admin', ['readUser']),
+  computed: {
+    ...mapState(useAppStore, ['config']),
+    ...mapState(useAdminStore, ['user']),
   },
   async mounted() {
     await this.readUser(this.userId);
   },
+  methods: {
+    ...mapActions(useAdminStore, ['readUser']),
+  },
 };
 </script>
+
+<template>
+  <div>
+    <h3>{{ user.fullName }}</h3>
+    <h4 :lang="locale">{{ $t('trans.administerUser.userDetails') }}</h4>
+    <pre>{{ user }}</pre>
+  </div>
+</template>

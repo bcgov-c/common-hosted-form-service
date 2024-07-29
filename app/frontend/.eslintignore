@@ -4,3 +4,4 @@ node_modules
 public/js
 src/formio
 src/*
+tests

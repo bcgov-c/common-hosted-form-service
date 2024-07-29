@@ -1,27 +1,204 @@
+<script setup>
+import { storeToRefs } from 'pinia';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import userService from '~/services/userService';
+import { useFormStore } from '~/store/form';
+import { useIdpStore } from '~/store/identityProviders';
+import { Regex } from '~/utils/constants';
+
+const { t, locale } = useI18n({ useScope: 'global' });
+
+defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(['new-users', 'adding-users']);
+
+const idpStore = useIdpStore();
+
+const debounceTime = 250;
+let debounceTimer = null;
+const addingUsers = ref(false);
+const isLoading = ref(false);
+const model = ref(null);
+const search = ref(null);
+const selectedIdp = ref(null);
+const selectedRoles = ref([]);
+const showError = ref(false);
+const entries = ref([]);
+
+const { isRTL } = storeToRefs(useFormStore());
+const { loginButtons, primaryIdp } = storeToRefs(idpStore);
+
+const FORM_ROLES = computed(() => {
+  const idpRoles = idpStore.listRoles(selectedIdp.value);
+  return Object.values(idpRoles).sort();
+});
+
+const autocompleteLabel = computed(() => {
+  return idpStore.isPrimary(selectedIdp.value)
+    ? t('trans.addTeamMember.enterUsername')
+    : t('trans.addTeamMember.enterExactUsername');
+});
+
+watch(selectedIdp, (newIdp, oldIdp) => {
+  if (newIdp !== oldIdp) {
+    selectedRoles.value = [];
+    model.value = null;
+    entries.value = [];
+    showError.value = false;
+  }
+});
+
+watch(selectedRoles, (newRoles, oldRoles) => {
+  if (newRoles !== oldRoles) {
+    entries.value = [];
+    showError.value = false;
+  }
+});
+
+watch(addingUsers, () => {
+  emit('adding-users', addingUsers.value);
+});
+
+initializeSelectedIdp();
+
+onBeforeUnmount(() => {
+  clearTimeout(debounceTimer);
+});
+
+// workaround so we can use computed value (primaryIdp) in created()
+function initializeSelectedIdp() {
+  selectedIdp.value = primaryIdp.value?.code;
+}
+
+// show users in dropdown that have a text match on multiple properties
+function filterObject(_itemTitle, queryText, item) {
+  return Object.values(item)
+    .filter((v) => v)
+    .some((v) => {
+      if (typeof v === 'string')
+        return v.toLowerCase().includes(queryText.toLowerCase());
+      else {
+        return Object.values(v).some(
+          (nestedValue) =>
+            typeof nestedValue === 'string' &&
+            nestedValue.toLowerCase().includes(queryText.toLowerCase())
+        );
+      }
+    });
+}
+
+function save() {
+  if (selectedRoles.value.length === 0) {
+    showError.value = true;
+    return;
+  }
+  showError.value = false;
+  // emit user (object) to the parent component
+  emit('new-users', [model.value], selectedRoles.value);
+  // reset search field
+  model.value = null;
+  addingUsers.value = false;
+}
+
+function debounceSearch(input) {
+  if (debounceTimer) clearTimeout(debounceTimer);
+
+  debounceTimer = setTimeout(() => {
+    searchUsers(input);
+  }, debounceTime);
+}
+
+async function searchUsers(input) {
+  if (!input) {
+    entries.value = [];
+    return;
+  }
+  if (input === model.value) {
+    return;
+  }
+  isLoading.value = true;
+  try {
+    let params = {};
+    params.idpCode = selectedIdp.value;
+    let teamMembershipConfig = idpStore.teamMembershipSearch(selectedIdp.value);
+    if (teamMembershipConfig) {
+      if (input.length < teamMembershipConfig.text.minLength)
+        throw new Error(t(teamMembershipConfig.text.message));
+      if (input.includes('@')) {
+        if (!new RegExp(Regex.EMAIL).test(input))
+          throw new Error(t(teamMembershipConfig.email.message));
+        else params.email = input;
+      } else {
+        params.username = input;
+      }
+    } else {
+      params.search = input;
+    }
+    const response = await userService.getUsers(params);
+    entries.value = response.data;
+  } catch (error) {
+    entries.value = [];
+    /* eslint-disable no-console */
+    console.error(
+      t('trans.manageSubmissionUsers.getUsersErrMsg', {
+        error: error,
+      })
+    );
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+defineExpose({
+  addingUsers,
+  debounceSearch,
+  debounceTime,
+  debounceTimer,
+  emit,
+  filterObject,
+  model,
+  save,
+  search,
+  searchUsers,
+  selectedIdp,
+  selectedRoles,
+  showError,
+});
+</script>
+
+/* c8 ignore start */
 <template>
   <span :class="{ 'dir-rtl': isRTL }">
     <span v-if="addingUsers" style="margin-right: 656px" elevation="1">
       <v-sheet
         elevation="1"
         class="float-right"
-        style="position: absolute; width: 669px"
+        position="absolute"
+        style="width: 669px"
       >
         <v-sheet style="background-color: #38598a" elevation="1">
           <v-row justify="center" align="center">
             <v-col cols="12" sm="12">
               <v-radio-group
-                class="ml-3 my-0"
                 v-model="selectedIdp"
+                class="ml-3 my-0"
                 row
-                dense
+                density="compact"
                 fluid
                 hide-details
               >
-                <v-radio class="my-0" label="IDIR" :value="ID_PROVIDERS.IDIR" />
-                <v-radio label="Basic BCeID" :value="ID_PROVIDERS.BCEIDBASIC" />
                 <v-radio
-                  label="Business BCeID"
-                  :value="ID_PROVIDERS.BCEIDBUSINESS"
+                  v-for="button in loginButtons"
+                  :key="button.code"
+                  :value="button.code"
+                  :label="button.display"
                 />
               </v-radio-group>
             </v-col>
@@ -30,56 +207,47 @@
         <v-row class="p-3">
           <v-col cols="12">
             <v-autocomplete
-              autocomplete="autocomplete_off"
               v-model="model"
+              v-model:search="search"
+              :items="entries"
+              chips
+              closable-chips
               clearable
-              dense
-              :filter="filterObject"
+              item-title="fullName"
+              density="compact"
+              :custom-filter="filterObject"
               hide-details
-              :items="items"
               :label="autocompleteLabel"
               :loading="isLoading"
               return-object
-              :search-input.sync="searchUsers"
               :class="{ label: isRTL }"
+              @update:search="debounceSearch"
             >
               <!-- no data -->
               <template #no-data>
                 <div
                   class="px-2"
                   :class="{ 'text-right': isRTL }"
+                  :lang="locale"
                   v-html="$t('trans.addTeamMember.cantFindChefsUsers')"
-                  :lang="lang"
-                />
+                ></div>
               </template>
               <!-- selected user -->
-              <template #selection="data">
-                <span
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  close
-                  @click="data.select"
-                >
-                  {{ data.item.fullName }}
-                </span>
+              <template #chip="{ props, item }">
+                <v-chip v-bind="props" :text="item?.raw?.fullName"></v-chip>
               </template>
+
               <!-- users found in dropdown -->
-              <template #item="data">
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-item-content v-text="data.item" />
+              <template #item="{ props, item }">
+                <template v-if="typeof item !== 'object'">
+                  <v-list-item v-bind="props" :title="item" />
                 </template>
                 <template v-else>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ data.item.fullName }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{ data.item.username }} ({{ data.item.idpCode }})
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle>
-                      {{ data.item.email }}
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
+                  <v-list-item
+                    v-bind="props"
+                    :title="`${item?.raw?.fullName} (${item?.raw?.email})`"
+                    :subtitle="`${item?.raw?.username} (${item?.raw?.idpCode})`"
+                  />
                 </template>
               </template>
             </v-autocomplete>
@@ -90,7 +258,7 @@
             <v-chip-group
               v-model="selectedRoles"
               multiple
-              active-class="primary--text"
+              selected-class="text-primary"
               fluid
               column
               class="py-0 mx-3"
@@ -101,7 +269,7 @@
                 :key="role"
                 :value="role"
                 filter
-                outlined
+                variant="outlined"
               >
                 {{ role }}
               </v-chip>
@@ -113,28 +281,30 @@
             <!-- buttons -->
             <v-btn
               color="primary"
-              class="isRTL ? mr-3 : ml-3"
+              :class="isRTL ? 'mr-3' : 'ml-3'"
               :disabled="!model"
               :loading="isLoading"
+              :title="$t('trans.addTeamMember.add')"
               @click="save"
             >
-              <span :lang="lang">{{ $t('trans.addTeamMember.add') }}</span>
+              <span :lang="locale">{{ $t('trans.addTeamMember.add') }}</span>
             </v-btn>
             <v-btn
-              outlined
-              class="isRTL ? mr-2 : ml-2"
+              variant="outlined"
+              :class="isRTL ? 'mr-3' : 'ml-3'"
+              :title="$t('trans.addTeamMember.cancel')"
               @click="
                 addingUsers = false;
                 showError = false;
               "
             >
-              <span :lang="lang">{{ $t('trans.addTeamMember.cancel') }}</span>
+              <span :lang="locale">{{ $t('trans.addTeamMember.cancel') }}</span>
             </v-btn>
           </v-col>
         </v-row>
         <v-row v-if="showError" class="px-4 my-0 py-0">
           <v-col class="text-left">
-            <span class="red--text" :lang="lang">{{
+            <span class="text-red" :lang="locale">{{
               $t('trans.addTeamMember.mustSelectAUser')
             }}</span>
           </v-col>
@@ -142,160 +312,31 @@
       </v-sheet>
     </span>
     <span v-else>
-      <v-tooltip bottom>
-        <template #activator="{ on, attrs }">
+      <v-tooltip location="bottom">
+        <template #activator="{ props }">
           <v-btn
             class="mx-1"
-            @click="addingUsers = true"
             color="primary"
             :disabled="disabled"
             icon
-            v-bind="attrs"
-            v-on="on"
+            v-bind="props"
+            size="x-small"
+            :title="$t('trans.addTeamMember.addNewMember')"
+            @click="addingUsers = true"
           >
-            <v-icon>person_add</v-icon>
+            <v-icon icon="mdi:mdi-account-plus"></v-icon>
           </v-btn>
         </template>
-        <span :lang="lang">{{ $t('trans.addTeamMember.addNewMember') }}</span>
+        <span :lang="locale">{{ $t('trans.addTeamMember.addNewMember') }}</span>
       </v-tooltip>
     </span>
   </span>
 </template>
-
-<script>
-import { mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import { FormRoleCodes, IdentityProviders, Regex } from '@/utils/constants';
-import { userService } from '@/services';
-
-export default {
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {
-      addingUsers: false,
-      isLoading: false,
-      items: [],
-      model: null,
-      searchUsers: null,
-      selectedIdp: IdentityProviders.IDIR,
-      selectedRoles: [],
-      showError: false,
-    };
-  },
-  methods: {
-    // show users in dropdown that have a text match on multiple properties
-    filterObject(item, queryText) {
-      return Object.values(item)
-        .filter((v) => v)
-        .some((v) =>
-          v.toLocaleLowerCase().includes(queryText.toLocaleLowerCase())
-        );
-    },
-    save() {
-      if (this.selectedRoles.length === 0) {
-        this.showError = true;
-        return;
-      }
-      this.showError = false;
-      // emit user (object) to the parent component
-      this.$emit('new-users', [this.model], this.selectedRoles);
-      // reset search field
-      this.model = null;
-      this.addingUsers = false;
-    },
-  },
-  computed: {
-    ...mapFields('form', ['form.idps']),
-    ...mapGetters('auth', ['identityProvider']),
-    ...mapGetters('form', ['isRTL', 'lang']),
-    ID_PROVIDERS() {
-      return IdentityProviders;
-    },
-    FORM_ROLES() {
-      if (this.selectedIdp === IdentityProviders.BCEIDBASIC)
-        return Object.values(FormRoleCodes).filter(
-          (frc) => frc === FormRoleCodes.FORM_SUBMITTER
-        );
-      else if (this.selectedIdp === IdentityProviders.BCEIDBUSINESS)
-        return Object.values(FormRoleCodes)
-          .filter(
-            (frc) =>
-              frc != FormRoleCodes.OWNER && frc != FormRoleCodes.FORM_DESIGNER
-          )
-          .sort();
-      return Object.values(FormRoleCodes).sort();
-    },
-    autocompleteLabel() {
-      return this.selectedIdp == IdentityProviders.IDIR
-        ? this.$t('trans.addTeamMember.enterUsername')
-        : this.$t('trans.addTeamMember.enterExactUsername');
-    },
-  },
-  watch: {
-    selectedIdp(newIdp, oldIdp) {
-      if (newIdp !== oldIdp) {
-        this.items = [];
-        this.model = null;
-        this.showError = false;
-      }
-    },
-    selectedRoles(newRoles, oldRoles) {
-      if (oldRoles.length === 0 && newRoles.length > 0) {
-        this.showError = false;
-      }
-    },
-    addingUsers() {
-      this.$emit('adding-users', this.addingUsers);
-    },
-    // Get a list of user objects from database
-    async searchUsers(input) {
-      if (!input) return;
-      this.isLoading = true;
-      try {
-        let params = {};
-        params.idpCode = this.selectedIdp;
-        if (
-          this.selectedIdp == IdentityProviders.BCEIDBASIC ||
-          this.selectedIdp == IdentityProviders.BCEIDBUSINESS
-        ) {
-          if (input.length < 6)
-            throw new Error(
-              this.$t('trans.addTeamMember.BCeIDInputSearchMaxLen')
-            );
-          if (input.includes('@')) {
-            if (!new RegExp(Regex.EMAIL).test(input))
-              throw new Error(this.$t('trans.addTeamMember.BCeIDMustBeExact'));
-            else params.email = input;
-          } else {
-            params.username = input;
-          }
-        } else {
-          params.search = input;
-        }
-        const response = await userService.getUsers(params);
-        this.items = response.data;
-      } catch (error) {
-        this.items = [];
-        /* eslint-disable no-console */
-        console.error(
-          this.$t('trans.addTeamMember.errorGettingUsers', { error: error })
-        ); // eslint-disable-line no-console
-      } finally {
-        this.isLoading = false;
-      }
-    },
-  },
-};
-</script>
+/* c8 ignore end */
 
 <style scoped>
-.v-radio >>> label,
-.v-radio >>> i.v-icon {
+.v-radio :deep(label),
+.v-radio :deep(i.v-icon) {
   color: white !important;
   font-weight: bold;
 }

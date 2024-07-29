@@ -1,81 +1,126 @@
+<script setup>
+import { storeToRefs } from 'pinia';
+import QrcodeVue from 'qrcode.vue';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+import BaseCopyToClipboard from '~/components/base/BaseCopyToClipboard.vue';
+import { NotificationTypes } from '~/utils/constants';
+import { useFormStore } from '~/store/form';
+
+const { locale } = useI18n({ useScope: 'global' });
+
+const router = useRouter();
+
+const properties = defineProps({
+  formId: {
+    type: String,
+    required: true,
+  },
+  warning: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const dialog = ref(false);
+const qrLevel = ref('M');
+const qrSize = ref(900);
+
+const { isRTL } = storeToRefs(useFormStore());
+
+const formLink = computed(() => {
+  const url = router.resolve({
+    name: 'FormSubmit',
+    query: { f: properties.formId },
+  });
+  return `${window.location.origin}${url.href}`;
+});
+const NOTIFICATIONS_TYPES = computed(() => NotificationTypes);
+
+function downloadQr() {
+  let link = document.createElement('a');
+  link.download = 'qrcode.png';
+  link.href = document.querySelector('.qrCodeContainer canvas').toDataURL();
+  link.click();
+}
+
+defineExpose({ dialog, formLink, downloadQr });
+</script>
+
 <template>
   <span :class="{ 'dir-rtl': isRTL }">
-    <v-tooltip bottom>
-      <template #activator="{ on, attrs }">
+    <v-tooltip location="bottom">
+      <template #activator="{ props }">
         <v-btn
           class="mx-1"
-          data-cy="shareFormButton"
           color="primary"
+          data-cy="shareFormButton"
+          v-bind="props"
+          size="x-small"
+          density="default"
+          icon="mdi:mdi-share-variant"
+          :title="$t('trans.shareForm.shareForm')"
           @click="dialog = true"
-          icon
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon class="mr-1">share</v-icon>
-        </v-btn>
+        />
       </template>
-      <span :lang="lang">{{ $t('trans.shareForm.shareForm') }}</span>
+      <span :lang="locale">{{ $t('trans.shareForm.shareForm') }}</span>
     </v-tooltip>
 
-    <v-dialog v-model="dialog" width="900">
+    <v-dialog v-model="dialog" width="900" data-cy="shareFormDialog">
       <v-card>
-        <v-card-title
-          :class="{ 'dir-rtl': isRTL }"
-          class="text-h5 pb-0"
-          :lang="lang"
-          >{{ $t('trans.shareForm.shareLink') }}</v-card-title
-        >
+        <v-card-title class="text-h5 pb-0" :lang="locale">{{
+          $t('trans.shareForm.shareLink')
+        }}</v-card-title>
         <v-card-text>
           <hr />
-          <p class="mb-5" :class="{ 'dir-rtl': isRTL }" :lang="lang">
+          <p class="mb-5" :class="{ 'dir-rtl': isRTL }" :lang="locale">
             {{ $t('trans.shareForm.copyQRCode') }}
           </p>
           <v-alert
-            :value="warning"
+            v-if="warning"
             :class="[NOTIFICATIONS_TYPES.WARNING.class, { 'dir-rtl': isRTL }]"
             :icon="NOTIFICATIONS_TYPES.WARNING.icon"
-            transition="scale-transition"
-            :lang="lang"
-          >
-            {{ $t('trans.shareForm.warningMessage') }}
-          </v-alert>
+            :text="$t('trans.shareForm.warningMessage')"
+            :lang="locale"
+          ></v-alert>
           <v-text-field
             readonly
-            dense
-            flat
-            outlined
+            density="compact"
+            variant="outlined"
             label="URL"
             data-test="text-shareUrl"
-            :value="formLink"
+            :model-value="formLink"
             :class="{ 'dir-rtl': isRTL }"
           >
             <template #prepend>
-              <v-icon>link</v-icon>
+              <v-icon icon="mdi:mdi-link"></v-icon>
             </template>
-            <template #append-outer>
+            <template #append>
               <BaseCopyToClipboard
-                class="mt-n1"
-                :copyText="formLink"
-                :tooltipText="$t('trans.shareForm.copyURLToClipboard')"
-                :lang="lang"
+                class="mt-n1 mx-2"
+                :text-to-copy="formLink"
+                :tooltip-text="$t('trans.shareForm.copyURLToClipboard')"
+                :lang="locale"
               />
-              <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
+              <v-tooltip location="bottom">
+                <template #activator="{ props }">
                   <v-btn
                     class="mt-n1"
                     :class="{ 'dir-rtl': isRTL }"
-                    color="primary"
                     :href="formLink"
-                    icon
+                    color="primary"
                     target="_blank"
-                    v-bind="attrs"
+                    v-bind="props"
+                    size="x-small"
+                    density="default"
                     data-cy="shareFormLinkButton"
-                    v-on="on"
-                  >
-                    <v-icon class="mr-1">open_in_new</v-icon>
-                  </v-btn>
+                    icon="mdi:mdi-open-in-new"
+                    :title="$t('trans.shareForm.openThisForm')"
+                  />
                 </template>
-                <span :class="{ 'dir-rtl': isRTL }" :lang="lang">{{
+                <span :class="{ 'dir-rtl': isRTL }" :lang="locale">{{
                   $t('trans.shareForm.openThisForm')
                 }}</span>
               </v-tooltip>
@@ -88,27 +133,26 @@
                 <qrcode-vue
                   :value="formLink"
                   :size="qrSize"
-                  renderAs="canvas"
+                  render-as="canvas"
                   :level="qrLevel"
                 />
               </div>
             </v-col>
             <v-col cols="1" class="text-center">
-              <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
+              <v-tooltip location="bottom">
+                <template #activator="{ props }">
                   <v-btn
                     color="primary"
                     icon
+                    v-bind="props"
+                    size="x-small"
+                    :title="$t('trans.shareForm.downloadQRCode')"
                     @click="downloadQr"
-                    v-bind="attrs"
-                    v-on="on"
                   >
-                    <v-icon>get_app</v-icon>
+                    <v-icon icon="mdi:mdi-download"></v-icon>
                   </v-btn>
                 </template>
-                <span :lang="lang">{{
-                  $t('trans.shareForm.downloadQRCode')
-                }}</span>
+                <span>{{ $t('trans.shareForm.downloadQRCode') }}</span>
               </v-tooltip>
             </v-col>
           </v-row>
@@ -119,9 +163,11 @@
             :class="{ 'dir-rtl': isRTL }"
             class="mb-5 close-dlg"
             color="primary"
+            variant="flat"
+            :title="$t('trans.shareForm.close')"
             @click="dialog = false"
           >
-            <span :lang="lang">{{ $t('trans.shareForm.close') }}</span>
+            <span :lang="locale">{{ $t('trans.shareForm.close') }}</span>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -129,63 +175,15 @@
   </span>
 </template>
 
-<script>
-import QrcodeVue from 'qrcode.vue';
-import { NotificationTypes } from '@/utils/constants';
-import { mapGetters } from 'vuex';
-export default {
-  components: {
-    QrcodeVue,
-  },
-  props: {
-    formId: {
-      type: String,
-      required: true,
-    },
-    warning: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {
-      dialog: false,
-      qrLevel: 'M',
-      qrSize: 900,
-    };
-  },
-  computed: {
-    ...mapGetters('form', ['lang']),
-
-    formLink() {
-      // TODO: Consider using vue-router to generate this url string instead
-      return `${window.location.origin}${process.env.BASE_URL}form/submit?f=${this.formId}`;
-    },
-    NOTIFICATIONS_TYPES() {
-      return NotificationTypes;
-    },
-    ...mapGetters('form', ['isRTL']),
-  },
-  methods: {
-    downloadQr() {
-      let link = document.createElement('a');
-      link.download = 'qrcode.png';
-      link.href = document.querySelector('.qrCodeContainer canvas').toDataURL();
-      link.click();
-    },
-  },
-};
-</script>
-
 <style scoped lang="scss">
-@import '~vuetify/src/styles/settings/_variables';
+@import '~vuetify/lib/styles/settings/_variables.scss';
 
 .qrCodeContainer {
   @media #{map-get($display-breakpoints, 'sm-and-up')} {
     padding-left: 75px;
   }
 
-  ::v-deep canvas {
+  :deep(canvas) {
     margin-top: 50px;
     max-width: 250px;
     max-height: 250px;

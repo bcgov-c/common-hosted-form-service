@@ -1,6 +1,23 @@
 {
+  "open": "開ける",
   "date": {
     "date": "yyyy-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "電子メール管理",
+    "manageForm": "フォームの管理",
+    "submissionConfirmation": "提出の確認"
+  },
+  "emailTemplate": {
+    "body": "体",
+    "save": "保存",
+    "saveEmailTemplateConsoleErrMsg": "フォーム {formId} の電子メール テンプレートの更新中にエラーが発生しました: {error}",
+    "saveEmailTemplateErrMsg": "電子メール テンプレートを更新しようとしたときにエラーが発生しました。",
+    "subject": "主題",
+    "title": "タイトル",
+    "validBodyRequired": "メールの本文を入力してください",
+    "validSubjectRequired": "メールの件名を入力してください",
+    "validTitleRequired": "メールのタイトルを入力してください"
   },
   "formsTable": {
     "myForms": "私のフォーム",
@@ -18,6 +35,10 @@
   "manageLayout": {
     "manageForm": "フォームの管理"
   },
+  "preview": {
+    "preview": "プレビュー",
+    "previewToolTip": "これは、送信者に表示されるフォーム バージョンのデザインと動作のプレビューを示します。このページからフォームを送信することはできません。"
+  },
   "shareForm": {
     "shareForm": "共有フォーム",
     "shareLink": "共有リンク",
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "URLをクリップボードにコピー"
   },
   "manageFormActions": {
+    "emailManagement": "電子メール管理",
     "viewSubmissions": "提出物を見る",
     "teamManagement": "チーム管理",
     "deleteForm": "フォームの削除",
@@ -47,7 +69,22 @@
     "status": "スターテス",
     "update": "アップデート",
     "cancel": "キャンセル",
-    "eventSubscription": "イベントのサブスクリプション"
+    "eventSubscription": "イベントのサブスクリプション",
+    "cdogsTemplate": "CDOGS テンプレート"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "CDOGSテンプレートをアップロード",
+    "uploadTemplateFile": "テンプレートファイルをアップロード",
+    "upload": "アップロード",
+    "delete": "削除",
+    "download": "ダウンロード",
+    "invalidFileMessage": "テンプレートは次のいずれかの拡張子を使用する必要があります: .txt, .docx, .html, .odt, .pptx, .xlsx",
+    "uploadSuccess": "テンプレートが正常にアップロードされました。",
+    "uploadError": "テンプレートのアップロード中にエラーが発生しました。",
+    "deleteSuccess": "テンプレートが正常に削除されました。",
+    "deleteError": "テンプレートの削除中にエラーが発生しました。",
+    "fetchError": "テンプレートの取得中にエラーが発生しました。",
+    "info": "共通ドキュメント生成サービス（CDOGS）を使用するためのテンプレートをアップロードしてください"
   },
   "formSettings": {
     "pressToAddMultiEmail": "<kbd>Enter</kbd>または<kbd>、</kbd>または<kbd>スペース</kbd>を押して複数の電子メール アドレスを追加します",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "イベントのサブスクリプションを許可する",
     "eventSubscription": "イベントのサブスクリプション",
     "validEndpointRequired": "で始まる有効なエンドポイントを入力してください https://",
-    "validBearerTokenRequired": "有効なベアラー トークンの例を入力してください: 89abddfb-2cff-4fda-83e6-13221f0c3d4f"
+    "validBearerTokenRequired": "有効なベアラー トークンの例を入力してください: 89abddfb-2cff-4fda-83e6-13221f0c3d4f",
+    "wideFormLayout": "ワイドフォームレイアウト"
+  },
+  "formProfile": {
+    "message": "CHEFSチームは包括的なビジネスケースの作成に重要な入力となる情報を収集し、整理しています。これらのケースは、CHEFSの戦略的な運用と今後の改善を指南するうえで重要な役割を果たします。データを収集するこの取り組みは、重要な意思決定の情報提供やCHEFSの軌道を形作るために不可欠です。これにより、CHEFSが変化するニーズと課題に対応するための適応性と効果を確保します.",
+    "ministryPrompt": "関連する省庁を選択してください",
+    "useCasePrompt": "以下からフォームの目的を選択してください",
+    "deploymentPrompt": "展開レベルを指定してください",
+    "APIPrompt": "提供されたAPIをサードパーティのアプリケーションに統合する意向がある場合は指定してください",
+    "labelPrompt": "ラベルは、共通の組織に属するか関連するコンテキストを共有する可能性がある類似のフォームをカテゴリ分けする手段として機能します。",
+    "useCaseToolTip": "特定のユースケースが表示されない場合は、CHEFSチームに連絡してさらなるオプションをご相談ください",
+    "deploymentLevel": "展開レベル",
+    "ministryName": "省庁",
+    "label": "ラベル",
+    "useCase": "ユースケース",
+    "development": "開発",
+    "test": "テスト",
+    "production": "本番",
+    "Y": "はい",
+    "N": "いいえ",
+    "application": "判断に続いて評価されるアプリケーション",
+    "collection": "データセット、データの提出の収集",
+    "report": "通常は定期的なスケジュールまたはイベントトリガーのレポート、フォローアップなど",
+    "registration": "登録またはサインアップ - 評価なし",
+    "feedback": "満足度、同意、可能性、またはその他の定性的な質問を判断するフィードバックフォーム",
+    "getLabelErr": "ユーザーラベルを取得しようとしてエラーが発生しました。",
+    "getLabelConsErr": "ラベルの取得エラー：",
+    "selectAPIErr": "API 統合の使用に関する選択をお知らせください",
+    "selectDeploymentErr": "展開レベルを選択してください",
+    "selectMinistryErr": "省庁を選択してください",
+    "selectUseCaseErr": "フォームのユースケースを入力してください",
+    "labelSizeErr": "ラベルは 25 文字を超えることはできません"
+  },
+  "ministries": {
+    "AF": "農業と食品 (AF)",
+    "AG": "検事総長 (AG)",
+    "MCF": "子供と家族の発展 (MCF)",
+    "CITZ": "市民サービス (CITZ)",
+    "ECC": "教育と幼児ケア (ECC)",
+    "EMCR": "緊急事態管理と気候対応 (EMCR)",
+    "EMLI": "エネルギー、鉱山、低炭素イノベーション (EMLI)",
+    "ENV": "環境と気候変動戦略 (ENV)",
+    "FIN": "財務 (FIN)",
+    "FOR": "森林 (FOR)",
+    "HLTH": "健康 (HLTH)",
+    "HOUS": "住宅 (HOUS)",
+    "IRR": "先住民関係と和解 (IRR)",
+    "JEDI": "雇用、経済開発、イノベーション (JEDI)",
+    "LBR": "労働 (LBR)",
+    "MMHA": "精神保健と中毒 (MMHA)",
+    "MUNI": "地方自治体 (MUNI)",
+    "PSFS": "高等教育と将来のスキル (PSFS)",
+    "PSSG": "公共安全と検察総長 (PSSG)",
+    "SDPR": "社会開発と貧困削減 (SDPR)",
+    "TACS": "観光、芸術、文化、スポーツ (TACS)",
+    "MOTI": "輸送と基盤整備 (MOTI)",
+    "WLRS": "水、土地、資源管理 (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "イベントタイプ",
@@ -153,6 +246,7 @@
     "infoA": "API キー シークレットが安全な場所 (キー コンテナーなど) に保存されていることを確認してください。",
     "infoB": "API キーにより、フォームへの無制限のアクセスが許可されます。 API キーを誰にも渡さないでください。",
     "infoC": "API キーは、自動化されたシステム操作にのみ使用してください。ユーザーベースのアクセスには API キーを使用しないでください",
+    "infoD": "API キーを介して送信されたファイルにアクセスしたい場合は、キーを生成した後、次のチェックボックスをオンにしてください。",
     "deleteKey": "キーの削除",
     "apiKey": "APIキー",
     "hideSecret": "秘密を隠す",
@@ -170,8 +264,7 @@
     "regenerate": "再生する",
     "generate": "生成",
     "secret": "ひみつ",
-    "text": "文章",
-    "password": "パスワード"
+    "filesAPIAccess": "この API キーに送信されたファイルへのアクセスを許可します"
   },
   "manageVersions": {
     "important": "重要！",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: 権限がありません。 :",
     "401ErrorMsg": "アカウントが正しく設定されていません。<br />お問い合わせください",
     "403Forbidden": "403禁止します。 :",
-    "403ErrorMsg": "このページには {idp} 認証が必要です。",
+    "403ErrorMsg": "このページには {permission} 認証が必要です。",
     "401UnAuthorized": "401: 不正です。 :",
     "401UnAuthorizedErrMsg": "このページにアクセスする権限がありません。"
   },
@@ -325,7 +418,8 @@
     "version": "バージョン",
     "save": "保存",
     "saving": "保存",
-    "notSaved": "保存されていません"
+    "notSaved": "保存されていません",
+    "fieldnameError": "`form` キーワードを {label} フィールド名として使用することはできません"
   },
   "formViewerMultiUpload": {
     "important": "重要",
@@ -375,6 +469,7 @@
     "emailRequired": "電子メールは必須です"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "該当する記録が見つかりません",
     "submissions": "提出物",
     "submissionsTable": "提出物テーブル",
     "selectColumns": "列の選択",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "BCeID の電子メール検索は正確である必要があります。",
     "getUsersErrMsg": "ユーザー取得エラー: {error}",
     "exactEmailOrUsername": "正確な電子メールまたはユーザー名を入力します。",
-    "requiredFiled": "名前、電子メール、またはユーザー名を入力してください"
+    "requiredField": "名前、電子メール、またはユーザー名を入力してください"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "この提出物を見る",
@@ -464,6 +559,7 @@
     "editThisDraft": "この下書きを編集する"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "該当する記録が見つかりません",
     "previousSubmissions": "以前の投稿",
     "selectColumns": "列の選択",
     "createNewSubmission": "新しい提出物を作成する",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "注記の追加中にエラーが発生しました:",
     "notes": "ノート",
     "note": "ノート",
-    "maxChars": "最大4000文字"
+    "maxChars": "最大4000文字",
+    "totalNotes": "合計ノート:"
   },
   "statusPanel": {
     "currentStatus": "現在のステータス：",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "譲受人は必須です",
     "assignToMe": "私に割り当ててください",
     "recipientEmail": "受信者のEメール",
+    "recipientIsRequired": "受取人が必要です",
     "attachCommentToEmail": "メールにコメントを添付",
     "emailComment": "メールでのコメント",
     "maxChars": "最大4000文字",
@@ -595,7 +693,16 @@
     "docGrnSucess": "ドキュメントが正常に生成されました",
     "failedDocGenErrMsg": "ドキュメントの生成に失敗しました",
     "failedDocGenConsErrMsg": "テンプレートの送信エラー: {error}",
-    "cDogsTemplate": "CDOGS テンプレート"
+    "cDogsTemplate": "CDOGS テンプレート",
+    "uploadCdogsTemplate": "CDOGSテンプレートをアップロード",
+    "printOptions": "印刷オプション",
+    "expandtextFields": "テキストフィールドを拡張",
+    "moreInfo": "詳細情報",
+    "defaultCdogsTemplate": "デフォルトのCDOGSテンプレートを使用する",
+    "fileName": "ファイル名",
+    "uploadDate": "アップロード日",
+    "upload": "アップロード",
+    "selectExportFileType": "エクスポートファイルタイプを選択"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "コンポーネント情報リンク",
@@ -640,6 +747,7 @@
     "updatedBy": "によって変更"
   },
   "teamManagement": {
+    "noMatchingRecordText": "該当する記録が見つかりません",
     "teamManagement": "チーム管理",
     "selectColumns": "列の選択",
     "manageForm": "フォームの管理",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "オンライン フォームを作成してクライアントから情報を収集し、ワークフローを改善します。",
     "getStarted": "始めましょう"
   },
-  "create": {
-    "createNewForm": "新しいフォームの作成",
+  "baseStepper": {
     "setUpForm": "フォームの設定",
     "designForm": "デザインフォーム",
+    "manageForm": "フォームの管理"
+  },
+  "create": {
     "formSettings": "フォーム設定",
     "disclaimer": "免責事項",
     "disclaimerStmt": "フォームデザイナーの免責事項と責任声明に同意します",
@@ -794,11 +904,12 @@
     "resetColumns": "列をリセット"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "すべての提出物を表示",
+    "viewMyDraftOrSubmissions": "私のドラフト/提出物を表示する",
     "saveAsADraft": "下書きとして保存",
     "editThisDraft": "この下書きを編集する",
     "switchSingleSubmssn": "単一の提出に切り替える",
-    "switchMultiSubmssn": "複数提出に切り替える"
+    "switchMultiSubmssn": "複数の提出に切り替える",
+    "wideLayout": "ワイドレイアウト"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "リンクがクリップボードにコピーされました",
@@ -877,6 +988,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "フォームビルダーコンポーネントの取得エラー: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "{formId} の電子メール テンプレートの読み込みエラー: {error}",
+      "fetchEmailTemplatesErrMsg": "このフォームの電子メール テンプレートを取得中にエラーが発生しました",
       "getCurrUserFormsErrMsg": "フォームの取得中にエラーが発生しました。",
       "getCurrUserFormsConsErrMsg": "ユーザーデータ取得エラー: {error}",
       "getUserFormPermErrMsg": "このフォームのユーザー データを取得中にエラーが発生しました。",
@@ -900,6 +1013,8 @@
       "publishDraftErrMsg": "公開中にエラーが発生しました。",
       "publishDraftConsErrMsg": "{draftId} の公開エラー: {error}",
       "toggleVersnPublConsErrMsg": "toggleVersionPublish {versionId} {publish} でのエラー: {error}",
+      "updateEmailTemplateConsErrMsg": "フォーム {formId} の電子メール テンプレートの更新中にエラーが発生しました: {error}",
+      "updateEmailTemplateErrMsg": "このフォームの電子メール テンプレートを更新中にエラーが発生しました。",
       "updateFormErrMsg": "このフォームの設定を更新中にエラーが発生しました。",
       "updateFormConsErrMsg": "フォーム {id} の更新中にエラーが発生しました: {error}",
       "deleteSubmissionNotifyMsg": "提出物は正常に削除されました。",

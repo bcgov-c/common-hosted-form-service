@@ -5,9 +5,9 @@ const path = require('path');
 const Problem = require('api-problem');
 const querystring = require('querystring');
 
-const keycloak = require('./src/components/keycloak');
 const log = require('./src/components/log')(module.filename);
 const httpLogger = require('./src/components/log').httpLogger;
+const middleware = require('./src/forms/common/middleware');
 const v1Router = require('./src/routes/v1');
 
 const DataConnection = require('./src/db/dataConnection');
@@ -26,15 +26,20 @@ app.use(compression());
 app.use(express.json({ limit: config.get('server.bodyLimit') }));
 app.use(express.urlencoded({ extended: true }));
 
+// Express needs to know about the OpenShift proxy. With this setting Express
+// pulls the IP address from the headers, rather than use the proxy IP address.
+// This gives the correct IP address in the logs and for the rate limiting.
+// See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+app.set('trust proxy', 1);
+
+app.set('x-powered-by', false);
+
 // Skip if running tests
 if (process.env.NODE_ENV !== 'test') {
   // Initialize connections and exit if unsuccessful
   initializeConnections();
   app.use(httpLogger);
 }
-
-// Use Keycloak OIDC Middleware
-app.use(keycloak.middleware());
 
 // Block requests until service is ready
 app.use((_req, res, next) => {
@@ -72,6 +77,7 @@ apiRouter.get('/api', (_req, res) => {
 // Host API endpoints
 apiRouter.use(config.get('server.apiPath'), v1Router);
 app.use(config.get('server.basePath'), apiRouter);
+app.use(middleware.errorHandler);
 
 // Host the static frontend assets
 const staticFilesPath = config.get('frontend.basePath');
@@ -170,11 +176,16 @@ function initializeConnections() {
     .then((results) => {
       state.connections.data = results[0];
 
-      if (state.connections.data) log.info('DataConnection Reachable', { function: 'initializeConnections' });
+      if (state.connections.data)
+        log.info('DataConnection Reachable', {
+          function: 'initializeConnections',
+        });
     })
     .catch((error) => {
       log.error(`Initialization failed: Database OK = ${state.connections.data}`, { function: 'initializeConnections' });
-      log.error('Connection initialization failure', error.message, { function: 'initializeConnections' });
+      log.error('Connection initialization failure', error.message, {
+        function: 'initializeConnections',
+      });
       if (!state.ready) {
         process.exitCode = 1;
         shutdown();
@@ -183,7 +194,9 @@ function initializeConnections() {
     .finally(() => {
       state.ready = Object.values(state.connections).every((x) => x);
       if (state.ready) {
-        log.info('Service ready to accept traffic', { function: 'initializeConnections' });
+        log.info('Service ready to accept traffic', {
+          function: 'initializeConnections',
+        });
         // Start periodic 10 second connection probe check
         probeId = setInterval(checkConnections, 10000);
       }
@@ -203,7 +216,10 @@ function checkConnections() {
     Promise.all(tasks).then((results) => {
       state.connections.data = results[0];
       state.ready = Object.values(state.connections).every((x) => x);
-      if (!wasReady && state.ready) log.info('Service ready to accept traffic', { function: 'checkConnections' });
+      if (!wasReady && state.ready)
+        log.info('Service ready to accept traffic', {
+          function: 'checkConnections',
+        });
       log.verbose(state);
       if (!state.ready) {
         process.exitCode = 1;

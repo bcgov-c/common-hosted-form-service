@@ -1,73 +1,321 @@
+<script setup>
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+import { computed, inject, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+
+import BaseDialog from '~/components/base/BaseDialog.vue';
+import BaseInfoCard from '~/components/base/BaseInfoCard.vue';
+import { exportFormSchema } from '~/composables/form';
+import { formService } from '~/services';
+import { useFormStore } from '~/store/form';
+import { useNotificationStore } from '~/store/notification';
+import { FormPermissions } from '~/utils/constants';
+
+const { t, locale } = useI18n({ useScope: 'global' });
+
+const router = useRouter();
+
+const formDesigner = inject('formDesigner');
+const draftId = inject('draftId');
+
+const formStore = useFormStore();
+const notificationStore = useNotificationStore();
+
+const { drafts, form, permissions, isRTL } = storeToRefs(formStore);
+
+const headers = ref([
+  {
+    title: t('trans.manageVersions.version'),
+    align: 'start',
+    key: 'version',
+  },
+  {
+    title: t('trans.manageVersions.status'),
+    align: 'start',
+    key: 'status',
+  },
+  {
+    title: t('trans.manageVersions.dateCreated'),
+    align: 'start',
+    key: 'createdAt',
+  },
+  {
+    title: t('trans.manageVersions.createdBy'),
+    align: 'start',
+    key: 'createdBy',
+  },
+  {
+    title: t('trans.manageVersions.actions'),
+    align: 'end',
+    key: 'action',
+    filterable: false,
+    sortable: false,
+    width: 200,
+  },
+]);
+
+const rerenderTable = ref(0);
+const showDeleteDraftDialog = ref(false);
+const showHasDraftsDialog = ref(false);
+const showPublishDialog = ref(false);
+
+let formSchema = ref({
+  display: 'form',
+  type: 'form',
+  components: [],
+});
+
+const publishOpts = ref({
+  publishing: true,
+  version: '',
+  id: '',
+});
+
+const hasDraft = computed(() => drafts.value?.length > 0);
+const hasVersions = computed(() => form.value?.versions?.length);
+const versionList = computed(() => {
+  if (hasDraft.value) {
+    // If there are existing drafts
+    const formattedDrafts = drafts.value.map((draft, idx) => {
+      draft.version = form.value.versions.length + drafts.value.length - idx;
+      draft.published = draft.published ? draft.published : false;
+      draft.isDraft = true;
+      delete draft.formVersionId;
+      return draft;
+    });
+    return formattedDrafts.concat(form.value.versions);
+  } else {
+    return form.value ? form.value.versions : [];
+  }
+});
+const canPublish = computed(() =>
+  permissions.value.includes(FormPermissions.FORM_UPDATE)
+);
+
+async function deleteCurrentDraft() {
+  showDeleteDraftDialog.value = false;
+  await formStore.deleteDraft({
+    formId: form.value.id,
+    draftId: drafts.value[0].id,
+  });
+  await formStore.fetchDrafts(form.value.id);
+}
+
+async function onExportClick(formVersionId, isDraft) {
+  await getFormSchema(formVersionId, isDraft);
+  exportFormSchema(form.value.name, formSchema.value, form.value.snake);
+}
+
+async function getFormSchema(id, isDraft = false) {
+  try {
+    let res = !isDraft
+      ? await formService.readVersion(form.value.id, id)
+      : await formService.readDraft(form.value.id, id);
+    formSchema.value = { ...formSchema.value, ...res.data.schema };
+  } catch (error) {
+    notificationStore.addNotification({
+      text: 'An error occurred while loading the form design.',
+      consoleError: `Error loading form ${form.value.id} schema (version / draft: ${id}): ${error}`,
+    });
+  }
+}
+
+function createVersion(formId, versionId) {
+  if (hasDraft.value) {
+    showHasDraftsDialog.value = true;
+  } else {
+    router.push({
+      name: 'FormDesigner',
+      query: { f: formId, v: versionId, newVersion: true },
+    });
+  }
+}
+
+function cancelPublish() {
+  showPublishDialog.value = false;
+  document.documentElement.style.overflow = 'auto';
+  if (hasDraft.value) {
+    const idx = drafts.value.map((d) => d.id).indexOf(publishOpts.value.id);
+    if (idx !== -1) {
+      drafts.value[idx].published = !drafts.value[idx].published;
+    }
+  }
+  if (form.value.versions) {
+    const idx = form.value.versions
+      .map((d) => d.id)
+      .indexOf(publishOpts.value.id);
+    if (idx !== -1) {
+      form.value.versions[idx].published = !form.value.versions[idx].published;
+    }
+  }
+  rerenderTable.value += 1;
+}
+
+async function updatePublish() {
+  showPublishDialog.value = false;
+  document.documentElement.style.overflow = 'auto';
+  // if publishing a draft version
+  if (publishOpts.value.isDraft) {
+    await formStore.publishDraft({
+      formId: form.value.id,
+      draftId: publishOpts.value.id,
+    });
+    // Refresh draft in form version list
+    formStore.fetchDrafts(form.value.id);
+  }
+  // else, we toggle status of a version
+  else {
+    await formStore.toggleVersionPublish({
+      formId: form.value.id,
+      versionId: publishOpts.value.id,
+      publish: publishOpts.value.publishing,
+    });
+  }
+  // Refresh form version list
+  formStore.fetchForm(form.value.id);
+}
+
+function togglePublish(value, id, version, isDraft) {
+  publishOpts.value = {
+    publishing: value,
+    version: version,
+    id: id,
+    isDraft: isDraft,
+  };
+  showPublishDialog.value = true;
+}
+
+function turnOnPublish() {
+  if (versionList.value) {
+    for (const item of versionList.value) {
+      if (item.id === draftId) {
+        publishOpts.value = {
+          publishing: true,
+          version: item.version,
+          id: item.id,
+          isDraft: item.isDraft,
+        };
+        // toggle switch state in data table
+        const idx = drafts.value.map((d) => d.id).indexOf(item.id);
+        if (idx !== -1) {
+          drafts.value[idx].published = true;
+        }
+        document.documentElement.style.overflow = 'hidden';
+        showPublishDialog.value = true;
+      }
+    }
+  }
+}
+
+onMounted(() => {
+  if (formDesigner) {
+    turnOnPublish();
+  }
+});
+
+defineExpose({
+  createVersion,
+  deleteCurrentDraft,
+  formSchema,
+  onExportClick,
+  publishOpts,
+  rerenderTable,
+  showDeleteDraftDialog,
+  showHasDraftsDialog,
+  showPublishDialog,
+  togglePublish,
+  updatePublish,
+  versionList,
+});
+</script>
+
 <template>
   <div :class="{ 'dir-rtl': isRTL }">
     <BaseInfoCard class="my-4">
-      <h4 class="primary--text" :lang="lang">
-        <v-icon :class="isRTL ? 'ml-1' : 'mr-1'" color="primary">info</v-icon
-        >{{ $t('trans.manageVersions.important') }}
+      <h4 class="text-primary" :lang="locale">
+        <v-icon
+          :class="isRTL ? 'ml-1' : 'mr-1'"
+          color="primary"
+          icon="mdi:mdi-information"
+        ></v-icon
+        >{{ $t('trans.manageVersions.important') }}!
       </h4>
-      <p :lang="lang">
-        {{ $t('trans.manageVersions.infoA') }}
-      </p>
+      <p :lang="locale">{{ $t('trans.manageVersions.infoA') }}</p>
     </BaseInfoCard>
 
-    <div class="mt-8 mb-5" :lang="lang">
-      <v-icon :class="isRTL ? 'ml-1' : 'mr-1'" color="primary">info</v-icon
+    <div class="mt-8 mb-5" :lang="locale">
+      <v-icon
+        :class="isRTL ? 'ml-1' : 'mr-1'"
+        color="primary"
+        icon="mdi:mdi-information"
+      ></v-icon
       >{{ $t('trans.manageVersions.infoB') }}
     </div>
+
+    <!-- Actions -->
     <v-data-table
       :key="rerenderTable"
+      hover
       class="submissions-table"
       :headers="headers"
       :items="versionList"
     >
       <!-- Version  -->
-      <template #[`item.version`]="{ item }">
+      <template #item.version="{ item }">
         <router-link
           :to="
             item.isDraft
-              ? { name: 'FormPreview', query: { f: item.formId, d: item.id } }
-              : { name: 'FormPreview', query: { f: item.formId, v: item.id } }
+              ? {
+                  name: 'FormPreview',
+                  query: { f: item.formId, d: item.id },
+                }
+              : {
+                  name: 'FormPreview',
+                  query: { f: item.formId, v: item.id },
+                }
           "
           class="mx-5"
           target="_blank"
         >
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <span v-bind="attrs" v-on="on" :lang="lang">
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <span v-bind="props" :lang="locale">
                 {{ $t('trans.manageVersions.version') }} {{ item.version }}
                 <v-chip
                   v-if="item.isDraft"
                   color="secondary"
                   class="mb-5 px-1"
                   x-small
-                  text-color="black"
-                  :lang="lang"
+                  :lang="locale"
                 >
                   {{ $t('trans.manageVersions.draft') }}
                 </v-chip>
               </span>
             </template>
-            <span :lang="lang">
+            <span :lang="locale">
               {{ $t('trans.manageVersions.clickToPreview') }}
-              <v-icon>open_in_new</v-icon>
+              <v-icon icon="mdi:mdi-open-in-new"></v-icon>
             </span>
           </v-tooltip>
         </router-link>
       </template>
 
       <!-- Status  -->
-      <template #[`item.status`]="{ item }">
+      <template #item.status="{ item }">
         <v-switch
+          v-model="item.published"
           data-cy="formPublishedSwitch"
           color="success"
-          value
-          :input-value="item.published"
           :disabled="!canPublish"
           :class="{ 'dir-ltl': isRTL }"
-          @change="togglePublish($event, item.id, item.version, item.isDraft)"
+          @update:modelValue="
+            togglePublish($event, item.id, item.version, item.isDraft)
+          "
         >
           <template #label>
-            <span :class="{ 'mr-2': isRTL }" :lang="lang">
+            <span :class="{ 'mr-2': isRTL }" :lang="locale">
               {{
                 item.published
                   ? $t('trans.manageVersions.published')
@@ -79,21 +327,20 @@
       </template>
 
       <!-- Created date  -->
-      <template #[`item.createdAt`]="{ item }">
-        {{ item.createdAt | formatDateLong }}
+      <template #item.createdAt="{ item }">
+        {{ $filters.formatDateLong(item.createdAt) }}
       </template>
 
       <!-- Created by  -->
-      <template #[`item.createdBy`]="{ item }">
+      <template #item.createdBy="{ item }">
         {{ item.createdBy }}
       </template>
 
-      <!-- Actions -->
-      <template #[`item.action`]="{ item }">
+      <template #item.action="{ item }">
         <!-- Edit draft version -->
         <span v-if="item.isDraft">
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
               <router-link
                 :to="{
                   name: 'FormDesigner',
@@ -104,60 +351,70 @@
                   color="primary"
                   class="mx-1"
                   icon
-                  v-bind="attrs"
-                  v-on="on"
+                  v-bind="props"
+                  variant="text"
+                  :title="$t('trans.manageVersions.editVersion')"
                 >
-                  <v-icon>edit</v-icon>
+                  <v-icon icon="mdi:mdi-pencil"></v-icon>
                 </v-btn>
               </router-link>
             </template>
-            <span :lang="lang">{{
+            <span :lang="locale">{{
               $t('trans.manageVersions.editVersion')
             }}</span>
           </v-tooltip>
         </span>
 
-        <!-- export -->
+        <!-- Export version -->
         <span>
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
               <v-btn
                 color="primary"
                 class="mx-1"
                 icon
+                v-bind="props"
+                variant="text"
+                :title="$t('trans.manageVersions.exportDesign')"
                 @click="onExportClick(item.id, item.isDraft)"
-                v-bind="attrs"
-                v-on="on"
               >
-                <v-icon>get_app</v-icon>
+                <v-icon icon="mdi:mdi-download"></v-icon>
               </v-btn>
             </template>
-            <span :lang="lang">{{
+            <span :lang="locale">{{
               $t('trans.manageVersions.exportDesign')
             }}</span>
           </v-tooltip>
         </span>
 
-        <!-- create new version -->
+        <!-- Create draft from version -->
         <span v-if="!item.isDraft">
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <span v-bind="attrs" v-on="on">
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <span v-bind="props">
                 <v-btn
                   color="primary"
                   class="mx-1"
                   :disabled="hasDraft"
                   icon
+                  variant="text"
+                  :title="
+                    hasDraft
+                      ? $t('trans.manageVersions.infoC')
+                      : $t('trans.manageVersions.useVersionInfo', {
+                          version: item.version,
+                        })
+                  "
                   @click="createVersion(item.formId, item.id)"
                 >
-                  <v-icon>add</v-icon>
+                  <v-icon icon="mdi:mdi-plus"></v-icon>
                 </v-btn>
               </span>
             </template>
-            <span v-if="hasDraft" :lang="lang">
+            <span v-if="hasDraft" :lang="locale">
               {{ $t('trans.manageVersions.infoC') }}
             </span>
-            <span v-else :lang="lang">
+            <span v-else :lang="locale">
               {{
                 $t('trans.manageVersions.useVersionInfo', {
                   version: item.version,
@@ -167,23 +424,25 @@
           </v-tooltip>
         </span>
 
-        <!-- delete draft version -->
+        <!-- Delete version -->
         <span v-else>
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <span v-bind="attrs" v-on="on">
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <span v-bind="props">
                 <v-btn
                   color="red"
                   class="mx-1"
                   :disabled="!hasVersions"
                   icon
+                  variant="text"
+                  :title="$t('trans.manageVersions.deleteVersion')"
                   @click="showDeleteDraftDialog = true"
                 >
-                  <v-icon>delete</v-icon>
+                  <v-icon icon="mdi:mdi-delete"></v-icon>
                 </v-btn>
               </span>
             </template>
-            <span :lang="lang">{{
+            <span :lang="locale">{{
               $t('trans.manageVersions.deleteVersion')
             }}</span>
           </v-tooltip>
@@ -197,12 +456,12 @@
       @close-dialog="showHasDraftsDialog = false"
     >
       <template #title
-        ><span :lang="lang">{{
+        ><span :lang="locale">{{
           $t('trans.manageVersions.draftAlreadyExists')
         }}</span></template
       >
       <template #text>
-        <span :lang="lang">
+        <span :lang="locale">
           {{ $t('trans.manageVersions.infoD') }}
         </span>
       </template>
@@ -215,24 +474,24 @@
       @close-dialog="cancelPublish"
     >
       <template #title>
-        <span v-if="publishOpts.publishing" :lang="lang">
+        <span v-if="publishOpts.publishing" :lang="locale">
           {{ $t('trans.manageVersions.publishVersion') }}
           {{ publishOpts.version }}
         </span>
-        <span v-else :lang="lang">
+        <span v-else :lang="locale">
           {{ $t('trans.manageVersions.unpublishVersion') }}
           {{ publishOpts.version }}</span
         >
       </template>
       <template #text>
-        <span v-if="publishOpts.publishing" :lang="lang"
-          >{{
+        <span v-if="publishOpts.publishing" :lang="locale">
+          {{
             $t('trans.manageVersions.useVersionInfo', {
               version: publishOpts.version,
             })
           }}
         </span>
-        <span v-else :lang="lang">
+        <span v-else :lang="locale">
           {{ $t('trans.manageVersions.infoE') }}
         </span>
       </template>
@@ -245,259 +504,21 @@
       @continue-dialog="deleteCurrentDraft"
     >
       <template #title
-        ><span :lang="lang">{{
+        ><span :lang="locale">{{
           $t('trans.manageVersions.confirmDeletion')
         }}</span>
       </template>
       <template #text
-        ><span :lang="lang">{{
+        ><span :lang="locale">{{
           $t('trans.manageVersions.infoF')
         }}</span></template
       >
       <template #button-text-continue>
-        <span :lang="lang">{{ $t('trans.manageVersions.delete') }}</span>
+        <span :lang="locale">{{ $t('trans.manageVersions.delete') }}</span>
       </template>
     </BaseDialog>
   </div>
 </template>
-
-<script>
-import { mapActions, mapGetters } from 'vuex';
-import { formService } from '@/services';
-import { FormPermissions } from '@/utils/constants';
-
-export default {
-  name: 'ManageVersions',
-  inject: ['fd', 'draftId', 'formId'],
-  data() {
-    return {
-      formSchema: {
-        display: 'form',
-        type: 'form',
-        components: [],
-      },
-      publishOpts: {
-        publishing: true,
-        version: '',
-        id: '',
-      },
-      showHasDraftsDialog: false,
-      showPublishDialog: false,
-      showDeleteDraftDialog: false,
-      rerenderTable: 0,
-    };
-  },
-  computed: {
-    ...mapGetters('form', ['drafts', 'form', 'permissions', 'isRTL', 'lang']),
-    headers() {
-      return [
-        {
-          text: this.$t('trans.manageVersions.version'),
-          align: 'start',
-          value: 'version',
-        },
-        {
-          text: this.$t('trans.manageVersions.status'),
-          align: 'start',
-          value: 'status',
-        },
-        {
-          text: this.$t('trans.manageVersions.dateCreated'),
-          align: 'start',
-          value: 'createdAt',
-        },
-
-        {
-          text: this.$t('trans.manageVersions.createdBy'),
-          align: 'start',
-          value: 'createdBy',
-        },
-        {
-          text: this.$t('trans.manageVersions.actions'),
-          align: 'end',
-          value: 'action',
-          filterable: false,
-          sortable: false,
-          width: 200,
-        },
-      ];
-    },
-    canCreateDesign() {
-      return this.permissions.includes(FormPermissions.DESIGN_CREATE);
-    },
-    hasDraft() {
-      return this.drafts && this.drafts.length > 0;
-    },
-    hasVersions() {
-      return this.form && this.form.versions && this.form.versions.length;
-    },
-    versionList() {
-      if (this.hasDraft) {
-        // reformat draft object and then join with versions array
-        const reDraft = this.drafts.map((obj, idx) => {
-          obj.published = false;
-          obj.version = this.form.versions.length + this.drafts.length - idx;
-          obj.isDraft = true;
-          delete obj.formVersionId;
-          delete obj.schema;
-
-          return obj;
-        });
-        const merged = reDraft.concat(this.form.versions);
-        return this.form ? merged : [];
-      } else {
-        return this.form ? this.form.versions : [];
-      }
-    },
-    canPublish() {
-      return this.permissions.includes(FormPermissions.FORM_UPDATE);
-    },
-  },
-  methods: {
-    ...mapActions('notifications', ['addNotification']),
-    ...mapActions('form', [
-      'fetchForm',
-      'fetchDrafts',
-      'publishDraft',
-      'deleteDraft',
-      'toggleVersionPublish',
-    ]),
-    createVersion(formId, versionId) {
-      if (this.hasDraft) {
-        this.showHasDraftsDialog = true;
-      } else {
-        this.$router.push({
-          name: 'FormDesigner',
-          query: { f: formId, v: versionId, nv: true },
-        });
-      }
-    },
-
-    // -----------------------------------------------------------------------------------------------------
-    // Publish/unpublish actions
-    // -----------------------------------------------------------------------------------------------------
-    cancelPublish() {
-      this.showPublishDialog = false;
-      document.documentElement.style.overflow = 'auto';
-      if (this.draftId) {
-        this.$router
-          .replace({
-            name: 'FormDesigner',
-            query: {
-              f: this.formId,
-              d: this.draftId,
-              saved: true,
-            },
-          })
-          .catch(() => {});
-        return;
-      }
-      // To get the toggle back to original state
-      this.rerenderTable += 1;
-    },
-    togglePublish(value, id, version, isDraft) {
-      this.publishOpts = {
-        publishing: value,
-        version: version,
-        id: id,
-        isDraft: isDraft,
-      };
-      this.showPublishDialog = true;
-    },
-    turnOnPublish() {
-      if (this.versionList) {
-        for (const item of this.versionList) {
-          if (item.id === this.draftId) {
-            this.publishOpts = {
-              publishing: true,
-              version: item.version,
-              id: item.id,
-              isDraft: item.isDraft,
-            };
-            document.documentElement.style.overflow = 'hidden';
-            this.showPublishDialog = true;
-          }
-        }
-      }
-    },
-    async updatePublish() {
-      this.showPublishDialog = false;
-      document.documentElement.style.overflow = 'auto';
-      // if publishing a draft version
-      if (this.publishOpts.isDraft) {
-        await this.publishDraft({
-          formId: this.form.id,
-          draftId: this.publishOpts.id,
-        });
-        // Refresh draft in form version list
-        this.fetchDrafts(this.form.id);
-      }
-      // else, we toggle status of a version
-      else {
-        await this.toggleVersionPublish({
-          formId: this.form.id,
-          versionId: this.publishOpts.id,
-          publish: this.publishOpts.publishing,
-        });
-      }
-      // Refresh form version list
-      this.fetchForm(this.form.id);
-    },
-    // ----------------------------------------------------------------------/ Publish/unpublish actions
-
-    async deleteCurrentDraft() {
-      this.showDeleteDraftDialog = false;
-      await this.deleteDraft({
-        formId: this.form.id,
-        draftId: this.drafts[0].id,
-      });
-      this.fetchDrafts(this.form.id);
-    },
-
-    async onExportClick(id, isDraft) {
-      await this.getFormSchema(id, isDraft);
-      let snek = this.form.snake;
-      if (!this.form.snake) {
-        snek = this.form.name
-          .replace(/\s+/g, '_')
-          .replace(/[^-_0-9a-z]/gi, '')
-          .toLowerCase();
-      }
-
-      const a = document.createElement('a');
-      a.href = `data:application/json;charset=utf-8,${encodeURIComponent(
-        JSON.stringify(this.formSchema)
-      )}`;
-      a.download = `${snek}_schema.json`;
-      a.style.display = 'none';
-      a.classList.add('hiddenDownloadTextElement');
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    },
-
-    async getFormSchema(id, isDraft = false) {
-      try {
-        let res = !isDraft
-          ? await formService.readVersion(this.form.id, id)
-          : await formService.readDraft(this.form.id, id);
-        this.formSchema = { ...this.formSchema, ...res.data.schema };
-      } catch (error) {
-        this.addNotification({
-          message: 'An error occurred while loading the form design.',
-          consoleError: `Error loading form ${this.form.id} schema (version / draft: ${id}): ${error}`,
-        });
-      }
-    },
-  },
-  created() {
-    //check if the navigation to this page is from FormDesigner
-    if (this.fd) {
-      this.turnOnPublish();
-    }
-  },
-};
-</script>
 
 <style scoped>
 /* Todo, this is duplicated in a few tables, extract to style */
@@ -506,15 +527,11 @@ export default {
 }
 
 @media (max-width: 1263px) {
-  .submissions-table >>> th {
+  .submissions-table :deep(th) {
     vertical-align: top;
   }
 }
-/* Want to use scss but the world hates me */
-.submissions-table >>> tbody tr:nth-of-type(odd) {
-  background-color: #f5f5f5;
-}
-.submissions-table >>> thead tr th {
+.submissions-table :deep(thead) tr th {
   font-weight: normal;
   color: #003366 !important;
   font-size: 1.1em;

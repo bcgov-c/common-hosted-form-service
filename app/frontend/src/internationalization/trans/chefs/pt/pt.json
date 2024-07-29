@@ -1,6 +1,23 @@
 {
+  "open": "Abrir",
   "date": {
     "date": "aaaa-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "Gerenciamento de e-mail",
+    "manageForm": "Gerenciar formulário",
+    "submissionConfirmation": "Confirmação de envio"
+  },
+  "emailTemplate": {
+    "body": "Corpo",
+    "save": "Salvar",
+    "saveEmailTemplateConsoleErrMsg": "Erro ao atualizar o modelo de e-mail do formulário {formId}: {error}",
+    "saveEmailTemplateErrMsg": "Ocorreu um erro ao tentar atualizar o modelo de e-mail.",
+    "subject": "Assunto",
+    "title": "Título",
+    "validBodyRequired": "Por favor insira um corpo para o e-mail",
+    "validSubjectRequired": "Insira uma linha de assunto para o e-mail",
+    "validTitleRequired": "Insira um título para o e-mail"
   },
   "formsTable": {
     "myForms": "Meus formulários",
@@ -14,6 +31,10 @@
     "Description": "Descrição:",
     "action": "Ações",
     "loadingText": "Carregando, por favor espere"
+  },
+  "preview": {
+    "preview": "Visualização",
+    "previewToolTip": "Isso mostra uma visualização do design e do comportamento da versão do formulário, conforme seus remetentes o verão. Você não pode enviar o formulário desta página."
   },
   "manageLayout": {
     "manageForm": "Gerenciar formulário"
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "Copiar URL para a área de transferência"
   },
   "manageFormActions": {
+    "emailManagement": "Gerenciamento de e-mail",
     "viewSubmissions": "Ver envios",
     "teamManagement": "Gerenciamento de equipe",
     "deleteForm": "Excluir formulário",
@@ -47,7 +69,22 @@
     "status": "Status",
     "update": "Atualizar",
     "cancel": "Cancelar",
-    "eventSubscription": "Assinatura de evento"
+    "eventSubscription": "Assinatura de evento",
+    "cdogsTemplate": "modelo CDOGS"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "Carregar modelo CDOGS",
+    "uploadTemplateFile": "Carregar arquivo de modelo",
+    "upload": "Carregar",
+    "delete": "Excluir",
+    "download": "Baixar",
+    "invalidFileMessage": "O modelo deve usar uma das seguintes extensões: .txt, .docx, .html, .odt, .pptx, .xlsx",
+    "uploadSuccess": "Modelo carregado com sucesso.",
+    "uploadError": "Ocorreu um erro ao carregar o modelo.",
+    "deleteSuccess": "Modelo excluído com sucesso.",
+    "deleteError": "Ocorreu um erro ao excluir o modelo.",
+    "fetchError": "Ocorreu um erro ao buscar o modelo.",
+    "info": "Carregue um modelo para usar o Serviço de Geração de Documentos Comuns (CDOGS)"
   },
   "formSettings": {
     "pressToAddMultiEmail": "Pressione <kbd>enter</kbd> ou <kbd>,</kbd> ou <kbd>espaço</kbd> para adicionar vários endereços de e-mail",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "Permitir assinatura de evento",
     "eventSubscription": "Assinatura de evento",
     "validEndpointRequired": "Insira um endpoint válido começando com https://",
-    "validBearerTokenRequired": "Insira um exemplo de token de portador válido: 89abddfb-2cff-4fda-83e6-13221f0c3d4f"
+    "validBearerTokenRequired": "Insira um exemplo de token de portador válido: 89abddfb-2cff-4fda-83e6-13221f0c3d4f",
+    "wideFormLayout": "Layout de Formulário Amplo"
+  },
+  "formProfile": {
+  "message": "A equipe CHEFS está coletando e organizando informações para servir como entrada crucial para a criação de casos de negócios abrangentes. Esses casos desempenharão um papel fundamental na orientação da operação estratégica e na melhoria contínua do CHEFS nos próximos anos. Essa iniciativa de coleta de dados é essencial para informar decisões críticas e moldar a trajetória do CHEFS, garantindo sua adaptabilidade e eficácia em lidar com necessidades e desafios em evolução.",
+  "ministryPrompt": "Escolha o ministério ao qual você está associado",
+  "useCasePrompt": "Escolha a finalidade do seu formulário abaixo",
+  "deploymentPrompt": "Por favor, especifique o seu nível de implementação",
+  "APIPrompt": "Especifique se pretende utilizar a API fornecida para integração em uma aplicação de terceiros",
+  "labelPrompt": "As etiquetas servem como um meio de categorizar formulários semelhantes que podem pertencer a uma organização comum ou compartilhar um contexto relacionado.",
+  "useCaseToolTip": "Se você não encontrar o seu caso de uso específico, entre em contato com a equipe CHEFS para discutir outras opções",
+  "deploymentLevel": "Nível de Implementação",
+  "ministryName": "Ministério",
+  "label": "Etiquetas",
+  "useCase": "Tipo de Caso de Uso",
+  "development": "Desenvolvimento",
+  "test": "Teste",
+  "production": "Produção",
+  "Y": "Sim",
+  "N": "Não",
+  "application": "Aplicações que serão avaliadas seguidas por uma decisão",
+  "collection": "Coleta de Conjuntos de Dados, envio de dados",
+  "feedback": "Formulário de Feedback para determinar satisfação, concordância, probabilidade ou outras perguntas qualitativas",
+  "report": "Relatórios geralmente em uma programação repetitiva ou eventos programados como acompanhamentos",
+  "registration": "Registro ou Inscrição - sem avaliação",
+  "getLabelErr": "Ocorreu um erro ao tentar buscar rótulos de usuário.",
+  "getLabelConsErr": "Erro ao buscar rótulos: ",
+  "selectAPIErr": "Informe-nos sobre sua escolha em relação ao uso da Integração de API",
+  "selectDeploymentErr": "Por favor, selecione um nível de implementação",
+  "selectMinistryErr": "Por favor, selecione o seu ministério",
+  "selectUseCaseErr": "Por favor, informe o caso de uso do seu formulário",
+  "labelSizeErr": "Os rótulos não podem exceder 25 caracteres"
+  },
+  "ministries": {
+    "AF": "Agricultura e Alimentação (AF)",
+    "AG": "Procurador-Geral (AG)",
+    "MCF": "Desenvolvimento da Criança e da Família (MCF)",
+    "CITZ": "Serviços aos Cidadãos (CITZ)",
+    "ECC": "Educação e Cuidados com a Criança (ECC)",
+    "EMCR": "Gestão de Emergências e Preparação para Mudanças Climáticas (EMCR)",
+    "EMLI": "Energia, Minas e Inovação de Baixo Carbono (EMLI)",
+    "ENV": "Estratégia de Meio Ambiente e Mudança Climática (ENV)",
+    "FIN": "Finanças (FIN)",
+    "FOR": "Florestas (FOR)",
+    "HLTH": "Saúde (HLTH)",
+    "HOUS": "Habitação (HOUS)",
+    "IRR": "Relações e Reconciliação Indígenas (IRR)",
+    "JEDI": "Empregos, Desenvolvimento Econômico e Inovação (JEDI)",
+    "LBR": "Trabalho (LBR)",
+    "MMHA": "Saúde Mental e Dependências (MMHA)",
+    "MUNI": "Assuntos Municipais (MUNI)",
+    "PSFS": "Educação Pós-Secundária e Habilidades Futuras (PSFS)",
+    "PSSG": "Segurança Pública e Procurador-Geral (PSSG)",
+    "SDPR": "Desenvolvimento Social e Redução da Pobreza (SDPR)",
+    "TACS": "Turismo, Artes, Cultura e Esporte (TACS)",
+    "MOTI": "Transporte e Infraestrutura (MOTI)",
+    "WLRS": "Administração de Água, Terra e Recursos (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "Tipo de evento",
@@ -153,6 +246,7 @@
     "infoA": "Certifique-se de que o segredo da sua chave de API esteja armazenado em um local seguro (ou seja, cofre de chaves).",
     "infoB": "Sua chave de API concede acesso irrestrito ao seu formulário. Não dê sua chave de API para ninguém.",
     "infoC": "A chave de API APENAS deve ser usada para interações automatizadas do sistema. Não use sua chave de API para acesso baseado no usuário",
+    "infoD": "Se você deseja acessar os arquivos enviados por meio da chave API, marque a caixa de seleção a seguir após gerar a chave.",
     "deleteKey": "Excluir chave",
     "apiKey": "Chave API",
     "hideSecret": "Ocultar Segredo",
@@ -170,8 +264,7 @@
     "regenerate": "Regenerado",
     "generate": "Gerar",
     "secret": "Segredo",
-    "text": "texto",
-    "password": "senha"
+    "filesAPIAccess": "Permitir que esta chave de API acesse os arquivos enviados"
   },
   "manageVersions": {
     "important": "IMPORTANTE!",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: não autorizado. :",
     "401ErrorMsg": "Sua conta não está configurada corretamente.<br /> Por favor entre em contato",
     "403Forbidden": "403: Proibido. :",
-    "403ErrorMsg": "Esta página requer autenticação {idp}.",
+    "403ErrorMsg": "Esta página requer autenticação {permission}.",
     "401UnAuthorized": "401 não autorizado. :",
     "401UnAuthorizedErrMsg": "Você não tem permissão para acessar esta página."
   },
@@ -325,7 +418,8 @@
     "version": "Versão",
     "save": "Salvar",
     "saving": "salvando",
-    "notSaved": "Não salvo"
+    "notSaved": "Não salvo",
+    "fieldnameError": "Você NÃO PODE usar a palavra-chave `form` como nome de campo {label}"
   },
   "formViewerMultiUpload": {
     "important": "IMPORTANTE",
@@ -375,6 +469,7 @@
     "emailRequired": "E-mail é obrigatório"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "Nenhum registro correspondente encontrado",
     "submissions": "Envios",
     "submissionsTable": "Tabela de Envios",
     "selectColumns": "Selecionar colunas",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "As pesquisas de e-mail para BCeID devem ser exatas.",
     "getUsersErrMsg": "Erro ao obter usuários: {error}",
     "exactEmailOrUsername": "Digite um e-mail ou nome de usuário exato.",
-    "requiredFiled": "Digite um nome, e-mail ou nome de usuário"
+    "requiredField": "Digite um nome, e-mail ou nome de usuário"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "Ver este envio",
@@ -464,6 +559,7 @@
     "editThisDraft": "Editar este rascunho"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "Nenhum registro correspondente encontrado",
     "previousSubmissions": "Envios anteriores",
     "selectColumns": "Selecionar colunas",
     "createNewSubmission": "Criar um novo envio",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "Erro ao adicionar nota:",
     "notes": "Notas",
     "note": "Observação",
-    "maxChars": "Máximo de 4.000 caracteres"
+    "maxChars": "Máximo de 4.000 caracteres",
+    "totalNotes": "Notas Totais:"
   },
   "statusPanel": {
     "currentStatus": "Status atual:",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "O cessionário é obrigatório",
     "assignToMe": "ATRIBUIR PARA MIM",
     "recipientEmail": "E-mail do destinatário",
+    "recipientIsRequired": "Destinatário é necessário",
     "attachCommentToEmail": "Anexar comentário ao e-mail",
     "emailComment": "Comentário de e-mail",
     "maxChars": "Máximo de 4.000 caracteres",
@@ -595,7 +693,16 @@
     "docGrnSucess": "Documento gerado com sucesso",
     "failedDocGenErrMsg": "Falha ao gerar documento",
     "failedDocGenConsErrMsg": "Erro ao enviar modelo: {error}",
-    "cDogsTemplate": "modelo CDOGS"
+    "cDogsTemplate": "modelo CDOGS",
+    "uploadCdogsTemplate": "Carregar modelo CDOGS",
+    "printOptions": "Opções de Impressão",
+    "expandtextFields": "Expandir campos de texto",
+    "moreInfo": "Mais informações",
+    "defaultCdogsTemplate": "Usar modelo padrão CDOGS",
+    "fileName": "Nome do arquivo",
+    "uploadDate": "Data de upload",
+    "upload": "Carregar",
+    "selectExportFileType": "Selecionar tipo de arquivo de exportação"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "Link de informações do componente",
@@ -640,6 +747,7 @@
     "updatedBy": "Modificado por"
   },
   "teamManagement": {
+    "noMatchingRecordText": "Nenhum registro correspondente encontrado",
     "teamManagement": "Gerenciamento de equipe",
     "selectColumns": "Selecionar colunas",
     "manageForm": "Gerenciar formulário",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "Crie formulários online para coletar informações de seus clientes e melhorar seus fluxos de trabalho.",
     "getStarted": "iniciar"
   },
-  "create": {
-    "createNewForm": "Criar novo formulário",
+  "baseStepper": {
     "setUpForm": "Configurar formulário",
     "designForm": "Forma de desenho",
+    "manageForm": "Gerenciar formulário"
+  },
+  "create": {
     "formSettings": "Configurações do formulário",
     "disclaimer": "Isenção de responsabilidade",
     "disclaimerStmt": "Eu concordo com a isenção de responsabilidade e declaração de responsabilidade para Form Designers",
@@ -794,11 +904,12 @@
     "resetColumns": "Redefinir colunas"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "Ver todos os envios",
+    "viewMyDraftOrSubmissions": "Ver meus rascunhos/envios",
     "saveAsADraft": "Salve como um rascunho",
     "editThisDraft": "Editar este rascunho",
     "switchSingleSubmssn": "Alternar para envio único",
-    "switchMultiSubmssn": "Alternar para envio múltiplo"
+    "switchMultiSubmssn": "Mudar para vários envios",
+    "wideLayout": "Layout Amplo"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "Link copiado para a área de transferência",
@@ -877,6 +988,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "Erro ao obter os componentes do construtor de formulário: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "Erro ao carregar modelos de e-mail para {formId}: {error}",
+      "fetchEmailTemplatesErrMsg": "Ocorreu um erro ao buscar os modelos de e-mail para este formulário",
       "getCurrUserFormsErrMsg": "Ocorreu um erro ao buscar seus formulários.",
       "getCurrUserFormsConsErrMsg": "Erro ao obter dados do usuário: {error}",
       "getUserFormPermErrMsg": "Ocorreu um erro ao buscar seus dados de usuário para este formulário.",
@@ -900,6 +1013,8 @@
       "publishDraftErrMsg": "Ocorreu um erro durante a publicação.",
       "publishDraftConsErrMsg": "Erro ao publicar {draftId}: {error}",
       "toggleVersnPublConsErrMsg": "Erro em toggleVersionPublish {versionId} {publish}: {error}",
+      "updateEmailTemplateConsErrMsg": "Erro ao atualizar modelos de e-mail para o formulário {formId}: {error}",
+      "updateEmailTemplateErrMsg": "Ocorreu um erro ao atualizar os modelos de e-mail deste formulário.",
       "updateFormErrMsg": "Ocorreu um erro ao atualizar as configurações deste formulário.",
       "updateFormConsErrMsg": "Erro ao atualizar o formulário {id}: {error}",
       "deleteSubmissionNotifyMsg": "Submissão excluída com sucesso.",

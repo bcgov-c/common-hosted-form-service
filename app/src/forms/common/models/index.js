@@ -1,8 +1,10 @@
 module.exports = {
   // Tables
+  DocumentTemplate: require('./tables/documentTemplate'),
   FileStorage: require('./tables/fileStorage'),
   Form: require('./tables/form'),
   FormApiKey: require('./tables/formApiKey'),
+  FormEmailTemplate: require('./tables/formEmailTemplate'),
   FormIdentityProvider: require('./tables/formIdentityProvider'),
   FormSubmission: require('./tables/formSubmission'),
   FormStatusCode: require('./tables/formStatusCode'),
@@ -19,8 +21,11 @@ module.exports = {
   SubmissionAudit: require('./tables/submissionAudit'),
   User: require('./tables/user'),
   UserFormPreferences: require('./tables/userFormPreferences'),
+  Label: require('./tables/label'),
   FormComponentsProactiveHelp: require('./tables/formComponentsProactiveHelp'),
   FormSubscription: require('./tables/formSubscription'),
+  ExternalAPI: require('./tables/externalAPI'),
+  ExternalAPIStatusCode: require('./tables/externalAPIStatusCode'),
 
   // Views
   FormSubmissionUserPermissions: require('./views/formSubmissionUserPermissions'),
@@ -29,4 +34,5 @@ module.exports = {
   SubmissionMetadata: require('./views/submissionMetadata'),
   UserFormAccess: require('./views/userFormAccess'),
   UserSubmissions: require('./views/userSubmissions'),
+  AdminExternalAPI: require('./views/adminExternalAPI'),
 };

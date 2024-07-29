@@ -1,12 +1,43 @@
+<script setup>
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import { useAuthStore } from '~/store/auth';
+import { useIdpStore } from '~/store/identityProviders';
+
+const { locale } = useI18n({ useScope: 'global' });
+
+defineProps({
+  formSubmitMode: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const idpStore = useIdpStore();
+
+const { authenticated, isAdmin, identityProvider } = storeToRefs(
+  useAuthStore()
+);
+
+const hasPrivileges = computed(() => {
+  return idpStore.isPrimary(identityProvider?.value?.code);
+});
+</script>
+
 <template>
-  <nav v-if="!hideNavBar" class="navigation-main d-print-none px-md-16 px-4">
+  <nav
+    v-if="!formSubmitMode"
+    class="elevation-4 navigation-main d-print-none px-md-16 px-4"
+  >
     <div class="nav-holder">
       <ul>
         <li>
           <router-link
             data-cy="aboutLinks"
             :to="{ name: 'About' }"
-            :lang="lang"
+            :lang="locale"
             >{{ $t('trans.bCGovNavBar.about') }}</router-link
           >
         </li>
@@ -14,28 +45,33 @@
           <router-link
             data-cy="userFormsLinks"
             :to="{ name: 'UserForms' }"
-            :lang="lang"
+            :lang="locale"
             >{{ $t('trans.bCGovNavBar.myForms') }}</router-link
           >
         </li>
         <li v-if="hasPrivileges">
-          <router-link :to="{ name: 'FormCreate' }" :lang="lang">{{
-            $t('trans.bCGovNavBar.createNewForm')
-          }}</router-link>
+          <router-link
+            data-cy="createNewForm"
+            :to="{ name: 'FormCreate' }"
+            :lang="locale"
+            >{{ $t('trans.bCGovNavBar.createNewForm') }}</router-link
+          >
         </li>
         <li v-if="hasPrivileges">
           <a
+            data-cy="help"
             href="https://github.com/bcgov/common-hosted-form-service/wiki"
             target="_blank"
-            :hreflang="lang"
+            :lang="locale"
             >{{ $t('trans.bCGovNavBar.help') }}</a
           >
         </li>
         <li v-if="hasPrivileges">
           <a
+            data-cy="feedback"
             href="https://chefs-fider.apps.silver.devops.gov.bc.ca/"
             target="_blank"
-            :hreflang="lang"
+            :lang="locale"
             >{{ $t('trans.bCGovNavBar.feedback') }}</a
           >
         </li>
@@ -43,7 +79,7 @@
           <router-link :to="{ name: 'User' }">User (TBD)</router-link>
         </li> -->
         <li v-if="isAdmin">
-          <router-link :to="{ name: 'Admin' }" :lang="lang">{{
+          <router-link data-cy="admin" :to="{ name: 'Admin' }" :lang="locale">{{
             $t('trans.bCGovNavBar.admin')
           }}</router-link>
         </li>

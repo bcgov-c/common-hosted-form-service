@@ -1,7 +1,15 @@
-import { appAxios } from '@/services/interceptors';
-import { ApiRoutes } from '@/utils/constants';
+import { appAxios } from '~/services/interceptors';
+import { ApiRoutes } from '~/utils/constants';
 
 export default {
+  /**
+   * @function getIdentityProviders
+   * Get the Identity Provider details from the rbac endpoint
+   * @returns {Promise} An axios response
+   */
+  getIdentityProviders(params = {}) {
+    return appAxios().get(`${ApiRoutes.RBAC}/idps`, { params });
+  },
   /**
    * @function getCurrentUser
    * Get the current user details from the rbac endpoint

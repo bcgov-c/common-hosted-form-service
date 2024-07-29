@@ -1,19 +1,45 @@
+<script setup>
+import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+import FormViewer from '~/components/designer/FormViewer.vue';
+import RequestReceipt from '~/components/forms/RequestReceipt.vue';
+import { useAuthStore } from '~/store/auth';
+import { useFormStore } from '~/store/form';
+
+const { locale } = useI18n({ useScope: 'global' });
+
+defineProps({
+  s: {
+    type: String,
+    required: true,
+  },
+});
+
+const { email } = storeToRefs(useAuthStore());
+const { form, isRTL } = storeToRefs(useFormStore());
+</script>
+
 <template>
   <div>
-    <FormViewer :submissionId="s" :readOnly="true" displayTitle>
-      <template #alert="{ form }">
+    <FormViewer :submission-id="s" :read-only="true" display-title>
+      <template #alert>
         <div class="mb-5" :class="{ 'dir-rtl': isRTL }">
-          <h1 class="mb-5" :lang="lang">
-            <v-icon large color="success">check_circle</v-icon>
+          <h1 class="mb-5" :lang="locale">
+            <v-icon
+              size="large"
+              color="success"
+              icon="mdi:mdi-check-circle"
+            ></v-icon>
             {{ $t('trans.sucess.sucessFormSubmissn') }}
           </h1>
 
           <div v-if="form.showSubmissionConfirmation">
             <h3>
-              <span class="d-print-none" :lang="lang">
-                {{ $t('trans.sucess.keepRecord') }}
+              <span class="d-print-none" :lang="locale">
+                {{ $t('trans.sucess.keepRecord') }}{{ ' ' }}
               </span>
-              <span :lang="lang">
+              <span :lang="locale">
                 {{ $t('trans.sucess.confirmationId') }}:
                 <mark>{{ s.substring(0, 8).toUpperCase() }}</mark>
               </span>
@@ -32,25 +58,3 @@
     </FormViewer>
   </div>
 </template>
-
-<script>
-import { mapGetters } from 'vuex';
-
-import FormViewer from '@/components/designer/FormViewer.vue';
-import RequestReceipt from '@/components/forms/RequestReceipt.vue';
-
-export default {
-  name: 'FormView',
-  props: {
-    s: String,
-  },
-  components: {
-    FormViewer,
-    RequestReceipt,
-  },
-  computed: {
-    ...mapGetters('auth', ['email']),
-    ...mapGetters('form', ['isRTL', 'lang']),
-  },
-};
-</script>

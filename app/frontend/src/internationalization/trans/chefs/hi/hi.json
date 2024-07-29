@@ -1,6 +1,23 @@
 {
+  "open": "खुला",
   "date": {
     "date": "yyyy-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "ईमेल प्रबंधन",
+    "manageForm": "प्रपत्र प्रबंधित करें",
+    "submissionConfirmation": "प्रस्तुत करने की पुष्टि"
+  },
+  "emailTemplate": {
+    "body": "शरीर",
+    "save": "बचाना",
+    "saveEmailTemplateConsoleErrMsg": "फ़ॉर्म {formId} के लिए ईमेल टेम्पलेट अपडेट करने में त्रुटि: {error}",
+    "saveEmailTemplateErrMsg": "ईमेल टेम्पलेट को अद्यतन करने का प्रयास करते समय एक त्रुटि उत्पन्न हुई।",
+    "subject": "विषय",
+    "title": "शीर्षक",
+    "validBodyRequired": "कृपया ईमेल के लिए एक मुख्य भाग दर्ज करें",
+    "validSubjectRequired": "कृपया ईमेल के लिए विषय पंक्ति दर्ज करें",
+    "validTitleRequired": "कृपया ईमेल के लिए एक शीर्षक दर्ज करें"
   },
   "formsTable": {
     "myForms": "मेरे प्रपत्र",
@@ -18,6 +35,10 @@
   "manageLayout": {
     "manageForm": "प्रपत्र प्रबंधित करें"
   },
+  "preview": {
+    "preview": "पूर्व दर्शन",
+    "previewToolTip": "यह प्रपत्र संस्करण डिज़ाइन और व्यवहार का पूर्वावलोकन दिखाता है जैसा कि आपके सबमिटर्स इसे देखेंगे। आप इस पेज से फ़ॉर्म सबमिट नहीं कर सकते."
+  },
   "shareForm": {
     "shareForm": "प्रपत्र साझा करें",
     "shareLink": "लिंक शेयर करें",
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "यूआरएल को क्लिपबोर्ड पर कॉपी करें"
   },
   "manageFormActions": {
+    "emailManagement": "ईमेल प्रबंधन",
     "viewSubmissions": "सबमिशन देखें",
     "teamManagement": "टीम प्रबंधन",
     "deleteForm": "फ़ॉर्म हटाएँ",
@@ -47,7 +69,22 @@
     "status": "दर्जा",
     "update": "अद्यतन",
     "cancel": "रद्द करना",
-    "eventSubscription": "इवेंट सदस्यता"
+    "eventSubscription": "इवेंट सदस्यता",
+    "cdogsTemplate": "सीडीओजीएस टेम्पलेट"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "CDOGS टेम्पलेट अपलोड करें",
+    "uploadTemplateFile": "टेम्पलेट फ़ाइल अपलोड करें",
+    "upload": "अपलोड करें",
+    "delete": "हटाएं",
+    "download": "डाउनलोड करें",
+    "invalidFileMessage": "टेम्पलेट में निम्नलिखित में से एक एक्सटेंशन का उपयोग करना चाहिए: .txt, .docx, .html, .odt, .pptx, .xlsx",
+    "uploadSuccess": "टेम्पलेट सफलतापूर्वक अपलोड हुआ।",
+    "uploadError": "टेम्पलेट अपलोड करते समय एक त्रुटि हुई।",
+    "deleteSuccess": "टेम्पलेट सफलतापूर्वक हटाया गया।",
+    "deleteError": "टेम्पलेट हटाते समय एक त्रुटि हुई।",
+    "fetchError": "टेम्पलेट प्राप्त करते समय एक त्रुटि हुई।",
+    "info": "कॉमन डॉक्युमेंट जनरेशन सर्विस (CDOGS) का उपयोग करने के लिए एक टेम्पलेट अपलोड करें"
   },
   "formSettings": {
     "pressToAddMultiEmail": "एकाधिक ईमेल पते जोड़ने के लिए <kbd>एंटर</kbd> या <kbd>,</kbd> या <kbd>स्पेस</kbd> दबाएँ",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "ईवेंट सदस्यता की अनुमति दें",
     "eventSubscription": "इवेंट सदस्यता",
     "validEndpointRequired": "कृपया प्रारंभ करने वाला एक वैध समापन बिंदु दर्ज करें https://",
-    "validBearerTokenRequired": "एक वैध वाहक टोकन उदाहरण दर्ज करें: 89abddfb-2cff-4fda-83e6-13221f0c3d4f"
+    "validBearerTokenRequired": "एक वैध वाहक टोकन उदाहरण दर्ज करें: 89abddfb-2cff-4fda-83e6-13221f0c3d4f",
+    "wideFormLayout": "वाइड फॉर्म लेआउट"
+  },
+  "formProfile": {
+    "message": "CHEFS टीम सूचना एकत्र कर रही है और उसे समृद्धिकारी व्यापक व्यापार मामलों के लिए महत्वपूर्ण इनपुट के रूप में सेवा करने के लिए। ये मामले CHEFS के आगामी वर्षों में रणनीतिक संचालन और उन्नति में महत्वपूर्ण भूमिका निभाएंगे। डेटा इकट्ठा करने का यह पहल सूचना को सूचित करने, महत्वपूर्ण निर्णयों को सूचित करने और CHEFS की यात्रा को मोल्डिंग के लिए आवश्यक है, इसे सुनिश्चित करना है कि यह आवश्यकताओं और चुनौतियों को समाप्त करने में अपनी योग्यता और प्रभावकारिता में बदलते समय का सामना कर सकता है।",
+    "ministryPrompt": "वह मंत्रालय चुनें जिससे आप जुड़े हैं",
+    "useCasePrompt": "नीचे अपने फ़ॉर्म का उद्देश्य चुनें",
+    "deploymentPrompt": "कृपया अपने डिप्लॉयमेंट स्तर को स्पष्ट करें",
+    "APIPrompt": "स्पष्ट करें कि आप तैयार कर रहे हैं कि आप तृतीय-पक्ष अनुप्रयोग में एकीकरण के लिए प्रदान की गई API का उपयोग करना चाहते हैं या नहीं",
+    "labelPrompt": "लेबल समान फ़ॉर्म को श्रेणीबद्ध करने के लिए एक साधन के रूप में कार्य करते हैं जो एक सामान्य संगठन का हिस्सा हो सकते हैं या एक संबंधित संदर्भ को साझा कर सकते हैं।",
+    "useCaseToolTip": "यदि आप अपने विशिष्ट उपयोग मामले को नहीं देख रहे हैं, तो आगे की विकल्पों की चर्चा के लिए CHEFS टीम से संपर्क करें",
+    "deploymentLevel": "निगमन स्तर",
+    "ministryName": "मंत्रालय",
+    "label": "लेबल्स",
+    "useCase": "उपयोग का प्रकार",
+    "development": "विकास",
+    "test": "परीक्षण",
+    "production": "उत्पादन",
+    "Y": "हाँ",
+    "N": "नहीं",
+    "feedback": "संतुष्टि, सहमति, संभावना, या अन्य गुणमूल्य प्रश्नों को निर्धारित करने के लिए प्रतिक्रिया फॉर्म",
+    "application": "फैसले के बाद मूल्यांकन किए जाने वाले अनुप्रयोग",
+    "collection": "डेटासेट का संग्रहण, डेटा सबमिशन",
+    "report": "सामान्यत: एक दोहराए गए समय सारणी या घटना-निर्धारित जैसे अनुसरण",
+    "registration": "पंजीकरण या साइन अप - कोई मूल्यांकन नहीं",
+    "getLabelErr": "उपयोगकर्ता लेबल प्राप्त करने का प्रयास करते समय एक त्रुटि हुई है।",
+    "getLabelConsErr": "लेबल प्राप्त करने में त्रुटि: ",
+    "selectAPIErr": "कृपया हमें एपीआई एकीकरण का उपयोग करने के संबंध में अपनी राय बताएं",
+    "selectDeploymentErr": "कृपया एक निगमन स्तर का चयन करें",
+    "selectMinistryErr": "कृपया अपने मंत्रालय का चयन करें",
+    "selectUseCaseErr": "कृपया अपने फॉर्म के उपयोग का केस दर्ज करें",
+    "labelSizeErr": "लेबल 25 अक्षरों से अधिक नहीं हो सकते"
+  },
+  "ministries": {
+    "AF": "कृषि और खाद्य (AF)",
+    "AG": "अटॉर्नी जनरल (AG)",
+    "MCF": "बच्चों और परिवार विकास (MCF)",
+    "CITZ": "नागरिक सेवाएँ (CITZ)",
+    "ECC": "शिक्षा और बच्चा सेवा (ECC)",
+    "EMCR": "आपातकालीन प्रबंधन और जलवायु संबंधितता (EMCR)",
+    "EMLI": "ऊर्जा, खान और कम कार्बन इनोवेशन (EMLI)",
+    "ENV": "पर्यावरण और जलवायु परिवर्तन रणनीति (ENV)",
+    "FIN": "वित्त (FIN)",
+    "FOR": "वन्यजन (FOR)",
+    "HLTH": "स्वास्थ्य (HLTH)",
+    "HOUS": "आवास (HOUS)",
+    "IRR": "स्थानीय संबंध और सुलह (IRR)",
+    "JEDI": "नौकरियाँ, आर्थिक विकास और नवाचार (JEDI)",
+    "LBR": "श्रम (LBR)",
+    "MMHA": "मानसिक स्वास्थ्य और बहुआधिकारिकता (MMHA)",
+    "MUNI": "नगरीय कार्य (MUNI)",
+    "PSFS": "पोस्ट-सेकेंडरी शिक्षा और भविष्य कौशल (PSFS)",
+    "PSSG": "सार्वजनिक सुरक्षा और सोलिसिटर जनरल (PSSG)",
+    "SDPR": "सामाजिक विकास और गरीबी कमी (SDPR)",
+    "TACS": "पर्यटन, कला, सांस्कृतिक और खेल (TACS)",
+    "MOTI": "परिवहन और बुनियादी संरचना (MOTI)",
+    "WLRS": "जल, भूमि और संसाधन संरक्षण (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "घटना प्रकार",
@@ -153,6 +246,7 @@
     "infoA": "सुनिश्चित करें कि आपकी एपीआई कुंजी रहस्य एक सुरक्षित स्थान (यानी कुंजी वॉल्ट) में संग्रहीत है।",
     "infoB": "आपकी एपीआई कुंजी आपके फॉर्म तक अप्रतिबंधित पहुंच प्रदान करती है। अपनी एपीआई कुंजी किसी को न दें।",
     "infoC": "एपीआई कुंजी का उपयोग केवल स्वचालित सिस्टम इंटरैक्शन के लिए किया जाना चाहिए। उपयोगकर्ता आधारित पहुंच के लिए अपनी एपीआई कुंजी का उपयोग न करें",
+    "infoD": "यदि आप एपीआई कुंजी के माध्यम से सबमिट की गई फ़ाइलों तक पहुंच चाहते हैं, तो कृपया कुंजी उत्पन्न करने के बाद निम्नलिखित चेकबॉक्स को सक्षम करें।",
     "deleteKey": "कुंजी हटाएँ",
     "apiKey": "एपीआई कुंजी",
     "hideSecret": "गुप्त छिपाएँ",
@@ -170,8 +264,7 @@
     "regenerate": "पुनः जेनरेट",
     "generate": "बनाना",
     "secret": "गुप्त",
-    "text": "मूलपाठ",
-    "password": "पासवर्ड"
+    "filesAPIAccess": "इस एपीआई कुंजी को सबमिट की गई फ़ाइलों तक पहुंचने की अनुमति दें"
   },
   "manageVersions": {
     "important": "महत्वपूर्ण!",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: अधिकृत नहीं. :",
     "401ErrorMsg": "आपका खाता ठीक से सेट नहीं है.<br /> कृपया संपर्क करें",
     "403Forbidden": "403 निषिद्ध। :",
-    "403ErrorMsg": "इस पृष्ठ को {idp} प्रमाणीकरण की आवश्यकता है।",
+    "403ErrorMsg": "इस पृष्ठ को {permission} प्रमाणीकरण की आवश्यकता है।",
     "401UnAuthorized": "अनधिकृत 401। :",
     "401UnAuthorizedErrMsg": "आपको इस पेज को एक्सेस करने की अनुमति नहीं है।"
   },
@@ -325,7 +418,8 @@
     "version": "संस्करण",
     "save": "बचाना",
     "saving": "सहेजा जा रहा है",
-    "notSaved": "सहेजा नहीं गया"
+    "notSaved": "सहेजा नहीं गया",
+    "fieldnameError": "आप `फ़ॉर्म` कीवर्ड का उपयोग {लेबल} फ़ील्डनाम के रूप में नहीं कर सकते"
   },
   "formViewerMultiUpload": {
     "important": "महत्वपूर्ण",
@@ -375,6 +469,7 @@
     "emailRequired": "ईमेल की जरूरत है"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "कोई मिलान रिकॉर्ड पाया",
     "submissions": "प्रविष्टियों",
     "submissionsTable": "सबमिशनटेबल",
     "selectColumns": "कॉलम चुनें",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "बीसीईआईडी के लिए ईमेल खोजें सटीक होनी चाहिए।",
     "getUsersErrMsg": "उपयोगकर्ता प्राप्त करने में त्रुटि: {error}",
     "exactEmailOrUsername": "सटीक ई-मेल या उपयोगकर्ता नाम दर्ज करें.",
-    "requiredFiled": "एक नाम, ई-मेल या उपयोगकर्ता नाम दर्ज करें"
+    "requiredField": "एक नाम, ई-मेल या उपयोगकर्ता नाम दर्ज करें"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "यह सबमिशन देखें",
@@ -464,6 +559,7 @@
     "editThisDraft": "इस ड्राफ्ट को संपादित करें"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "कोई मिलान रिकॉर्ड पाया",
     "previousSubmissions": "पिछली प्रस्तुतियाँ",
     "selectColumns": "कॉलम चुनें",
     "createNewSubmission": "एक नया सबमिशन बनाएं",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "नोट जोड़ने में त्रुटि:",
     "notes": "टिप्पणियाँ",
     "note": "टिप्पणी",
-    "maxChars": "अधिकतम 4000 अक्षर"
+    "maxChars": "अधिकतम 4000 अक्षर",
+    "totalNotes": "कुल नोट्स:"
   },
   "statusPanel": {
     "currentStatus": "वर्तमान स्थिति:",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "समनुदेशिती आवश्यक है",
     "assignToMe": "मेरे लिए आवंटित",
     "recipientEmail": "प्राप्तकर्ता का ई - मेल",
+    "recipientIsRequired": "प्राप्तकर्ता आवश्यक है",
     "attachCommentToEmail": "ईमेल पर टिप्पणी संलग्न करें",
     "emailComment": "ईमेल टिप्पणी",
     "maxChars": "अधिकतम 4000 अक्षर",
@@ -595,7 +693,16 @@
     "docGrnSucess": "दस्तावेज़ सफलतापूर्वक तैयार हुआ",
     "failedDocGenErrMsg": "दस्तावेज़ जनरेट करने में विफल",
     "failedDocGenConsErrMsg": "टेम्प्लेट सबमिट करने में त्रुटि: {error}",
-    "cDogsTemplate": "सीडीओजीएस टेम्पलेट"
+    "cDogsTemplate": "सीडीओजीएस टेम्पलेट",
+    "uploadCdogsTemplate": "CDOGS टेम्पलेट अपलोड करें",
+    "printOptions": "प्रिंट विकल्प",
+    "expandtextFields": "टेक्स्ट फ़ील्ड्स का विस्तार करें",
+    "moreInfo": "अधिक जानकारी",
+    "defaultCdogsTemplate": "डिफ़ॉल्ट CDOGS टेम्पलेट का प्रयोग करें",
+    "fileName": "फ़ाइल का नाम",
+    "uploadDate": "अपलोड दिनांक",
+    "upload": "अपलोड करें",
+    "selectExportFileType": "निर्यात फ़ाइल प्रकार चुनें"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "घटक सूचना लिंक",
@@ -640,6 +747,7 @@
     "updatedBy": "द्वारा संशोधित"
   },
   "teamManagement": {
+    "noMatchingRecordText": "कोई मिलान रिकॉर्ड पाया",
     "teamManagement": "टीम प्रबंधन",
     "selectColumns": "कॉलम चुनें",
     "manageForm": "प्रपत्र प्रबंधित करें",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "अपने ग्राहकों से जानकारी एकत्र करने और अपने कार्यप्रवाह में सुधार करने के लिए ऑनलाइन फॉर्म बनाएं।",
     "getStarted": "शुरू हो जाओ"
   },
-  "create": {
-    "createNewForm": "नया फॉर्म बनाएं",
+  "baseStepper": {
     "setUpForm": "फॉर्म सेट करें",
     "designForm": "डिज़ाइन फॉर्म",
+    "manageForm": "प्रपत्र प्रबंधित करें"
+  },
+  "create": {
     "formSettings": "फॉर्म सेटिंग्स",
     "disclaimer": "अस्वीकरण",
     "disclaimerStmt": "मैं फॉर्म डिजाइनरों के अस्वीकरण और जिम्मेदारी के बयान से सहमत हूं",
@@ -794,11 +904,12 @@
     "resetColumns": "कॉलम रीसेट करें"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "सभी प्रस्तुतियाँ देखें",
+    "viewMyDraftOrSubmissions": "मेरा ड्राफ्ट/प्रस्तुतियाँ देखें",
     "saveAsADraft": "एक मसौदे के रूप में सहेजो",
     "editThisDraft": "इस ड्राफ्ट को संपादित करें",
     "switchSingleSubmssn": "एकल सबमिशन पर स्विच करें",
-    "switchMultiSubmssn": "एकाधिक सबमिशन पर स्विच करें"
+    "switchMultiSubmssn": "एकाधिक सबमिशन पर स्विच करें",
+    "wideLayout": "वाइड लेआउट"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "लिंक को क्लिपबोर्ड पर कॉपी किया गया",
@@ -877,6 +988,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "प्रपत्र बिल्डर घटक प्राप्त करने में त्रुटि: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "{formId} के लिए ईमेल टेम्पलेट लोड करने में त्रुटि: {error}",
+      "fetchEmailTemplatesErrMsg": "इस फ़ॉर्म के लिए ईमेल टेम्प्लेट लाने में त्रुटि हुई",
       "getCurrUserFormsErrMsg": "आपके प्रपत्र लाते समय एक त्रुटि उत्पन्न हुई.",
       "getCurrUserFormsConsErrMsg": "उपयोगकर्ता डेटा प्राप्त करने में त्रुटि: {error}",
       "getUserFormPermErrMsg": "इस फ़ॉर्म के लिए आपका उपयोगकर्ता डेटा लाते समय एक त्रुटि उत्पन्न हुई.",
@@ -900,6 +1013,8 @@
       "publishDraftErrMsg": "प्रकाशन करते समय एक त्रुटि उत्पन्न हुई.",
       "publishDraftConsErrMsg": "{draftId} प्रकाशित करने में त्रुटि: {error}",
       "toggleVersnPublConsErrMsg": "toggleVersionPublish {versionId} {publish} में त्रुटि: {error}",
+      "updateEmailTemplateConsErrMsg": "फ़ॉर्म {formId} के लिए ईमेल टेम्पलेट अपडेट करने में त्रुटि: {error}",
+      "updateEmailTemplateErrMsg": "इस फ़ॉर्म के लिए ईमेल टेम्प्लेट अपडेट करते समय एक त्रुटि उत्पन्न हुई.",
       "updateFormErrMsg": "इस फ़ॉर्म की सेटिंग अपडेट करते समय एक त्रुटि उत्पन्न हुई.",
       "updateFormConsErrMsg": "फॉर्म {id} अपडेट करने में त्रुटि: {error}",
       "deleteSubmissionNotifyMsg": "सबमिशन सफलतापूर्वक हटा दिया गया.",

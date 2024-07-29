@@ -1,3 +1,140 @@
+<script>
+import { mapActions, mapState } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+import ProactiveHelpDialog from '~/components/infolinks/ProactiveHelpDialog.vue';
+import ProactiveHelpPreviewDialog from '~/components/infolinks/ProactiveHelpPreviewDialog.vue';
+import { useFormStore } from '~/store/form';
+import { useAdminStore } from '~/store/admin';
+
+export default {
+  components: {
+    ProactiveHelpDialog,
+    ProactiveHelpPreviewDialog,
+  },
+  props: {
+    layoutList: {
+      type: Array,
+      required: true,
+    },
+    componentsList: {
+      type: Array,
+      default: () => [],
+    },
+    groupName: {
+      type: String,
+      required: true,
+    },
+  },
+  setup() {
+    const { t, locale } = useI18n({ useScope: 'global' });
+
+    return { t, locale };
+  },
+  data() {
+    return {
+      component: {},
+      componentName: '',
+      loading: false,
+      publish: [],
+      publishStatus: 'UNPUBLISHED',
+      showDialog: false,
+      showPreviewDialog: false,
+    };
+  },
+  computed: {
+    ...mapState(useFormStore, ['isRTL']),
+    ...mapState(useAdminStore, ['fcProactiveHelpImageUrl']),
+    headers() {
+      return [
+        {
+          title: this.$t('trans.generalLayout.formTitle'),
+          align: 'start',
+          key: 'componentName',
+          width: '1%',
+        },
+        {
+          title: this.$t('trans.generalLayout.actions'),
+          align: 'end',
+          key: 'actions',
+          filterable: false,
+          sortable: false,
+          width: '1%',
+        },
+      ];
+    },
+  },
+  mounted() {
+    let idx = 0;
+    for (let layoutItem of this.layoutList) {
+      for (let component of this.componentsList) {
+        if (component.componentName === layoutItem.componentName) {
+          this.publish[idx] = component.status;
+        }
+      }
+      idx++;
+    }
+  },
+  methods: {
+    ...mapActions(useAdminStore, [
+      'getFCProactiveHelpImageUrl',
+      'updateFCProactiveHelpStatus',
+    ]),
+    //used to open form component help information dialog
+    onDialog() {
+      this.showDialog = !this.showDialog;
+    },
+
+    //used to open form component help information preview dialog
+    onPreviewDialog() {
+      this.showPreviewDialog = !this.showPreviewDialog;
+    },
+
+    canDisabled(compName) {
+      return (
+        this.componentsList.filter(
+          (component) => component.componentName === compName
+        ).length == 0
+      );
+    },
+
+    onOpenDialog(compName) {
+      this.getComponent(compName);
+      this.onDialog();
+    },
+
+    async onOpenPreviewDialog(compName) {
+      const item = this.componentsList.find(
+        (item) => item.componentName === compName
+      );
+      await this.getFCProactiveHelpImageUrl(item.id);
+      this.getComponent(item.componentName);
+      this.onPreviewDialog();
+    },
+
+    getComponent(compName) {
+      if (compName) {
+        this.componentName = compName;
+        this.component = this.componentsList.find((obj) => {
+          return obj.componentName === this.componentName;
+        });
+      }
+    },
+
+    onSwitchChange(compName, index) {
+      for (const comp of this.componentsList) {
+        if (comp.componentName === compName) {
+          this.updateFCProactiveHelpStatus({
+            componentId: comp.id,
+            publishStatus: this.publish[index],
+          });
+        }
+      }
+    },
+  },
+};
+</script>
+
 <template>
   <div>
     <v-data-table
@@ -9,32 +146,31 @@
       :items="layoutList"
       :loading="loading"
       :loading-text="$t('trans.generalLayout.loadingText')"
-      :lang="lang"
+      :lang="locale"
     >
-      <template #[`item.componentName`]="{ item }">
+      <template #item.componentName="{ item }">
         <div>
-          <template>
-            <div style="text-transform: capitalize" class="label">
-              {{ item.componentName }}
-            </div>
-          </template>
+          <div style="text-transform: capitalize" class="label">
+            {{ item.componentName }}
+          </div>
         </div>
       </template>
-      <template #[`item.actions`]="{ item, index }">
+      <template #item.actions="{ item, index }">
         <div class="d-flex flex-row justify-end align-center actions">
           <div>
             <v-btn
               data-cy="edit_button"
               color="primary"
-              small
-              text
+              size="small"
+              variant="text"
+              :title="$t('trans.generalLayout.edit')"
               @click="onOpenDialog(item.componentName)"
             >
-              <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+              <v-icon icon="mdi:mdi-pencil-box-outline"></v-icon>
               <span
                 class="d-none d-sm-flex"
                 style="font-size: 16px"
-                :lang="lang"
+                :lang="locale"
                 >{{ $t('trans.generalLayout.edit') }}</span
               >
             </v-btn>
@@ -43,16 +179,17 @@
             <v-btn
               data-cy="preview_button"
               color="primary"
-              text
-              small
-              @click="onOpenPreviewDialog(item.componentName)"
+              variant="text"
+              size="small"
               :disabled="canDisabled(item.componentName)"
+              :title="$t('trans.generalLayout.preview')"
+              @click="onOpenPreviewDialog(item.componentName)"
             >
-              <font-awesome-icon icon="fa-solid fa-eye" />
+              <v-icon icon="mdi:mdi-eye"></v-icon>
               <span
                 class="d-none d-sm-flex"
                 style="font-size: 16px"
-                :lang="lang"
+                :lang="locale"
                 >{{ $t('trans.generalLayout.preview') }}</span
               >
             </v-btn>
@@ -61,22 +198,27 @@
             <v-btn
               data-cy="status_button"
               color="primary"
-              text
-              small
+              variant="text"
+              size="small"
+              :title="
+                publish[index]
+                  ? $t('trans.generalLayout.published')
+                  : $t('trans.generalLayout.unpublished')
+              "
               :disabled="canDisabled(item.componentName)"
             >
               <v-switch
-                :class="{ 'dir-ltl': isRTL }"
-                small
-                color="success"
-                :input-value="isComponentPublish(item.componentName, index)"
                 v-model="publish[index]"
-                @change="onSwitchChange(item.componentName, index)"
+                :class="{ 'dir-ltl': isRTL }"
+                density="compact"
+                hide-details
+                color="success"
+                @update:model-value="onSwitchChange(item.componentName, index)"
               ></v-switch>
               <span
                 style="width: 120px !important; font-size: 16px"
                 class="d-none d-sm-flex"
-                :lang="lang"
+                :lang="locale"
                 >{{
                   publish[index]
                     ? $t('trans.generalLayout.published')
@@ -89,144 +231,25 @@
       </template>
     </v-data-table>
     <ProactiveHelpDialog
-      :showDialog="showDialog"
       v-if="showDialog"
-      :groupName="groupName"
-      :componentName="componentName"
-      @close-dialog="onDialog"
+      :show-dialog="showDialog"
+      :group-name="groupName"
+      :component-name="componentName"
       :component="component"
+      @close-dialog="onDialog"
     />
     <ProactiveHelpPreviewDialog
-      :showDialog="showPreviewDialog"
       v-if="showPreviewDialog"
-      @close-dialog="onPreviewDialog"
-      :fcProactiveHelpImageUrl="fcProactiveHelpImageUrl"
+      :show-dialog="showPreviewDialog"
+      :fc-proactive-help-image-url="fcProactiveHelpImageUrl"
       :component="component"
+      @close-dialog="onPreviewDialog"
     />
   </div>
 </template>
 
-<script>
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { mapActions, mapGetters } from 'vuex';
-import { faPenToSquare, faEye } from '@fortawesome/free-solid-svg-icons';
-import ProactiveHelpDialog from '@/components/infolinks/ProactiveHelpDialog.vue';
-import ProactiveHelpPreviewDialog from '@/components/infolinks/ProactiveHelpPreviewDialog.vue';
-
-library.add(faPenToSquare, faEye);
-
-export default {
-  name: 'GeneralLayout',
-  components: { ProactiveHelpDialog, ProactiveHelpPreviewDialog },
-  data() {
-    return {
-      loading: false,
-      showDialog: false,
-      showPreviewDialog: false,
-      publish: [],
-      publishStatus: 'UNPUBLISHED',
-      componentName: '',
-      component: {},
-      listLength: this.componentsList.length,
-    };
-  },
-  computed: {
-    headers() {
-      return [
-        {
-          text: this.$t('trans.generalLayout.formTitle'),
-          align: 'start',
-          value: 'componentName',
-          width: '1%',
-        },
-        {
-          text: this.$t('trans.generalLayout.actions'),
-          align: 'end',
-          value: 'actions',
-          filterable: false,
-          sortable: false,
-          width: '1%',
-        },
-      ];
-    },
-    ...mapGetters('admin', ['fcProactiveHelpImageUrl']),
-    ...mapGetters('form', ['lang']),
-  },
-  props: {
-    layoutList: {
-      type: Array,
-      required: true,
-    },
-    componentsList: {
-      type: Array,
-      default: () => [],
-    },
-    groupName: String,
-  },
-  methods: {
-    ...mapActions('admin', [
-      'updateFCProactiveHelpStatus',
-      'getFCProactiveHelpImageUrl',
-    ]),
-
-    //used to open form component help information dialog
-    onDialog() {
-      this.showDialog = !this.showDialog;
-    },
-    //used to open form component help information preview dialog
-    onPreviewDialog() {
-      this.showPreviewDialog = !this.showPreviewDialog;
-    },
-    canDisabled(componentName) {
-      return (
-        this.componentsList.filter(
-          (component) => component.componentName === componentName
-        ).length == 0
-      );
-    },
-
-    isComponentPublish(componentName, index) {
-      for (let component of this.componentsList) {
-        if (component.componentName === componentName) {
-          this.publish[index] = component.status;
-        }
-      }
-    },
-    onOpenDialog(componentName) {
-      this.getComponent(componentName);
-      this.onDialog();
-    },
-    async onOpenPreviewDialog(componentName) {
-      const item = this.componentsList.find(
-        (item) => item.componentName === componentName
-      );
-      await this.getFCProactiveHelpImageUrl(item.id);
-      this.getComponent(item.componentName);
-      this.onPreviewDialog();
-    },
-    getComponent(componentName) {
-      if (componentName) {
-        this.componentName = componentName;
-        this.component = this.componentsList.find((obj) => {
-          return obj.componentName === this.componentName;
-        });
-      }
-    },
-    onSwitchChange(componentName, index) {
-      for (const component of this.componentsList) {
-        if (component.componentName === componentName) {
-          this.updateFCProactiveHelpStatus({
-            componentId: component.id,
-            publishStatus: this.publish[index],
-          });
-        }
-      }
-    },
-  },
-};
-</script>
 <style lang="scss" scoped>
-.submissions-table >>> tbody tr {
+.submissions-table :deep(tbody tr) {
   background: #bfbdbd14 !important;
   border: 1px solid #7070703f !important;
   margin-bottom: 35px !important;

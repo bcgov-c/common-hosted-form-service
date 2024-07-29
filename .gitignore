@@ -7,8 +7,8 @@ build
 coverage
 dist
 **/src/formio
-**/cypress/**/screenshots
 **/cypress/**/videos
+screenshots
 node_modules
 
 # Ignore only top-level package-lock.json
@@ -44,6 +44,11 @@ yarn-error.log*
 !.vscode/launch.json
 !.vscode/tasks.json
 !.vscode/README.md
+
+# devcontainer files
+!.devcontainer/chefs_local/*.sample
+.devcontainer/chefs_local/local.json
+.devcontainer/chefs_local/realm-export.json
 
 # temp office files
 ~$*

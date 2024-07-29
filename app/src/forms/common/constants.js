@@ -14,6 +14,11 @@ module.exports = Object.freeze({
     REMINDER_FORM_NOT_FILL: 'formNotFill',
   },
   Permissions: {
+    DOCUMENT_TEMPLATE_CREATE: 'document_template_create',
+    DOCUMENT_TEMPLATE_DELETE: 'document_template_delete',
+    DOCUMENT_TEMPLATE_READ: 'document_template_read',
+    EMAIL_TEMPLATE_READ: 'email_template_read',
+    EMAIL_TEMPLATE_UPDATE: 'email_template_update',
     FORM_API_CREATE: 'form_api_create',
     FORM_API_READ: 'form_api_read',
     FORM_API_UPDATE: 'form_api_update',
@@ -23,6 +28,7 @@ module.exports = Object.freeze({
     FORM_DELETE: 'form_delete',
     SUBMISSION_CREATE: 'submission_create',
     SUBMISSION_READ: 'submission_read',
+    SUBMISSION_REVIEW: 'submission_review',
     SUBMISSION_UPDATE: 'submission_update',
     SUBMISSION_DELETE: 'submission_delete',
     DESIGN_CREATE: 'design_create',
@@ -37,6 +43,7 @@ module.exports = Object.freeze({
     OWNER: 'owner',
     TEAM_MANAGER: 'team_manager',
     FORM_DESIGNER: 'form_designer',
+    SUBMISSION_APPROVER: 'submission_approver',
     SUBMISSION_REVIEWER: 'submission_reviewer',
     FORM_SUBMITTER: 'form_submitter',
   },
@@ -56,6 +63,9 @@ module.exports = Object.freeze({
     FORM_SUBMITTED: 'eventSubmission',
     FORM_STATUS_CHANGE: 'eventStatusChange',
     FORM_ASSIGNMENT: 'eventAssignment',
+    FORM_PUBLISHED: 'eventFormPublished',
+    FORM_DRAFT_PUBLISHED: 'eventFormDraftPublished',
+    FORM_UNPUBLISHED: 'eventFormUnPublished',
   },
   StorageTypes: {
     UPLOADS: 'uploads',
@@ -63,23 +73,10 @@ module.exports = Object.freeze({
     OBJECT_STORAGE: 'objectStorage',
     LOCAL_STORES: ['uploads', 'localStorage', 'exports'],
   },
-  Restricted: {
-    IDP: {
-      BCEID_BASIC: 'bceid-basic',
-      BCEID_BUSINESS: 'bceid-business',
-    },
-  },
   ScheduleType: {
     MANUAL: 'manual',
     CLOSINGDATE: 'closingDate',
     PERIOD: 'period',
-  },
-  IdentityProviders: {
-    BCEIDBASIC: 'bceid-basic', // Basic BCeID
-    BCEIDBUSINESS: 'bceid-business', // Business BCeID
-    BCSC: 'bcsc', // Services Card
-    GITHUB: 'github', // Github
-    IDIR: 'idir', // IDIR
   },
   EXPORT_TYPES: {
     submissions: 'submissions',
@@ -89,5 +86,28 @@ module.exports = Object.freeze({
     csv: 'csv',
     json: 'json',
     default: 'csv',
+  },
+  // app permissions are not assigned on the form
+  // they are for flow within the UX, what views one can navigate
+  // what buttons one can have.
+  // these will be assigned via the user's IDP.
+  APP_PERMISSIONS: {
+    VIEWS_FORM_STEPPER: 'views_form_stepper',
+    VIEWS_ADMIN: 'views_admin',
+    VIEWS_FILE_DOWNLOAD: 'views_file_download',
+    VIEWS_FORM_EMAILS: 'views_form_emails',
+    VIEWS_FORM_EXPORT: 'views_form_export',
+    VIEWS_FORM_MANAGE: 'views_form_manage',
+    VIEWS_FORM_PREVIEW: 'views_form_preview',
+    VIEWS_FORM_SUBMISSIONS: 'views_form_submissions',
+    VIEWS_FORM_TEAMS: 'views_form_teams',
+    VIEWS_FORM_VIEW: 'views_form_view',
+    VIEWS_USER_SUBMISSIONS: 'views_user_submissions',
+  },
+  ExternalAPIStatuses: {
+    SUBMITTED: 'SUBMITTED',
+    PENDING: 'PENDING',
+    APPROVED: 'APPROVED',
+    DENIED: 'DENIED',
   },
 });

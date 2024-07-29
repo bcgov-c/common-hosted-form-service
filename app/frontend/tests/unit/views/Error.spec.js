@@ -1,39 +1,73 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
-import i18n from '@/internationalization';
-import Error from '@/views/Error.vue';
+import { createTestingPinia } from '@pinia/testing';
+import { mount } from '@vue/test-utils';
+import { setActivePinia } from 'pinia';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-const localVue = createLocalVue();
-
-localVue.use(Vuex);
+import { useAuthStore } from '~/store/auth';
+import Error from '~/views/Error.vue';
 
 describe('Error.vue', () => {
-  let store;
+  const pinia = createTestingPinia();
+  setActivePinia(pinia);
+
+  const authStore = useAuthStore(pinia);
 
   beforeEach(() => {
-    store = new Vuex.Store();
-    store.registerModule('auth', {
-      namespaced: true,
-      getters: {
-        authenticated: () => true,
-        keycloakReady: () => true
-      },
-      actions: {
-        logout: () => jest.fn()
-      }
-    });
+    authStore.$reset();
   });
 
-  it('renders without error', async () => {
-    const wrapper = shallowMount(Error, {
-      localVue,
-      store,
-      i18n
+  it('renders', async () => {
+    const wrapper = mount(Error, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          RouterLink: true,
+        },
+      },
     });
-    await localVue.nextTick();
 
-    const h1 = wrapper.find('h1');
-    expect(h1.exists()).toBe(true);
-    expect(h1.text()).toMatch('Error: Something went wrong... :(');
+    await nextTick();
+
+    expect(wrapper.text()).toMatch('trans.error.somethingWentWrong');
+  });
+
+  it('renders with a custom error message', async () => {
+    const wrapper = mount(Error, {
+      props: {
+        text: 'Custom Error Message',
+      },
+      global: {
+        plugins: [pinia],
+        stubs: {
+          RouterLink: true,
+        },
+      },
+    });
+
+    await nextTick();
+
+    expect(wrapper.text()).toMatch('Custom Error Message');
+  });
+
+  it('renders with a custom error message without translating', async () => {
+    const wrapper = mount(Error, {
+      props: {
+        text: 'Custom Error Message',
+        translate: false,
+      },
+      global: {
+        plugins: [pinia],
+        stubs: {
+          RouterLink: true,
+        },
+      },
+    });
+
+    await nextTick();
+
+    // Should fail to parse the json and translate is not passed
+    expect(wrapper.text()).toMatch('Custom Error Message');
   });
 });

@@ -1,6 +1,23 @@
 {
+  "open": "ਖੁੱਲਾ",
   "date": {
     "date": "yyyy-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "ਈਮੇਲ ਪ੍ਰਬੰਧਨ",
+    "manageForm": "ਫਾਰਮ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰੋ",
+    "submissionConfirmation": "ਸਪੁਰਦਗੀ ਦੀ ਪੁਸ਼ਟੀ"
+  },
+  "emailTemplate": {
+    "body": "ਸਰੀਰ",
+    "save": "ਬਚਾਓ",
+    "saveEmailTemplateConsoleErrMsg": "ਫਾਰਮ {formId} ਲਈ ਈਮੇਲ ਟੈਮਪਲੇਟ ਅੱਪਡੇਟ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
+    "saveEmailTemplateErrMsg": "ਈਮੇਲ ਟੈਮਪਲੇਟ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦੇ ਸਮੇਂ ਇੱਕ ਤਰੁੱਟੀ ਉਤਪੰਨ ਹੋਈ।",
+    "subject": "ਵਿਸ਼ਾ",
+    "title": "ਸਿਰਲੇਖ",
+    "validBodyRequired": "ਕਿਰਪਾ ਕਰਕੇ ਈਮੇਲ ਲਈ ਇੱਕ ਮੁੱਖ ਭਾਗ ਦਾਖਲ ਕਰੋ",
+    "validSubjectRequired": "ਕਿਰਪਾ ਕਰਕੇ ਈਮੇਲ ਲਈ ਵਿਸ਼ਾ ਲਾਈਨ ਦਾਖਲ ਕਰੋ",
+    "validTitleRequired": "ਕਿਰਪਾ ਕਰਕੇ ਈਮੇਲ ਲਈ ਇੱਕ ਸਿਰਲੇਖ ਦਾਖਲ ਕਰੋ"
   },
   "formsTable": {
     "myForms": "ਮੇਰੇ ਫਾਰਮ",
@@ -14,6 +31,10 @@
     "Description": "ਵਰਣਨ:",
     "action": "ਕਾਰਵਾਈਆਂ",
     "loadingText": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ... ਕਿਰਪਾ ਕਰਕੇ ਉਡੀਕ ਕਰੋ"
+  },
+  "preview": {
+    "preview": "ਝਲਕ",
+    "previewToolTip": "ਇਹ ਫਾਰਮ ਸੰਸਕਰਣ ਡਿਜ਼ਾਈਨ ਅਤੇ ਵਿਵਹਾਰ ਦਾ ਪੂਰਵਦਰਸ਼ਨ ਦਿਖਾਉਂਦਾ ਹੈ ਕਿਉਂਕਿ ਤੁਹਾਡੇ ਸਬਮਿਟਰ ਇਸਨੂੰ ਦੇਖਣਗੇ। ਤੁਸੀਂ ਇਸ ਪੰਨੇ ਤੋਂ ਫਾਰਮ ਜਮ੍ਹਾਂ ਨਹੀਂ ਕਰ ਸਕਦੇ।"
   },
   "manageLayout": {
     "manageForm": "ਫਾਰਮ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰੋ"
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "URL ਨੂੰ ਕਲਿੱਪਬੋਰਡ ਵਿੱਚ ਕਾਪੀ ਕਰੋ"
   },
   "manageFormActions": {
+    "emailManagement": "ਈਮੇਲ ਪ੍ਰਬੰਧਨ",
     "viewSubmissions": "ਬੇਨਤੀਆਂ ਦੇਖੋ",
     "teamManagement": "ਟੀਮ ਪ੍ਰਬੰਧਨ",
     "deleteForm": "ਫਾਰਮ ਮਿਟਾਓ",
@@ -47,7 +69,22 @@
     "status": "ਸਥਿਤੀ",
     "update": "ਅੱਪਡੇਟ ਕਰੋ",
     "cancel": "ਰੱਦ ਕਰੋ",
-    "eventSubscription": "د پیښې ګډون"
+    "eventSubscription": "د پیښې ګډون",
+    "cdogsTemplate": "CDOGS ਟੈਂਪਲੇਟ"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "CDOGS ਟੈਂਪਲੇਟ ਅੱਪਲੋਡ ਕਰੋ",
+    "uploadTemplateFile": "ਟੈਂਪਲੇਟ ਫਾਈਲ ਅੱਪਲੋਡ ਕਰੋ",
+    "upload": "ਅੱਪਲੋਡ ਕਰੋ",
+    "delete": "ਮਿਟਾਓ",
+    "download": "ਡਾਊਨਲੋਡ ਕਰੋ",
+    "invalidFileMessage": "ਟੈਂਪਲੇਟ ਵਿੱਚ ਇਹਨਾਂ ਵਿੱਚੋਂ ਕੋਈ ਇੱਕ ਐਕਸਟੈਂਸ਼ਨ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ: .txt, .docx, .html, .odt, .pptx, .xlsx",
+    "uploadSuccess": "ਟੈਂਪਲੇਟ ਸਫਲਤਾਪੂਰਵਕ ਅੱਪਲੋਡ ਹੋ ਗਈ।",
+    "uploadError": "ਟੈਂਪਲੇਟ ਅੱਪਲੋਡ ਕਰਦੇ ਸਮੇਂ ਇੱਕ ਗਲਤੀ ਆਈ।",
+    "deleteSuccess": "ਟੈਂਪਲੇਟ ਸਫਲਤਾਪੂਰਵਕ ਮਿਟਾਈ ਗਈ।",
+    "deleteError": "ਟੈਂਪਲੇਟ ਮਿਟਾਉਣ ਸਮੇਂ ਇੱਕ ਗਲਤੀ ਆਈ।",
+    "fetchError": "ਟੈਂਪਲੇਟ ਲਿਆਉਣ ਸਮੇਂ ਇੱਕ ਗਲਤੀ ਆਈ।",
+    "info": "ਕੌਮਨ ਦਸਤਾਵੇਜ਼ ਜਨਰੇਸ਼ਨ ਸਰਵਿਸ (CDOGS) ਵਰਤਣ ਲਈ ਇੱਕ ਟੈਂਪਲੇਟ ਅੱਪਲੋਡ ਕਰੋ"
   },
   "formSettings": {
     "pressToAddMultiEmail": "ਕਈ ਈਮੇਲ ਪਤੇ ਜੋੜਨ ਲਈ <kbd>ਐਂਟਰ</kbd> <kbd>ਜਾਂ</kbd> <kbd>ਸਪੇਸ</kbd> ਦਬਾਓ",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "د پیښې ګډون ته اجازه ورکړئ",
     "eventSubscription": "د پیښې ګډون",
     "validEndpointRequired": "مهرباني وکړئ یو معتبر پای ټکی دننه کړئ چې پیل کیږي https://",
-    "validBearerTokenRequired": "89abddfb-2cff-4fda-83e6-13221f0c3d4f د اعتبار وړ وړونکي نښه مثال داخل کړئ"
+    "validBearerTokenRequired": "89abddfb-2cff-4fda-83e6-13221f0c3d4f د اعتبار وړ وړونکي نښه مثال داخل کړئ",
+    "wideFormLayout": "ਵਾਈਡ ਫਾਰਮ ਲੇਆਉਟ"
+  },
+  "formProfile": {
+    "message": "CHEFS ਟੀਮ ਜਾਣਕਾਰੀ ਇਕੱਠੀ ਕਰ ਰਹੀ ਹੈ ਅਤੇ ਵਿਗਿਆਨ ਕੇਸਾਂ ਲਈ ਮੁਦਾਵਿਆਂ ਬਣਾਉਣ ਲਈ ਮੁਹਿਮ ਵਰਤ ਰਹੀ ਹੈ। ਇਹ ਕੇਸ ਸੀਧੇ CHEFS ਦੀ ਰਣਨੀਤਿਕ ਓਪਰੇਸ਼ਨ ਅਤੇ ਚਲਦੇ ਸਾਲਾਂ ਵਿੱਚ ਚੋਣ ਦੀ ਮੁਖਮਾਨੇ ਵਿੱਚ ਏਕ ਕੀ ਬੰਦੋਬਸਤੀ ਰੋਲ ਪਵੇਗਾ। ਡਾਟਾ ਇਕੱਠਾ ਕਰਨ ਦੀ ਇਹ ਪ੍ਰਯਾਸ਼ਾ ਜਰੂਰੀ ਹੈ ਜਿਸ ਨਾਲ ਕ੍ਰਿਟਿਕਲ ਫੈਸਲਿਆਂ ਨੂੰ ਸੂਚਿਤ ਕਰਨ ਲਈ ਅਤੇ CHEFS ਦੇ ਤਰੱਕੀਪੂਰਤ ਵਿੱਚ ਮੁਕਾਬਲਾ ਕਰਨ ਲਈ ਲੋੜੀਦਾ ਹੈ। ਇਸ ਨਾਲ ਯਹ ਸੁਨਿਸ਼ਚਿਤ ਹੋ ਜਾਂਦਾ ਹੈ ਕਿ ਇਹ ਆਪਣੇ ਅਨੁਕੂਲਨ ਅਤੇ ਚੁਣੇ ਗਏ ਚੁਣੌਤੀਆਂ ਅਤੇ ਜ਼ਰੂਰਾਤਾਂ ਦਾ ਇੱਜ਼ਤੀਕਾਰ ਅਤੇ ਯੋਜਨਾ ਵਿੱਚ ਇੱਕ ਬਦਲਾਵ ਅਤੇ ਕਾਰਗੁਜ਼ਾਰੀ ਵਿਚ ਇਹ ਗੁਣਤੀ ਹੈ।",
+    "ministryPrompt": "ਚੁਣੋ ਉਹ ਮੰਤਰਾਲਯ ਜਿਸ ਨਾਲ ਤੁਸੀਂ ਜੁੜੇ ਹੋ",
+    "useCasePrompt": "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਫਾਰਮ ਦੇ ਉਦੇਸ਼ ਚੁਣੋ",
+    "deploymentPrompt": "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਡਿਪਲੋਇਮੈਂਟ ਸ਼੍ਰੇਣੀ ਨੂੰ ਦਸੋ",
+    "APIPrompt": "ਕਿਰਪਾ ਕਰਕੇ ਦਸੋ ਜੇ ਤੁਸੀਂ ਤੀਜੇ-ਪਾਰਟੀ ਐਪਲੀਕੇਸ਼ਨ ਵਿੱਚ ਇੰਟੀਗ੍ਰੇਸ਼ਨ ਲਈ ਪ੍ਰਦਾਨ ਕੀਤੇ API ਦੀ ਵਰਤੋਂ ਕਰਨ ਦੀ ਇੱਛਾ ਹੈ",
+    "labelPrompt": "ਲੇਬਲ ਇਸ ਤਰ੍ਹਾਂ ਦੀਆਂ ਹਨ ਕਿ ਇਹ ਸੱਜਾਈਆਂ ਫਾਰਮਾਂ ਨੂੰ ਜੋੜ ਸਕਦੀਆਂ ਹਨ ਜੋ ਇੱਕ ਸਾਰੀਆਂ ਸੰਗਠਨਾਂ ਦੇ ਲਈ ਹੋਣ ਜ ਕਿਸੇ ਸਬੰਧਤ ਸੰਦਰਭ ਨੂੰ ਸਾਂਝਾ ਕਰ ਸਕਦੀਆਂ ਹਨ।",
+    "useCaseToolTip": "ਜੇ ਤੁਹਾਨੂੰ ਆਪਣੇ ਖਾਸ ਯੂਜ਼ ਕੇਸ ਨਜਰ ਨਹੀਂ ਆ ਰਿਹਾ, ਤਾਂ ਹੋਰ ਚੋਣਾਂ ਬਾਰੇ CHEFS ਟੀਮ ਨਾਲ ਸੰਪਰਕ ਕਰੋ",
+    "deploymentLevel": "ਨਿਵਾਸ ਸਤਾਰ",
+    "ministryName": "ਮੰਤਰਾਲਯ",
+    "label": "ਲੇਬਲ",
+    "useCase": "ਉਪਯੋਗ ਮਾਮਲਾ",
+    "development": "ਵਿਕਾਸ",
+    "test": "ਟੈਸਟ",
+    "production": "ਉਤਪਾਦਨ",
+    "Y": "ਹਾਂ",
+    "N": "ਨਹੀਂ",
+    "application": "ਫੈਸਲੇ ਦੇ ਬਾਅਦ ਦਰਜ ਕੀਤੀਆਂ ਜਾਣ ਵਾਲੀਆਂ ਅਰਜ਼ਾਂ",
+    "collection": "ਡਾਟਾਸੈਟਸ ਦੀ ਸੰਗਤ, ਡਾਟਾ ਸਬਮਿਟ ਕਰਨਾ",
+    "feedback": "ਸੰਤੋਖ, ਸਹਿਮਤੀ, ਸੰਭਾਵਨਾ, ਜਾਂ ਹੋਰ ਗੁਣਾਕਾਰੀ ਸਵਾਲਾਂ ਦੇ ਨਤੀਜੇ ਦੇ ਲਈ ਫੀਡਬੈਕ ਫਾਰਮ",
+    "report": "ਰਿਪੋਰਟਿੰਗ ਆਮ ਤੌਰ 'ਤੇ ਜਾਂ ਘਟਨਾ-ਨਿਯੰਤਰਿਤ ਤਰੀਕੇ ਨਾਲ ਹੋਵੇ ਜਾਂ ਫੌਲੋ-ਅੱਪਸ",
+    "registration": "ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਜਾਂ ਸਾਈਨ ਅੱਪ - ਕੋਈ ਮੁਲਾਂਕਣ ਨਹੀਂ",
+    "getLabelErr": "ਯੂਜ਼ਰ ਲੇਬਲਾਂ ਪ੍ਰਾਪਤ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ ਆਈ ਹੈ।",
+    "getLabelConsErr": "ਲੇਬਲਾਂ ਪ੍ਰਾਪਤ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ: ",
+    "selectAPIErr": "API ਇੰਟੀਗਰੇਸ਼ਨ ਦੀ ਵਰਤੋਂ ਬਾਰੇ ਆਪਣੇ ਚੋਣ ਦੀ ਸੂਚਨਾ ਦਿਓ",
+    "selectDeploymentErr": "ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਨਿਵਾਸ ਸਤਾਰ ਚੁਣੋ",
+    "selectMinistryErr": "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਮੰਤਰਾਲਯ ਚੁਣੋ",
+    "selectUseCaseErr": "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਫਾਰਮ ਦਾ ਉਪਯੋਗ ਮਾਮਲਾ ਦਰਜ ਕਰੋ",
+    "labelSizeErr": "ਲੇਬਲ 25 ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋ ਸਕਦੇ"
+  },
+  "ministries": {
+    "AF": "ਖੇਤੀ ਅਤੇ ਖਾਦਯ (AF)",
+    "AG": "ਵੱਕਲ ਜਨਰਲ (AG)",
+    "MCF": "ਬੱਚੇ ਅਤੇ ਪਰਿਵਾਰ ਵਿਕਾਸ (MCF)",
+    "CITZ": "ਨਾਗਰਿਕ ਸੇਵਾਵਾਂ (CITZ)",
+    "ECC": "ਸਿੱਖਿਆ ਅਤੇ ਬਾਲ ਦੇ ਦੇਖਭਾਲ (ECC)",
+    "EMCR": "ਆਪਾਤਕਾਲੀਨ ਪ੍ਰਬੰਧ ਅਤੇ ਜਲਵਾਯੁ ਤਿਆਰੀ (EMCR)",
+    "EMLI": "ਊਰਜਾ, ਖਦਾਨ ਅਤੇ ਹਾਣੀ ਕਾਰਬਨ ਇਨੋਵੇਸ਼ਨ (EMLI)",
+    "ENV": "ਵਾਤਾਵਰਨ ਅਤੇ ਜਲਵਾਯੁ ਤਬਦੀਲੀ ਰਣਨੀਤੀ (ENV)",
+    "FIN": "ਵਿਤਤ (FIN)",
+    "FOR": "ਜੰਗਲ (FOR)",
+    "HLTH": "ਸਿਹਤ (HLTH)",
+    "HOUS": "ਹਾਊਸਿੰਗ (HOUS)",
+    "IRR": "ਆਦਿਵਾਸੀ ਸਬੰਧ ਅਤੇ ਸੁਲਹ (IRR)",
+    "JEDI": "ਨੌਕਰੀਆਂ, ਆਰਥਿਕ ਵਿਕਾਸ ਅਤੇ ਇਨੋਵੇਸ਼ਨ (JEDI)",
+    "LBR": "ਮਜਦੂਰੀ (LBR)",
+    "MMHA": "ਮਾਨਸਿਕ ਸਿਹਤ ਅਤੇ ਲੱਛਣਾਵਾਂ (MMHA)",
+    "MUNI": "ਮਿਊਨੀਸਪੈਲ ਅਫ਼ੇਅਰਜ਼ (MUNI)",
+    "PSFS": "ਪੋਸਟ-ਸੈਕੰਡਰੀ ਸਿਖਿਆ ਅਤੇ ਭਵਿੱਖ ਦੀ ਹੁਨਰ (PSFS)",
+    "PSSG": "ਜਨਰਲ ਪਬਲਿਕ ਸੇਫਟੀ ਅਤੇ ਸਾਲਿਸਟਰ ਜਨਰਲ (PSSG)",
+    "SDPR": "ਸਮਾਜ ਵਿਕਾਸ ਅਤੇ ਗਰੀਬੀ ਘਾਟ ਘਾਟ (SDPR)",
+    "TACS": "ਟਾਰਿਜ਼ਮ, ਕਲਾ, ਸਾਂਝਾ ਅਤੇ ਖੇਡ (TACS)",
+    "MOTI": "ਯਾਤਾਯਾਤ ਅਤੇ ਸੰਸਾਧਨ (MOTI)",
+    "WLRS": "ਪਾਣੀ, ਜ਼ਮੀਨ ਅਤੇ ਸੰਸਾਧਨ ਪ੍ਰਬੰਧਨ (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "د پیښې ډول",
@@ -153,6 +246,7 @@
     "infoA": "ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਤੁਹਾਡੀ API ਕੁੰਜੀ ਗੁਪਤ ਇੱਕ ਸੁਰੱਖਿਅਤ ਸਥਾਨ (ਜਿਵੇਂ ਕਿ ਕੁੰਜੀ ਵਾਲਟ) ਵਿੱਚ ਸਟੋਰ ਕੀਤੀ ਗਈ ਹੈ।",
     "infoB": "ਤੁਹਾਡੀ API ਕੁੰਜੀ ਤੁਹਾਡੇ ਫਾਰਮ ਤੱਕ ਅਪ੍ਰਬੰਧਿਤ ਪਹੁੰਚ ਪ੍ਰਦਾਨ ਕਰਦੀ ਹੈ। ਆਪਣੀ API ਕੁੰਜੀ ਕਿਸੇ ਨੂੰ ਨਾ ਦਿਓ।",
     "infoC": "API ਕੁੰਜੀ ਦੀ ਵਰਤੋਂ ਸਿਰਫ਼ ਆਟੋਮੇਟਿਡ ਸਿਸਟਮ ਪਰਸਪਰ ਕ੍ਰਿਆਵਾਂ ਲਈ ਕੀਤੀ ਜਾਣੀ ਚਾਹੀਦੀ ਹੈ। ਉਪਭੋਗਤਾ ਅਧਾਰਤ ਪਹੁੰਚ ਲਈ ਆਪਣੀ API ਕੁੰਜੀ ਦੀ ਵਰਤੋਂ ਨਾ ਕਰੋ",
+    "infoD": "ਜੇਕਰ ਤੁਸੀਂ API ਕੁੰਜੀ ਰਾਹੀਂ ਸਪੁਰਦ ਕੀਤੀਆਂ ਫਾਈਲਾਂ ਤੱਕ ਪਹੁੰਚ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ ਕੁੰਜੀ ਬਣਾਉਣ ਤੋਂ ਬਾਅਦ ਹੇਠਾਂ ਦਿੱਤੇ ਚੈਕਬਾਕਸ ਨੂੰ ਸਮਰੱਥ ਬਣਾਓ।",
     "deleteKey": "ਕੁੰਜੀ ਮਿਟਾਓ",
     "apiKey": "api ਕੁੰਜੀ",
     "hideSecret": "ਗੁਪਤ ਲੁਕਾਓ",
@@ -170,8 +264,7 @@
     "regenerate": "ਪੁਨਰਜਨਮ",
     "generate": "ਪੈਦਾ ਕਰੋ",
     "secret": "ਗੁਪਤ",
-    "text": "ਟੈਕਸਟ",
-    "password": "ਪਾਸਵਰਡ"
+    "filesAPIAccess": "ਇਸ API ਕੁੰਜੀ ਨੂੰ ਸਪੁਰਦ ਕੀਤੀਆਂ ਫ਼ਾਈਲਾਂ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦਿਓ"
   },
   "manageVersions": {
     "important": "ਮਹੱਤਵਪੂਰਨ!",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: ਅਧਿਕਾਰਤ ਨਹੀਂ। :",
     "401ErrorMsg": "ਤੁਹਾਡਾ ਖਾਤਾ ਸਹੀ ਢੰਗ ਨਾਲ ਸੈੱਟਅੱਪ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।<br /> ਕਿਰਪਾ ਕਰਕੇ ਸੰਪਰਕ ਕਰੋ",
     "403Forbidden": "403: ਵਰਜਿਤ। :",
-    "403ErrorMsg": "ਇਸ ਪੰਨੇ ਨੂੰ {idp} ਪ੍ਰਮਾਣੀਕਰਨ ਦੀ ਲੋੜ ਹੈ।",
+    "403ErrorMsg": "ਇਸ ਪੰਨੇ ਨੂੰ {permission} ਪ੍ਰਮਾਣੀਕਰਨ ਦੀ ਲੋੜ ਹੈ।",
     "401UnAuthorized": "401: ਅਣਅਧਿਕਾਰਤ। :",
     "401UnAuthorizedErrMsg": "ਤੁਹਾਨੂੰ ਇਸ ਪੰਨੇ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਨਹੀਂ ਹੈ।"
   },
@@ -325,7 +418,8 @@
     "version": "ਸੰਸਕਰਣ",
     "save": "ਸੇਵ ਕਰੋ",
     "saving": "ਸੰਭਾਲ ਰਿਹਾ ਹੈ",
-    "notSaved": "ਸੰਭਾਲਿਆ ਨਹੀਂ ਗਿਆ"
+    "notSaved": "ਸੰਭਾਲਿਆ ਨਹੀਂ ਗਿਆ",
+    "fieldnameError": "ਤੁਸੀਂ `form` ਕੀਵਰਡ ਨੂੰ {label} ਫੀਲਡਨਾਮ ਵਜੋਂ ਨਹੀਂ ਵਰਤ ਸਕਦੇ ਹੋ"
   },
   "formViewerMultiUpload": {
     "important": "ਮਹੱਤਵਪੂਰਨ",
@@ -375,6 +469,7 @@
     "emailRequired": "ਈਮੇਲ ਦੀ ਲੋੜ ਹੈ"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "ਕੋਈ ਮੇਲ ਖਾਂਦਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ",
     "submissions": "ਬੇਨਤੀਆਂ",
     "submissionsTable": "ਸਬਮਿਸ਼ਨ ਟੇਬਲ",
     "selectColumns": "ਕਾਲਮ ਚੁਣੋ",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "BCeID ਲਈ ਈਮੇਲ ਖੋਜਾਂ ਸਟੀਕ ਹੋਣੀਆਂ ਚਾਹੀਦੀਆਂ ਹਨ।",
     "getUsersErrMsg": "ਉਪਭੋਗਤਾਵਾਂ ਨੂੰ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
     "exactEmailOrUsername": "ਇੱਕ ਸਹੀ ਈ-ਮੇਲ ਜਾਂ ਉਪਭੋਗਤਾ ਨਾਮ ਦਰਜ ਕਰੋ।",
-    "requiredFiled": "ਇੱਕ ਨਾਮ, ਈ-ਮੇਲ, ਜਾਂ ਉਪਭੋਗਤਾ ਨਾਮ ਦਰਜ ਕਰੋ"
+    "requiredField": "ਇੱਕ ਨਾਮ, ਈ-ਮੇਲ, ਜਾਂ ਉਪਭੋਗਤਾ ਨਾਮ ਦਰਜ ਕਰੋ"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "ਇਸ ਸਬਮਿਸ਼ਨ ਨੂੰ ਦੇਖੋ",
@@ -464,6 +559,7 @@
     "editThisDraft": "ਇਸ ਡਰਾਫਟ ਨੂੰ ਸੰਪਾਦਿਤ ਕਰੋ"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "ਕੋਈ ਮੇਲ ਖਾਂਦਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ",
     "previousSubmissions": "ਪਿਛਲੀਆਂ ਬੇਨਤੀਆਂ",
     "selectColumns": "ਕਾਲਮ ਚੁਣੋ",
     "createNewSubmission": "ਇੱਕ ਨਵੀਂ ਸਬਮਿਸ਼ਨ ਬਣਾਓ",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "ਨੋਟ ਜੋੜਨ ਵਿੱਚ ਤਰੁੱਟੀ:",
     "notes": "ਨੋਟਸ",
     "note": "ਨੋਟ ਕਰੋ",
-    "maxChars": "ਅਧਿਕਤਮ 4000 ਅੱਖਰ"
+    "maxChars": "ਅਧਿਕਤਮ 4000 ਅੱਖਰ",
+    "totalNotes": "ਕੁੱਲ ਨੋਟਸ:"
   },
   "statusPanel": {
     "currentStatus": "ਮੌਜੂਦਾ ਸਥਿਤੀ:",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "ਜ਼ਿੰਮੇਦਾਰ ਲੋੜੀਂਦਾ ਹੈ",
     "assignToMe": "ਮੈਨੂੰ ਸੌਂਪੋ",
     "recipientEmail": "ਪ੍ਰਾਪਤਕਰਤਾ ਈਮੇਲ",
+    "recipientIsRequired": "ਪ੍ਰਾਪਤਕਰਤਾ ਦੀ ਲੋੜ ਹੈ",
     "attachCommentToEmail": "ਈਮੇਲ ਨਾਲ ਟਿੱਪਣੀ ਨੱਥੀ ਕਰੋ",
     "emailComment": "ਈਮੇਲ ਟਿੱਪਣੀ",
     "maxChars": "ਅਧਿਕਤਮ 4000 ਅੱਖਰ",
@@ -595,7 +693,16 @@
     "docGrnSucess": "ਦਸਤਾਵੇਜ਼ ਸਫਲਤਾਪੂਰਵਕ ਸਿਰਜਿਆ ਗਿਆ",
     "failedDocGenErrMsg": "ਦਸਤਾਵੇਜ਼ ਬਣਾਉਣ ਵਿੱਚ ਅਸਫਲ",
     "failedDocGenConsErrMsg": "ਟੈਮਪਲੇਟ ਦਰਜ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
-    "cDogsTemplate": "CDOGS ਟੈਂਪਲੇਟ"
+    "cDogsTemplate": "CDOGS ਟੈਂਪਲੇਟ",
+    "uploadCdogsTemplate": "CDOGS ਟੈਂਪਲੇਟ ਅੱਪਲੋਡ ਕਰੋ",
+    "printOptions": "ਛਾਪੇ ਦੇ ਵਿਕਲਪ",
+    "expandtextFields": "ਟੈਕਸਟ ਖੇਤਰਾਂ ਨੂੰ ਵਿਸਤਾਰ ਦਿਓ",
+    "moreInfo": "ਹੋਰ ਜਾਣਕਾਰੀ",
+    "defaultCdogsTemplate": "ਮੂਲ CDOGS ਟੈਂਪਲੇਟ ਵਰਤੋ",
+    "fileName": "ਫਾਈਲ ਦਾ ਨਾਂ",
+    "uploadDate": "ਅੱਪਲੋਡ ਮਿਤੀ",
+    "upload": "ਅੱਪਲੋਡ ਕਰੋ",
+    "selectExportFileType": "ਨਿਰਯਾਤ ਫਾਈਲ ਦੀ ਕਿਸਮ ਚੁਣੋ"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "ਕੰਪੋਨੈਂਟ ਜਾਣਕਾਰੀ ਲਿੰਕ",
@@ -640,6 +747,7 @@
     "updatedBy": "ਦੁਆਰਾ ਸੋਧਿਆ ਗਿਆ"
   },
   "teamManagement": {
+    "noMatchingRecordText": "ਕੋਈ ਮੇਲ ਖਾਂਦਾ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ",
     "teamManagement": "ਟੀਮ ਪ੍ਰਬੰਧਨ",
     "selectColumns": "ਕਾਲਮ ਚੁਣੋ",
     "manageForm": "ਫਾਰਮ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰੋ",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "ਆਪਣੇ ਗਾਹਕਾਂ ਤੋਂ ਜਾਣਕਾਰੀ ਇਕੱਠੀ ਕਰਨ ਅਤੇ ਆਪਣੇ ਵਰਕਫਲੋ ਨੂੰ ਬਿਹਤਰ ਬਣਾਉਣ ਲਈ ਔਨਲਾਈਨ ਫਾਰਮ ਬਣਾਓ।",
     "getStarted": "ਸ਼ੁਰੂ ਕਰੋ"
   },
-  "create": {
-    "createNewForm": "ਨਵਾਂ ਫਾਰਮ ਬਣਾਓ",
+  "baseStepper": {
     "setUpForm": "ਫਾਰਮ ਸੈਟ ਅਪ ਕਰੋ",
     "designForm": "ਡਿਜ਼ਾਈਨ ਫਾਰਮ",
+    "manageForm": "ਫਾਰਮ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰੋ"
+  },
+  "create": {
     "formSettings": "ਫਾਰਮ ਸੈਟਿੰਗਾਂ",
     "disclaimer": "ਬੇਦਾਅਵਾ",
     "disclaimerStmt": "ਮੈਂ ਫਾਰਮ ਡਿਜ਼ਾਈਨਰਾਂ ਲਈ ਬੇਦਾਅਵਾ ਅਤੇ ਜ਼ਿੰਮੇਵਾਰੀ ਦੇ ਬਿਆਨ ਨਾਲ ਸਹਿਮਤ ਹਾਂ",
@@ -794,11 +904,12 @@
     "resetColumns": "ਕਾਲਮ ਰੀਸੈਟ ਕਰੋ"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "ਸਾਰੀਆਂ ਬੇਨਤੀਆਂ ਦੇਖੋ",
+    "viewMyDraftOrSubmissions": "ਮੇਰਾ ਡਰਾਫਟ/ਸਬਮਿਸ਼ਨ ਦੇਖੋ",
     "saveAsADraft": "ਇੱਕ ਡਰਾਫਟ ਦੇ ਰੂਪ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕਰੋ",
     "editThisDraft": "ਇਸ ਡਰਾਫਟ ਨੂੰ ਸੰਪਾਦਿਤ ਕਰੋ",
     "switchSingleSubmssn": "ਸਿੰਗਲ ਸਬਮਿਸ਼ਨ 'ਤੇ ਸਵਿਚ ਕਰੋ",
-    "switchMultiSubmssn": "ਮਲਟੀਪਲ ਸਬਮਿਸ਼ਨ 'ਤੇ ਸਵਿਚ ਕਰੋ"
+    "switchMultiSubmssn": "ਕਈ ਸਬਮਿਸ਼ਨਾਂ 'ਤੇ ਸਵਿਚ ਕਰੋ",
+    "wideLayout": "ਵਾਈਡ ਲੇਆਉਟ"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "ਲਿੰਕ ਕਲਿੱਪਬੋਰਡ 'ਤੇ ਕਾਪੀ ਕੀਤਾ ਗਿਆ",
@@ -877,6 +988,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "ਫਾਰਮ ਬਿਲਡਰ ਕੰਪੋਨੈਂਟਸ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "{formId} ਲਈ ਈਮੇਲ ਟੈਮਪਲੇਟ ਲੋਡ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
+      "fetchEmailTemplatesErrMsg": "ਇਸ ਫਾਰਮ ਲਈ ਈਮੇਲ ਟੈਮਪਲੇਟਾਂ ਨੂੰ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਇੱਕ ਤਰੁੱਟੀ ਉਤਪੰਨ ਹੋਈ",
       "getCurrUserFormsErrMsg": "ਤੁਹਾਡੇ ਫਾਰਮ ਪ੍ਰਾਪਤ ਕਰਨ ਦੌਰਾਨ ਇੱਕ ਤਰੁੱਟੀ ਉਤਪੰਨ ਹੋਈ।",
       "getCurrUserFormsConsErrMsg": "ਉਪਭੋਗਤਾ ਡੇਟਾ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
       "getUserFormPermErrMsg": "ਇਸ ਫਾਰਮ ਲਈ ਤੁਹਾਡੇ ਉਪਭੋਗਤਾ ਡੇਟਾ ਨੂੰ ਪ੍ਰਾਪਤ ਕਰਨ ਦੌਰਾਨ ਇੱਕ ਤਰੁੱਟੀ ਆਈ ਹੈ।",
@@ -900,6 +1013,8 @@
       "publishDraftErrMsg": "ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਨ ਦੌਰਾਨ ਇੱਕ ਤਰੁੱਟੀ ਉਤਪੰਨ ਹੋਈ।",
       "publishDraftConsErrMsg": "{draftId} ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
       "toggleVersnPublConsErrMsg": "toggleVersionPublish {versionId} {publish} ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
+      "updateEmailTemplateConsErrMsg": "ਫਾਰਮ {formId} ਲਈ ਈਮੇਲ ਟੈਮਪਲੇਟ ਅੱਪਡੇਟ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
+      "updateEmailTemplateErrMsg": "ਇਸ ਫਾਰਮ ਲਈ ਈਮੇਲ ਟੈਮਪਲੇਟਸ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨ ਦੌਰਾਨ ਇੱਕ ਤਰੁੱਟੀ ਉਤਪੰਨ ਹੋਈ।",
       "updateFormErrMsg": "ਇਸ ਫਾਰਮ ਲਈ ਸੈਟਿੰਗਾਂ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨ ਦੌਰਾਨ ਇੱਕ ਤਰੁੱਟੀ ਉਤਪੰਨ ਹੋਈ।",
       "updateFormConsErrMsg": "ਫਾਰਮ {id} ਨੂੰ ਅੱਪਡੇਟ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ: {error}",
       "deleteSubmissionNotifyMsg": "ਸਪੁਰਦਗੀ ਸਫਲਤਾਪੂਰਵਕ ਮਿਟਾਈ ਗਈ।",

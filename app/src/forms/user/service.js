@@ -4,32 +4,22 @@ const RandExp = require('randexp');
 
 const { User, UserFormPreferences } = require('../common/models');
 const { IdentityProviders } = require('../common/constants');
+const { User, UserFormPreferences, Label } = require('../common/models');
+const idpService = require('../../components/idpService');
 
 const service = {
   //
   // User
   //
   list: (params) => {
-    let exact = false;
-    if (params.idpCode && (params.idpCode === IdentityProviders.BCEIDBASIC || params.idpCode === IdentityProviders.BCEIDBUSINESS)) {
-      if (!params.email && !params.username) {
-        throw new Problem(422, {
-          detail: 'Could not retrieve BCeID users. Invalid options provided.',
-        });
-      }
-      exact = true;
+    try {
+      // returns a promise, so caller needs to await.
+      return idpService.userSearch(params);
+    } catch (e) {
+      throw new Problem(422, {
+        detail: e.message,
+      });
     }
-
-    return User.query()
-      .modify('filterIdpUserId', params.idpUserId)
-      .modify('filterIdpCode', params.idpCode)
-      .modify('filterUsername', params.username, exact)
-      .modify('filterFullName', params.fullName)
-      .modify('filterFirstName', params.firstName)
-      .modify('filterLastName', params.lastName)
-      .modify('filterEmail', params.email, exact)
-      .modify('filterSearch', params.search)
-      .modify('orderLastFirstAscending');
   },
 
   create: async (token, body) => {
@@ -66,6 +56,46 @@ const service = {
 
   readSafe: (userId) => {
     return User.query().modify('safeSelect').findById(userId).throwIfNotFound();
+  },
+
+  //
+  // User Labels
+  //
+  readUserLabels: (currentUser) => {
+    return Label.query().where('userId', currentUser.id).select('labelText');
+  },
+
+  updateUserLabels: async (currentUser, body) => {
+    let trx;
+    try {
+      if (!body || !Array.isArray(body)) {
+        throw new Problem(422, {
+          detail: 'Could not update user labels. Invalid options provided',
+        });
+      }
+      trx = await Label.startTransaction();
+      for (const labelText of body) {
+        const existingLabel = await Label.query()
+          .where({
+            userId: currentUser.id,
+            labelText: labelText,
+          })
+          .first();
+
+        if (!existingLabel) {
+          await Label.query(trx).insert({
+            id: uuidv4(),
+            userId: currentUser.id,
+            labelText: labelText,
+          });
+        }
+      }
+      await trx.commit();
+      return service.readUserLabels(currentUser);
+    } catch (err) {
+      if (trx) await trx.rollback();
+      throw err;
+    }
   },
 
   //

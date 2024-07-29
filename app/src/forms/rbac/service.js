@@ -1,9 +1,10 @@
 const Problem = require('api-problem');
 const { v4: uuidv4 } = require('uuid');
-const { FormRoleUser, FormSubmissionUser, IdentityProvider, User, UserFormAccess, UserSubmissions } = require('../common/models');
+const { FormRoleUser, FormSubmissionUser, User, UserFormAccess, UserSubmissions } = require('../common/models');
 const { Roles } = require('../common/constants');
 const { queryUtils } = require('../common/utils');
 const authService = require('../auth/service');
+const idpService = require('../../components/idpService');
 
 const service = {
   list: async () => {
@@ -75,41 +76,27 @@ const service = {
       if (params.idp) accessLevels.push('idp');
       if (params.team) accessLevels.push('team');
     }
-    const filteredForms = authService.filterForms(user, user.forms, accessLevels);
+
+    const forms = await authService.getUserForms(user, {
+      ...params,
+      active: true,
+    });
+    const filteredForms = authService.filterForms(user, forms, accessLevels);
     user.forms = filteredForms;
+
     return user;
   },
 
   getCurrentUserSubmissions: async (currentUser, params) => {
     params = queryUtils.defaultActiveOnly(params);
-    const query = UserSubmissions.query()
+    return UserSubmissions.query()
       .withGraphFetched('submissionStatus(orderDescending)')
       .withGraphFetched('submission')
       .modify('filterFormId', params.formId)
       .modify('filterFormSubmissionId', params.formSubmissionId)
       .modify('filterUserId', currentUser.id)
       .modify('filterActive', params.active)
-      .modify('orderDefault', params.sortBy && params.page ? true : false, params);
-    if (params.page) {
-      return await service.processPaginationData(
-        query,
-        params.page,
-        params.itemsPerPage,
-        params.filterformSubmissionStatusCode,
-        params.totalSubmissions,
-        params.sortBy,
-        params.sortDesc
-      );
-    }
-    return query;
-  },
-
-  async processPaginationData(query, page, itemsPerPage, filterformSubmissionStatusCode, totalSubmissions) {
-    if (itemsPerPage && parseInt(itemsPerPage) === -1) {
-      return await query.page(parseInt(page), parseInt(totalSubmissions || 0));
-    } else if (itemsPerPage && parseInt(page) >= 0) {
-      return await query.page(parseInt(page), parseInt(itemsPerPage));
-    }
+      .modify('orderDefault');
   },
 
   getFormUsers: async (params) => {
@@ -206,7 +193,7 @@ const service = {
       await FormSubmissionUser.query(trx).delete().where('formSubmissionId', formSubmissionId).where('userId', userId);
 
       // create the batch and insert. So if permissions is empty it removes the user from the submission
-      if (body.permissions !== []) {
+      if (Array.isArray(body.permissions) && body.permissions.length !== 0) {
         // add ids and save them
         const items = body.permissions.map((perm) => ({
           id: uuidv4(),
@@ -289,7 +276,10 @@ const service = {
       if (items && items.length) await FormRoleUser.query(trx).insert(items);
       await trx.commit();
       // return the new mappings
-      const result = await service.getUserForms({ userId: userId, formId: formId });
+      const result = await service.getUserForms({
+        userId: userId,
+        formId: formId,
+      });
       return result;
     } catch (err) {
       if (trx) await trx.rollback();
@@ -298,7 +288,7 @@ const service = {
   },
 
   getIdentityProviders: (params) => {
-    return IdentityProvider.query().modify('filterActive', params.active).modify('orderDefault');
+    return idpService.getIdentityProviders(params.active);
   },
 };
 

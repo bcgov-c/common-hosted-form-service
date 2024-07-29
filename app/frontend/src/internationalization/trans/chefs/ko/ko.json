@@ -1,6 +1,23 @@
 {
+  "open": "열려 있는",
   "date": {
     "date": "yyyy-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "이메일 관리",
+    "manageForm": "양식 관리",
+    "submissionConfirmation": "제출 확인"
+  },
+  "emailTemplate": {
+    "body": "몸",
+    "save": "구하다",
+    "saveEmailTemplateConsoleErrMsg": "{formId} 양식의 이메일 템플릿을 업데이트하는 중에 오류가 발생했습니다. {error}",
+    "saveEmailTemplateErrMsg": "이메일 템플릿을 업데이트하는 동안 오류가 발생했습니다.",
+    "subject": "주제",
+    "title": "제목",
+    "validBodyRequired": "이메일 본문을 입력하세요.",
+    "validSubjectRequired": "이메일 제목을 입력하세요.",
+    "validTitleRequired": "이메일 제목을 입력하세요."
   },
   "formsTable": {
     "myForms": "내 양식",
@@ -14,6 +31,10 @@
     "Description": "설명:",
     "action": "행위",
     "loadingText": "로딩 중 기다려주세요"
+  },
+  "preview": {
+    "preview": "시사",
+    "previewToolTip": "이는 제출자가 볼 수 있는 양식 버전 디자인 및 동작의 미리보기를 보여줍니다. 이 페이지에서는 양식을 제출할 수 없습니다."
   },
   "manageLayout": {
     "manageForm": "양식 관리"
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "클립보드에 URL 복사"
   },
   "manageFormActions": {
+    "emailManagement": "이메일 관리",
     "viewSubmissions": "제출물 보기",
     "teamManagement": "팀 관리",
     "deleteForm": "양식 삭제",
@@ -47,7 +69,22 @@
     "status": "상태",
     "update": "업데이트",
     "cancel": "취소",
-    "eventSubscription": "イベントのサブスクリプション"
+    "eventSubscription": "イベントのサブスクリプション",
+    "cdogsTemplate": "CDOGS 템플릿"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "CDOGS 템플릿 업로드",
+    "uploadTemplateFile": "템플릿 파일 업로드",
+    "upload": "업로드",
+    "delete": "삭제",
+    "download": "다운로드",
+    "invalidFileMessage": "템플릿은 다음 확장자 중 하나를 사용해야 합니다: .txt, .docx, .html, .odt, .pptx, .xlsx",
+    "uploadSuccess": "템플릿이 성공적으로 업로드되었습니다.",
+    "uploadError": "템플릿 업로드 중 오류가 발생했습니다.",
+    "deleteSuccess": "템플릿이 성공적으로 삭제되었습니다.",
+    "deleteError": "템플릿 삭제 중 오류가 발생했습니다.",
+    "fetchError": "템플릿 가져오기 중 오류가 발생했습니다.",
+    "info": "공통 문서 생성 서비스(CDOGS)를 사용하기 위해 템플릿을 업로드하십시오"
   },
   "formSettings": {
     "pressToAddMultiEmail": "여러 이메일 주소를 추가하려면 <kbd>enter</kbd> 또는 <kbd>,</kbd> 또는 <kbd>space를</kbd> 누르십시오.",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "イベントのサブスクリプションを許可する",
     "eventSubscription": "イベントのサブスクリプション",
     "validEndpointRequired": "で始まる有効なエンドポイントを入力してください https://",
-    "validBearerTokenRequired": "有効なベアラー トークンの例を入力してください: 89abddfb-2cff-4fda-83e6-13221f0c3d4f"
+    "validBearerTokenRequired": "有効なベアラー トークンの例を入力してください: 89abddfb-2cff-4fda-83e6-13221f0c3d4f",
+    "wideFormLayout": "와이드 폼 레이아웃"
+  },
+  "formProfile": {
+    "message": "CHEFS 팀은 포괄적인 비즈니스 케이스를 작성하는 데 중요한 입력으로 사용될 정보를 수집하고 조직하고 있습니다. 이러한 케이스는 향후 몇 년 동안 CHEFS의 전략적 운영과 지속적인 개선을 안내하는 데 중추적인 역할을 할 것입니다. 데이터 수집을 위한 이 이니셔티브는 중요한 결정에 정보를 제공하고 CHEFS의 궤도를 형성하는 데 필수적입니다. 이를 통해 CHEFS가 변화하는 필요와 도전에 대응하여 적응성과 효과를 보장합니다.",
+    "ministryPrompt": "소속된 부처를 선택하세요",
+    "useCasePrompt": "양식의 사용 사례를 선택하세요",
+    "deploymentPrompt": "배포 수준을 지정하세요",
+    "APIPrompt": "제공된 API를 써드파티 응용 프로그램 통합에 사용할 의도인 경우 지정하세요",
+    "labelPrompt": "레이블은 공통 조직에 속하거나 관련된 맥락을 공유할 수 있는 유사한 양식을 분류하는 수단으로 기능합니다.",
+    "useCaseToolTip": "특정 사용 사례가 표시되지 않는 경우 CHEFS 팀에 문의하여 추가 옵션을 논의하십시오",
+    "deploymentLevel": "배포 수준",
+    "ministryName": "부처",
+    "label": "라벨",
+    "useCase": "사용 사례",
+    "development": "개발",
+    "test": "테스트",
+    "production": "프로덕션",
+    "Y": "예",
+    "N": "아니오",
+    "application": "결정에 이어 평가될 응용 프로그램",
+    "collection": "데이터 세트 수집, 데이터 제출",
+    "feedback": "만족도, 동의, 가능성 또는 기타 질적인 질문을 결정하기 위한 피드백 양식",
+    "report": "보고서 - 일반적으로 주기적이거나 이벤트 기반(후속 조사 등)으로 진행",
+    "registration": "등록 또는 가입 - 평가 없음",
+    "getLabelErr": "사용자 레이블을 가져오는 중에 오류가 발생했습니다.",
+    "getLabelConsErr": "레이블을 가져오는 중 오류 발생: ",
+    "selectAPIErr": "API 통합 사용 여부를 알려주세요",
+    "selectDeploymentErr": "배포 수준을 선택해 주세요",
+    "selectMinistryErr": "부처를 선택해 주세요",
+    "selectUseCaseErr": "폼의 사용 사례를 입력해 주세요",
+    "labelSizeErr": "라벨은 25자를 초과할 수 없습니다"
+  },
+  "ministries": {
+    "AF": "농업 및 식품 (AF)",
+    "AG": "검찰총장 (AG)",
+    "MCF": "아동 및 가족 발전 (MCF)",
+    "CITZ": "시민 서비스 (CITZ)",
+    "ECC": "교육 및 유아 보육 (ECC)",
+    "EMCR": "비상 관리 및 기후 대비 (EMCR)",
+    "EMLI": "에너지, 광산 및 저탄소 혁신 (EMLI)",
+    "ENV": "환경 및 기후 변화 전략 (ENV)",
+    "FIN": "금융 (FIN)",
+    "FOR": "산림 (FOR)",
+    "HLTH": "보건 (HLTH)",
+    "HOUS": "주택 (HOUS)",
+    "IRR": "원주민 관계 및 화해 (IRR)",
+    "JEDI": "고용, 경제 개발 및 혁신 (JEDI)",
+    "LBR": "노동 (LBR)",
+    "MMHA": "정신 건강 및 중독 (MMHA)",
+    "MUNI": "지방 행정 (MUNI)",
+    "PSFS": "후생 교육 및 미래 기술 (PSFS)",
+    "PSSG": "공공 안전 및 검사 총장 (PSSG)",
+    "SDPR": "사회 개발 및 빈곤 감소 (SDPR)",
+    "TACS": "관광, 예술, 문화 및 스포츠 (TACS)",
+    "MOTI": "교통 및 기반 시설 (MOTI)",
+    "WLRS": "수자원, 토지 및 자원 관리 (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "イベントタイプ",
@@ -153,6 +246,7 @@
     "infoA": "API 키 비밀이 안전한 위치(예: 키 자격 증명 모음)에 저장되어 있는지 확인합니다.",
     "infoB": "API 키는 양식에 대한 무제한 액세스 권한을 부여합니다. 누구에게도 API 키를 제공하지 마십시오.",
     "infoC": "API 키는 자동화된 시스템 상호 작용에만 사용해야 합니다. 사용자 기반 액세스에 API 키를 사용하지 마십시오.",
+    "infoD": "API 키를 통해 제출된 파일에 액세스하려면 키를 생성한 후 다음 확인란을 활성화하세요.",
     "deleteKey": "키 삭제",
     "apiKey": "API 키",
     "hideSecret": "비밀 숨기기",
@@ -170,8 +264,7 @@
     "regenerate": "재생하다",
     "generate": "생성하다",
     "secret": "비밀",
-    "text": "텍스트",
-    "password": "비밀번호"
+    "filesAPIAccess": "이 API 키가 제출된 파일에 액세스하도록 허용"
   },
   "manageVersions": {
     "important": "중요한!",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: 권한이 없습니다. :",
     "401ErrorMsg": "귀하의 계정이 올바르게 설정되지 않았습니다.<br /> 연락주세요",
     "403Forbidden": "403 금지. :",
-    "403ErrorMsg": "이 페이지는 {idp} 인증이 필요합니다.",
+    "403ErrorMsg": "이 페이지는 {permission} 인증이 필요합니다.",
     "401UnAuthorized": "401: 권한이 없습니다. :",
     "401UnAuthorizedErrMsg": "이 페이지에 액세스할 수 있는 권한이 없습니다."
   },
@@ -325,7 +418,8 @@
     "version": "버전",
     "save": "구하다",
     "saving": "절약",
-    "notSaved": "저장되지 않음"
+    "notSaved": "저장되지 않음",
+    "fieldnameError": "{label} 필드 이름으로 `form` 키워드를 사용할 수 없습니다."
   },
   "formViewerMultiUpload": {
     "important": "중요한",
@@ -375,6 +469,7 @@
     "emailRequired": "이메일이 필요합니다"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "일치하는 기록이 없습니다",
     "submissions": "제출물",
     "submissionsTable": "제출물표",
     "selectColumns": "열 선택",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "BCeID에 대한 이메일 검색은 정확해야 합니다.",
     "getUsersErrMsg": "사용자 가져오기 오류: {error}",
     "exactEmailOrUsername": "정확한 이메일 또는 사용자 이름을 입력하세요.",
-    "requiredFiled": "이름, 이메일 또는 사용자 이름을 입력하세요."
+    "requiredField": "이름, 이메일 또는 사용자 이름을 입력하세요."
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "이 제출물 보기",
@@ -464,6 +559,7 @@
     "editThisDraft": "이 초안 편집"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "일치하는 기록이 없습니다",
     "previousSubmissions": "이전 제출물",
     "selectColumns": "열 선택",
     "createNewSubmission": "새 제출물 만들기",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "메모 추가 오류:",
     "notes": "노트",
     "note": "메모",
-    "maxChars": "최대 4000자"
+    "maxChars": "최대 4000자",
+    "totalNotes": "총 노트:"
   },
   "statusPanel": {
     "currentStatus": "현재 상태:",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "담당자는 필수 항목입니다.",
     "assignToMe": "나에게 할당",
     "recipientEmail": "이메일 수령인",
+    "recipientIsRequired": "수령인이 필요합니다",
     "attachCommentToEmail": "이메일에 댓글 첨부",
     "emailComment": "이메일 댓글",
     "maxChars": "최대 4000자",
@@ -595,7 +693,16 @@
     "docGrnSucess": "문서가 성공적으로 생성되었습니다.",
     "failedDocGenErrMsg": "문서를 생성하지 못했습니다.",
     "failedDocGenConsErrMsg": "템플릿 제출 오류: {error}",
-    "cDogsTemplate": "CDOGS 템플릿"
+    "cDogsTemplate": "CDOGS 템플릿",
+    "uploadCdogsTemplate": "CDOGS 템플릿 업로드",
+    "printOptions": "인쇄 옵션",
+    "expandtextFields": "텍스트 필드 확장",
+    "moreInfo": "더보기",
+    "defaultCdogsTemplate": "기본 CDOGS 템플릿 사용",
+    "fileName": "파일 이름",
+    "uploadDate": "업로드 날짜",
+    "upload": "업로드",
+    "selectExportFileType": "내보낼 파일 유형 선택"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "구성품 정보 링크",
@@ -640,6 +747,7 @@
     "updatedBy": "수정자"
   },
   "teamManagement": {
+    "noMatchingRecordText": "일치하는 기록이 없습니다",
     "teamManagement": "팀 관리",
     "selectColumns": "열 선택",
     "manageForm": "양식 관리",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "클라이언트로부터 정보를 수집하고 작업 흐름을 개선하기 위한 온라인 양식을 만드십시오.",
     "getStarted": "시작하다"
   },
-  "create": {
-    "createNewForm": "새 양식 만들기",
+  "baseStepper": {
     "setUpForm": "양식 설정",
     "designForm": "디자인 양식",
+    "manageForm": "양식 관리"
+  },
+  "create": {
     "formSettings": "양식 설정",
     "disclaimer": "부인 성명",
     "disclaimerStmt": "양식 디자이너에 대한 면책 조항 및 책임 진술에 동의합니다.",
@@ -794,11 +904,12 @@
     "resetColumns": "열 재설정"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "모든 제출물 보기",
+    "viewMyDraftOrSubmissions": "내 초안/제출물 보기",
     "saveAsADraft": "초안으로 저장",
     "editThisDraft": "이 초안 편집",
     "switchSingleSubmssn": "단일 제출로 전환",
-    "switchMultiSubmssn": "다중 제출로 전환"
+    "switchMultiSubmssn": "다중 제출로 전환",
+    "wideLayout": "와이드 레이아웃"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "클립보드에 복사된 링크",
@@ -877,6 +988,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "양식 작성기 구성요소 가져오기 오류: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "{formId}에 대한 이메일 템플릿을 로드하는 중에 오류가 발생했습니다. {error}",
+      "fetchEmailTemplatesErrMsg": "이 양식에 대한 이메일 템플릿을 가져오는 중 오류가 발생했습니다.",
       "getCurrUserFormsErrMsg": "양식을 가져오는 동안 오류가 발생했습니다.",
       "getCurrUserFormsConsErrMsg": "사용자 데이터 가져오기 오류: {error}",
       "getUserFormPermErrMsg": "이 양식에 대한 사용자 데이터를 가져오는 동안 오류가 발생했습니다.",
@@ -900,6 +1013,8 @@
       "publishDraftErrMsg": "게시하는 동안 오류가 발생했습니다.",
       "publishDraftConsErrMsg": "{draftId} 게시 오류: {error}",
       "toggleVersnPublConsErrMsg": "toggleVersionPublish {versionId} {publish} 오류: {error}",
+      "updateEmailTemplateConsErrMsg": "{formId} 양식의 이메일 템플릿을 업데이트하는 중에 오류가 발생했습니다. {error}",
+      "updateEmailTemplateErrMsg": "이 양식의 이메일 템플릿을 업데이트하는 동안 오류가 발생했습니다.",
       "updateFormErrMsg": "이 양식의 설정을 업데이트하는 동안 오류가 발생했습니다.",
       "updateFormConsErrMsg": "양식 {id} 업데이트 오류: {error}",
       "deleteSubmissionNotifyMsg": "제출이 성공적으로 삭제되었습니다.",

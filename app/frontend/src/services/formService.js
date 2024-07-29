@@ -1,5 +1,5 @@
-import { appAxios } from '@/services/interceptors';
-import { ApiRoutes } from '@/utils/constants';
+import { appAxios } from '~/services/interceptors';
+import { ApiRoutes } from '~/utils/constants';
 
 export default {
   //
@@ -142,6 +142,33 @@ export default {
   updateDraft(formId, formVersionDraftId, data) {
     return appAxios().put(
       `${ApiRoutes.FORMS}/${formId}/drafts/${formVersionDraftId}`,
+      data
+    );
+  },
+
+  //
+  // Form email template calls
+  //
+
+  /**
+   * @function listEmailTemplates
+   * Get all the email templates for a form
+   * @param {string} formId The form uuid
+   * @returns {Promise} An axios response
+   */
+  listEmailTemplates(formId) {
+    return appAxios().get(`${ApiRoutes.FORMS}/${formId}/emailTemplates`);
+  },
+
+  /**
+   * @function updateEmailTemplate
+   * Update a form's email template
+   * @param {Object} data The request body (containing formId)
+   * @returns {Promise} An axios response
+   */
+  updateEmailTemplate(data) {
+    return appAxios().put(
+      `${ApiRoutes.FORMS}/${data.formId}/emailTemplate`,
       data
     );
   },
@@ -372,13 +399,14 @@ export default {
    * @param {string} version The form version
    * @returns {Promise} An axios response
    */
-  readCSVExportFields(formId, type, draft, deleted, version) {
+  readCSVExportFields(formId, type, draft, deleted, version, singleRow) {
     return appAxios().get(`${ApiRoutes.FORMS}/${formId}/csvexport/fields`, {
       params: {
         type: type,
         draft: draft,
         deleted: deleted,
         version: version,
+        singleRow: singleRow,
       },
     });
   },
@@ -553,6 +581,146 @@ export default {
     return appAxios().put(
       `${ApiRoutes.FORMS}/${formId}/subscriptions`,
       subscriptionData
+    );
+  },
+
+  //
+  // Document Template (CDOGS)
+  //
+
+  /**
+   * @function documentTemplateCreate
+   * Post a new document template for a form
+   * @param {string} formId The form uuid
+   * @param {Object} data An object containing the document template details
+   * @returns {Promise} An axios response
+   */
+  documentTemplateCreate(formId, data) {
+    return appAxios().post(
+      `${ApiRoutes.FORMS}/${formId}/documentTemplates`,
+      data
+    );
+  },
+
+  /**
+   * @function documentTemplateDelete
+   * Delete a document template for a form
+   * @param {string} formId The form uuid
+   * @param {string} documentTemplateId The document template uuid
+   * @returns {Promise} An axios response
+   */
+  documentTemplateDelete(formId, documentTemplateId) {
+    return appAxios().delete(
+      `${ApiRoutes.FORMS}/${formId}/documentTemplates/${documentTemplateId}`
+    );
+  },
+
+  /**
+   * @function documentTemplateRead
+   * Read a document template for a form
+   * @param {string} formId The form uuid
+   * @param {string} documentTemplateId The document template uuid
+   * @returns {Promise} An axios response
+   */
+  documentTemplateRead(formId, documentTemplateId) {
+    return appAxios().get(
+      `${ApiRoutes.FORMS}/${formId}/documentTemplates/${documentTemplateId}`
+    );
+  },
+
+  /**
+   * @function documentTemplateList
+   * List all document templates for a form
+   * @param {string} formId The form uuid
+   * @returns {Promise} An axios response
+   */
+  documentTemplateList(formId) {
+    return appAxios().get(`${ApiRoutes.FORMS}/${formId}/documentTemplates`);
+  },
+
+  /**
+   * @function getProxyHeaders
+   * Get encrypted header for calling CHEFS proxy.
+   * @param {Object} data An object containing formId, versionId, submissionId
+   * @returns {Promise} An axios response
+   */
+  getProxyHeaders(data) {
+    return appAxios().post(`${ApiRoutes.PROXY}/headers`, data);
+  },
+
+  /**
+   * @function externalAPIList
+   * List all external API configurations for a form
+   * @param {string} formId The form uuid
+   * @returns {Promise} An axios response
+   */
+  externalAPIList(formId) {
+    return appAxios().get(
+      `${ApiRoutes.FORMS}/${formId}${ApiRoutes.EXTERNAL_APIS}`
+    );
+  },
+
+  /**
+   * @function externalAPICreate
+   * Create a new External API record
+   * @param {string} formId The form uuid
+   * @param {Object} data An object containing an External API record
+   * @returns {Promise} An axios response
+   */
+  externalAPICreate(formId, data) {
+    return appAxios().post(
+      `${ApiRoutes.FORMS}/${formId}${ApiRoutes.EXTERNAL_APIS}`,
+      data
+    );
+  },
+
+  /**
+   * @function externalAPIUpdate
+   * Update an External API record
+   * @param {string} formId The form uuid
+   * @param {string} id The external API uuid
+   * @param {Object} data An object containing an External API record
+   * @returns {Promise} An axios response
+   */
+  externalAPIUpdate(formId, id, data) {
+    return appAxios().put(
+      `${ApiRoutes.FORMS}/${formId}${ApiRoutes.EXTERNAL_APIS}/${id}`,
+      data
+    );
+  },
+
+  /**
+   * @function externalAPIDelete
+   * Delete a document template for a form
+   * @param {string} formId The form uuid
+   * @param {string} id The external API uuid
+   * @returns {Promise} An axios response
+   */
+  externalAPIDelete(formId, id) {
+    return appAxios().delete(
+      `${ApiRoutes.FORMS}/${formId}${ApiRoutes.EXTERNAL_APIS}/${id}`
+    );
+  },
+  /**
+   * @function externalAPIAlgorithmList
+   * List all external API configurations
+   * @param {string} formId The form uuid
+   * @returns {Promise} An axios response
+   */
+  externalAPIAlgorithmList(formId) {
+    return appAxios().get(
+      `${ApiRoutes.FORMS}/${formId}${ApiRoutes.EXTERNAL_APIS}/algorithms`
+    );
+  },
+  /**
+   * @function externalAPIStatusCodes
+   * List all external API status codes
+   * @param {string} formId The form uuid
+   * @returns {Promise} An axios response
+   */
+  externalAPIStatusCodes(formId) {
+    return appAxios().get(
+      `${ApiRoutes.FORMS}/${formId}${ApiRoutes.EXTERNAL_APIS}/statusCodes`
     );
   },
 };

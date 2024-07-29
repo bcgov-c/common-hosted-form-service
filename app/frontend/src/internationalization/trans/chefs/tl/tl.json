@@ -1,6 +1,23 @@
 {
+  "open": "Bukas",
   "date": {
     "date": "yyyy-mm-dd"
+  },
+  "emailManagement": {
+    "emailManagement": "Pamamahala ng Email",
+    "manageForm": "Pamahalaan ang Form",
+    "submissionConfirmation": "Pagkumpirma ng Pagsusumite"
+  },
+  "emailTemplate": {
+    "body": "Katawan",
+    "save": "Iligtas",
+    "saveEmailTemplateConsoleErrMsg": "Error sa pag-update ng template ng email para sa form {formId}: {error}",
+    "saveEmailTemplateErrMsg": "May naganap na error habang sinusubukang i-update ang template ng email.",
+    "subject": "Paksa",
+    "title": "Pamagat",
+    "validBodyRequired": "Mangyaring maglagay ng Body para sa email",
+    "validSubjectRequired": "Mangyaring magpasok ng linya ng Paksa para sa email",
+    "validTitleRequired": "Mangyaring maglagay ng Pamagat para sa email"
   },
   "formsTable": {
     "myForms": "Aking Mga Form",
@@ -18,6 +35,10 @@
   "manageLayout": {
     "manageForm": "Pamahalaan ang Form"
   },
+  "preview": {
+    "preview": "Silipin",
+    "previewToolTip": "Nagpapakita ito ng preview ng disenyo at gawi ng bersyon ng form habang makikita ito ng iyong mga nagsumite. Hindi mo maaaring isumite ang form mula sa pahinang ito."
+  },
   "shareForm": {
     "shareForm": "Ibahagi ang Form",
     "shareLink": "Ibahagi ang Link",
@@ -29,6 +50,7 @@
     "copyURLToClipboard": "Kopyahin ang URL sa clipboard"
   },
   "manageFormActions": {
+    "emailManagement": "Pamamahala ng Email",
     "viewSubmissions": "Tingnan ang Mga Pagsusumite",
     "teamManagement": "Pamamahala ng Koponan",
     "deleteForm": "Tanggalin ang Form",
@@ -47,7 +69,22 @@
     "status": "Katayuan",
     "update": "Update",
     "cancel": "Kanselahin",
-    "eventSubscription": "Subscription sa Kaganapan"
+    "eventSubscription": "Subscription sa Kaganapan",
+    "cdogsTemplate": "template ng CDOGS"
+  },
+  "documentTemplate": {
+    "uploadTemplate": "I-upload ang Template ng CDOGS",
+    "uploadTemplateFile": "I-upload ang file ng template",
+    "upload": "I-upload",
+    "delete": "Tanggalin",
+    "download": "I-download",
+    "invalidFileMessage": "Ang template ay dapat gumamit ng isa sa mga sumusunod na extension: .txt, .docx, .html, .odt, .pptx, .xlsx",
+    "uploadSuccess": "Matagumpay na na-upload ang template.",
+    "uploadError": "Nagkaroon ng error habang ina-upload ang template.",
+    "deleteSuccess": "Matagumpay na natanggal ang template.",
+    "deleteError": "Nagkaroon ng error habang tinatanggal ang template.",
+    "fetchError": "Nagkaroon ng error habang kinukuha ang template.",
+    "info": "Mag-upload ng template upang gamitin ang Common Document Generation Service (CDOGS)"
   },
   "formSettings": {
     "pressToAddMultiEmail": "Pindutin <kbd>ang enter</kbd> o <kbd>,</kbd> o <kbd>space</kbd> para magdagdag ng maraming email address",
@@ -129,7 +166,63 @@
     "allowEventSubscription": "Payagan ang subscription sa kaganapan",
     "eventSubscription": "Subscription sa Kaganapan",
     "validEndpointRequired": "Mangyaring magpasok ng wastong endpoint na nagsisimula sa https://",
-    "validBearerTokenRequired": "Maglagay ng wastong halimbawa ng token ng maydala: 89abddfb-2cff-4fda-83e6-13221f0c3d4f"
+    "validBearerTokenRequired": "Maglagay ng wastong halimbawa ng token ng maydala: 89abddfb-2cff-4fda-83e6-13221f0c3d4f",
+    "wideFormLayout": "Malapad na Porma ng Layout"
+  },
+  "formProfile": {
+    "message": "Ang CHEFS team ay nagkokolekta at nag-oorganisa ng impormasyon upang magsilbing mahalagang input para sa pagbuo ng kapsulang kaso ng negosyo. Ang mga kaso na ito ay magiging pangunahing bahagi sa paggabay sa pangangasiwa at patuloy na pagpapabuti ng CHEFS sa mga darating na taon. Ang inisyatibang ito sa pagsasama ng datos ay mahalaga para sa pagbibigay impormasyon sa mga kritikal na desisyon at pagsanay sa takbo ng CHEFS, tiyak na nagiging adaptable at epektibo sa pagsasaad sa mga nagbabagong pangangailangan at hamon.",
+    "ministryPrompt": "Pumili ng ministeryo na iyong kaugnay",
+    "useCasePrompt": "Piliin ang use case ng iyong form",
+    "deploymentPrompt": "Paki-tukoy ang antas ng iyong deployment",
+    "APIPrompt": "Tukuyin kung nais mong gamitin ang ibinigay na API para sa integrasyon sa isang third-party application",
+    "labelPrompt": "Ang mga label ay naglilingkod bilang paraan upang kategoryahin ang mga katulad na porma na maaaring maging bahagi ng isang pangkalahatang organisasyon o may kaugnay na konteksto.",
+    "useCaseToolTip": "Kung hindi mo nakikita ang iyong espesipikong paggamit, makipag-ugnay sa CHEFS team upang talakayin ang karagdagang mga opsyon",
+    "deploymentLevel": "Antas ng Pagpapatupad",
+    "ministryName": "Ministri",
+    "label": "Mga Label",
+    "useCase": "Uri ng Paggamit",
+    "development": "Pagbuo",
+    "test": "Pagsusuri",
+    "production": "Produksyon",
+    "Y": "Oo",
+    "N": "Hindi",
+    "application": "Mga Aplikasyon na ia-evaluate bago magdesisyon",
+    "collection": "Pagkolekta ng Datasets, pagpapasa ng datos",
+    "feedback": "Form ng Feedback upang malaman ang kasiyahan, pagsang-ayon, kahulugan, o iba pang kwalitatibong tanong",
+    "report": "Pag-uulat karaniwang ayon sa isang nire-repeating na iskedyul o event-driven tulad ng follow-ups",
+    "registration": "Rehistrasyon o Pag-sign up - walang pagsusuri",
+    "getLabelErr": "May naganap na error habang sinusubukang kunin ang mga label ng user.",
+    "getLabelConsErr": "Error sa pagkuha ng mga label: ",
+    "selectAPIErr": "Mangyaring ipaalam sa amin ang iyong pagsusuri tungkol sa paggamit ng API Integration",
+    "selectDeploymentErr": "Mangyaring pumili ng antas ng pagpapatupad",
+    "selectMinistryErr": "Mangyaring pumili ng iyong ministri",
+    "selectUseCaseErr": "Mangyaring ipasok ang paggamit ng iyong form",
+    "labelSizeErr": "Ang mga label ay hindi maaaring lumampas sa 25 character"
+  },
+  "ministries": {
+    "AF": "Pagsasaka at Pagkain (AF)",
+    "AG": "Attorney General (AG)",
+    "MCF": "Pag-unlad ng Bata at Pamilya (MCF)",
+    "CITZ": "Serbisyo sa Mamamayan (CITZ)",
+    "ECC": "Edukasyon at Pangangalaga sa mga Bata (ECC)",
+    "EMCR": "Pamahalaang May Emergency at Handang sa Pagbabago ng Klima (EMCR)",
+    "EMLI": "Enerhiya, Mina, at Low Carbon Innovation (EMLI)",
+    "ENV": "Kalusugan at Pagbabago sa Klima na Estratehiya (ENV)",
+    "FIN": "Pinansya (FIN)",
+    "FOR": "Mga Gubat (FOR)",
+    "HLTH": "Kalusugan (HLTH)",
+    "HOUS": "Pabahay (HOUS)",
+    "IRR": "Ugnayang Indiheyno at Pagsasapanan (IRR)",
+    "JEDI": "Trabaho, Pag-unlad sa Ekonomiya, at Inobasyon (JEDI)",
+    "LBR": "Paggawa (LBR)",
+    "MMHA": "Kalusugan ng Isip at Pagkahumaling (MMHA)",
+    "MUNI": "Municipal Affairs (MUNI)",
+    "PSFS": "Pang-eksenang Edukasyon at Kinabukasan na mga Kakayahan (PSFS)",
+    "PSSG": "Pampublikong Kaligtasan at Solicitor General (PSSG)",
+    "SDPR": "Pag-unlad sa Panlipunan at Pagbawas ng Kahirapan (SDPR)",
+    "TACS": "Turismo, Sining, Kultura at Isports (TACS)",
+    "MOTI": "Transportasyon at Infrastruktura (MOTI)",
+    "WLRS": "Pamamahala ng Tubig, Lupa at Yaman (WLRS)"
   },
   "subscribeEvent": {
     "eventType": "Uri ng kaganapan",
@@ -146,13 +239,14 @@
     "showSecret": "Ipakita ang Lihim",
     "key": "Susi",
     "saveSettingsErrMsg": "May naganap na error habang sinusubukang i-update ang mga setting para sa form na ito.",
-    "updateSettingsConsoleErrMsg": "Error sa pag-update ng mga setting para sa form {formId} : {error}"
+    "updateSettingsConsoleErrMsg": "Error sa pag-update ng mga setting para sa form {formId}: {error}"
   },
   "apiKey": {
     "disclaimer": "Disclaimer",
     "infoA": "Tiyaking nakaimbak ang iyong lihim ng API key sa isang secure na lokasyon (ibig sabihin, key vault).",
     "infoB": "Ang iyong API key ay nagbibigay ng walang limitasyong pag-access sa iyong form. Huwag ibigay ang iyong API key sa sinuman.",
     "infoC": "Dapat LAMANG gamitin ang API key para sa mga automated na pakikipag-ugnayan ng system. Huwag gamitin ang iyong API key para sa user based na access",
+    "infoD": "Kung gusto mong i-access ang mga isinumiteng file sa pamamagitan ng API Key, mangyaring paganahin ang sumusunod na checkbox pagkatapos mabuo ang key.",
     "deleteKey": "Tanggalin ang Susi",
     "apiKey": "susi ng api",
     "hideSecret": "Itago ang Lihim",
@@ -170,8 +264,7 @@
     "regenerate": "Magbagong-buhay",
     "generate": "Bumuo",
     "secret": "Lihim",
-    "text": "text",
-    "password": "password"
+    "filesAPIAccess": "Payagan ang API key na ito na ma-access ang mga isinumiteng file"
   },
   "manageVersions": {
     "important": "MAHALAGA!",
@@ -303,7 +396,7 @@
     "401NotAuthorized": "401: hindi awtorisado. :",
     "401ErrorMsg": "Ang iyong account ay hindi na-set up nang tama.<br /> Mangyaring makipag-ugnayan",
     "403Forbidden": "403 Ipinagbabawal. :",
-    "403ErrorMsg": "Nangangailangan ang page na ito ng {idp} authentication.",
+    "403ErrorMsg": "Nangangailangan ang page na ito ng {permission} authentication.",
     "401UnAuthorized": "401: Hindi awtorisado. :",
     "401UnAuthorizedErrMsg": "Wala kang pahintulot na i-access ang pahinang ito."
   },
@@ -325,7 +418,8 @@
     "version": "Bersyon",
     "save": "I-save",
     "saving": "Nagtitipid",
-    "notSaved": "Hindi Na-save"
+    "notSaved": "Hindi Na-save",
+    "fieldnameError": "HINDI mo MAAARI gumamit ng `form` na keyword bilang {label} fieldname"
   },
   "formViewerMultiUpload": {
     "important": "MAHALAGA",
@@ -375,6 +469,7 @@
     "emailRequired": "Kinakailangan ang email"
   },
   "submissionsTable": {
+    "noMatchingRecordText": "Walang nakitang katugmang mga tala",
     "submissions": "Mga pagsusumite",
     "submissionsTable": "Talahanayan ng mga Pagsusumite",
     "selectColumns": "Piliin ang Mga Column",
@@ -456,7 +551,7 @@
     "exactBCEIDSearch": "Dapat na eksakto ang mga paghahanap sa email para sa BceID.",
     "getUsersErrMsg": "Error sa pagkuha ng mga user: {error}",
     "exactEmailOrUsername": "Maglagay ng eksaktong e-mail o username.",
-    "requiredFiled": "Maglagay ng pangalan, e-mail, o username"
+    "requiredField": "Maglagay ng pangalan, e-mail, o username"
   },
   "mySubmissionsActions": {
     "viewThisSubmission": "Tingnan ang Pagsusumite na Ito",
@@ -464,6 +559,7 @@
     "editThisDraft": "I-edit ang Draft na ito"
   },
   "mySubmissionsTable": {
+    "noMatchingRecordText": "Walang nakitang katugmang mga tala",
     "previousSubmissions": "Nakaraang Mga Pagsusumite",
     "selectColumns": "Piliin ang Mga Column",
     "createNewSubmission": "Gumawa ng Bagong Pagsusumite",
@@ -505,7 +601,8 @@
     "fetchConsoleErrMsg": "Error sa pagdaragdag ng tala:",
     "notes": "Mga Tala",
     "note": "Tandaan",
-    "maxChars": "Max na 4000 character"
+    "maxChars": "Max na 4000 character",
+    "totalNotes": "Kabuuang Mga Tala:"
   },
   "statusPanel": {
     "currentStatus": "Kasalukuyang kalagayan:",
@@ -518,6 +615,7 @@
     "assigneeIsRequired": "Kinakailangan ang assignee",
     "assignToMe": "ASSIGN TO ME",
     "recipientEmail": "Email ng Tatanggap",
+    "recipientIsRequired": "Kinakailangan ang tatanggap",
     "attachCommentToEmail": "Maglakip ng Komento sa Email",
     "emailComment": "Komento sa Email",
     "maxChars": "Max na 4000 character",
@@ -595,7 +693,16 @@
     "docGrnSucess": "Matagumpay na nabuo ang dokumento",
     "failedDocGenErrMsg": "Nabigong bumuo ng Dokumento",
     "failedDocGenConsErrMsg": "Error sa pagsusumite ng template: {error}",
-    "cDogsTemplate": "template ng CDOGS"
+    "cDogsTemplate": "template ng CDOGS",
+    "uploadCdogsTemplate": "I-upload ang Template ng CDOGS",
+    "printOptions": "Mga Opsyon sa Pag-print",
+    "expandtextFields": "Palawakin ang mga patlang ng teksto",
+    "moreInfo": "Karagdagang Impormasyon",
+    "defaultCdogsTemplate": "Gamitin ang default na Template ng CDOGS",
+    "fileName": "Pangalan ng File",
+    "uploadDate": "Petsa ng Pag-upload",
+    "upload": "I-upload",
+    "selectExportFileType": "Piliin ang uri ng file na i-export"
   },
   "proactiveHelpDialog": {
     "componentInfoLink": "Link ng Impormasyon ng Bahagi",
@@ -640,6 +747,7 @@
     "updatedBy": "Binago ni"
   },
   "teamManagement": {
+    "noMatchingRecordText": "Walang nakitang katugmang mga tala",
     "teamManagement": "Pamamahala ng Koponan",
     "selectColumns": "Piliin ang Mga Column",
     "manageForm": "Pamahalaan ang Form",
@@ -759,10 +867,12 @@
     "createOnlineTitle": "Lumikha ng mga online na form upang mangolekta ng impormasyon mula sa iyong mga kliyente at pagbutihin ang iyong mga daloy ng trabaho.",
     "getStarted": "Magsimula"
   },
-  "create": {
-    "createNewForm": "Lumikha ng Bagong Form",
+  "baseStepper": {
     "setUpForm": "I-set up ang Form",
     "designForm": "Form ng Disenyo",
+    "manageForm": "Pamahalaan ang Form"
+  },
+  "create": {
     "formSettings": "Mga Setting ng Form",
     "disclaimer": "Disclaimer",
     "disclaimerStmt": "Sumasang-ayon ako sa disclaimer at pahayag ng responsibilidad para sa mga Form Designer",
@@ -794,11 +904,12 @@
     "resetColumns": "I-reset ang Mga Column"
   },
   "formViewerActions": {
-    "viewAllSubmissions": "Tingnan ang Lahat ng Pagsusumite",
+    "viewMyDraftOrSubmissions": "Tingnan ang Aking draft/mga isinumite",
     "saveAsADraft": "I-save bilang Draft",
     "editThisDraft": "I-edit ang Draft na ito",
     "switchSingleSubmssn": "Lumipat sa iisang pagsusumite",
-    "switchMultiSubmssn": "Lumipat sa Maramihang pagsusumite"
+    "switchMultiSubmssn": "Lumipat sa maramihang pagsusumite",
+    "wideLayout": "Malawak na Layout"
   },
   "baseCopyToClipboard": {
     "linkToClipboard": "Nakopya ang link sa clipboard",
@@ -820,9 +931,7 @@
     "loadingFormErrMsg": "Nagkaroon ng error habang nilo-load ang form na ito.",
     "loadingForm": "Error habang naglo-load ng {options}: {error}",
     "idpHintMsg": "Ang form na ito ay nangangailangan ng {idpHint} authentication. Mangyaring muling mag-login at subukang muli.",
-    "formIdpMissMatch": "Hindi tugma sa form ng IDP. Ang form ay nangangailangan ng {idpHint} ngunit ang user ay may {userIdp}."
-  },
-  "download": {
+    "formIdpMissMatch": "Hindi tugma sa form ng IDP. Ang form ay nangangailangan ng {idpHint} ngunit ang user ay may {userIdp}.",
     "chefsDataExport": "Pag-export ng Data ng CHEFS",
     "preparingForDownloading": "Naghahanda para sa pag-download...",
     "downloadInfoA": "Kung hindi awtomatikong nagda-download ang iyong file",
@@ -877,6 +986,8 @@
       "fecthingFormBuilderCompsConsErrMsg": "Error sa pagkuha ng mga bahagi ng tagabuo ng form: {error}"
     },
     "form": {
+      "fetchEmailTemplatesConsErrMsg": "Error sa paglo-load ng mga template ng email para sa {formId}: {error}",
+      "fetchEmailTemplatesErrMsg": "Nagkaroon ng error sa pagkuha ng mga template ng email para sa form na ito",
       "getCurrUserFormsErrMsg": "May naganap na error habang kinukuha ang iyong mga form.",
       "getCurrUserFormsConsErrMsg": "Error sa pagkuha ng data ng user: {error}",
       "getUserFormPermErrMsg": "May naganap na error habang kinukuha ang iyong data ng user para sa form na ito.",
@@ -900,6 +1011,8 @@
       "publishDraftErrMsg": "Nagkaroon ng error habang nagpa-publish.",
       "publishDraftConsErrMsg": "Error sa pag-publish ng {draftId}: {error}",
       "toggleVersnPublConsErrMsg": "Error sa toggleVersionPublish {versionId} {publish}: {error}",
+      "updateEmailTemplateConsErrMsg": "Error sa pag-update ng mga template ng email para sa form {formId}: {error}",
+      "updateEmailTemplateErrMsg": "May naganap na error habang ina-update ang mga template ng email para sa form na ito.",
       "updateFormErrMsg": "May naganap na error habang ina-update ang mga setting para sa form na ito.",
       "updateFormConsErrMsg": "Error sa pag-update ng form {id}: {error}",
       "deleteSubmissionNotifyMsg": "Matagumpay na natanggal ang pagsusumite.",

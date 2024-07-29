@@ -1,15 +1,16 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import adminService from '@/services/adminService';
-import { ApiRoutes } from '@/utils/constants';
+import adminService from '~/services/adminService';
+import { ApiRoutes } from '~/utils/constants';
 
 const mockInstance = axios.create();
 const mockAxios = new MockAdapter(mockInstance);
 
 const zeroUuid = '00000000-0000-0000-0000-000000000000';
 
-jest.mock('@/services/interceptors', () => {
+vi.mock('~/services/interceptors', () => {
   return {
     appAxios: () => mockInstance,
   };
@@ -29,7 +30,9 @@ describe('Admin Service', () => {
     it('calls update on endpoint', async () => {
       mockAxios.onPut(endpoint).reply(200);
 
-      const result = await adminService.addFormUser('usrid', zeroUuid, ['OWNER']);
+      const result = await adminService.addFormUser('usrid', zeroUuid, [
+        'OWNER',
+      ]);
       expect(result).toBeTruthy();
       expect(mockAxios.history.put).toHaveLength(1);
     });
@@ -125,6 +128,43 @@ describe('Admin Service', () => {
       mockAxios.onGet(endpoint).reply(200);
 
       const result = await adminService.readUser(zeroUuid);
+      expect(result).toBeTruthy();
+      expect(mockAxios.history.get).toHaveLength(1);
+    });
+  });
+
+  //
+  // External APIs
+  //
+  describe('admin/externalAPIs', () => {
+    const endpoint = `${ApiRoutes.ADMIN}${ApiRoutes.EXTERNAL_APIS}`;
+
+    it('calls get endpoint', async () => {
+      mockAxios.onGet(endpoint).reply(200);
+
+      const result = await adminService.listExternalAPIs();
+      expect(result).toBeTruthy();
+      expect(mockAxios.history.get).toHaveLength(1);
+    });
+  });
+  describe('admin/externalAPIs/{id}', () => {
+    const endpoint = `${ApiRoutes.ADMIN}${ApiRoutes.EXTERNAL_APIS}/12345`;
+
+    it('calls put endpoint', async () => {
+      mockAxios.onPut(endpoint).reply(200);
+
+      const result = await adminService.updateExternalAPI('12345', {});
+      expect(result).toBeTruthy();
+      expect(mockAxios.history.put).toHaveLength(1);
+    });
+  });
+  describe('admin/externalAPIs/statusCodes', () => {
+    const endpoint = `${ApiRoutes.ADMIN}${ApiRoutes.EXTERNAL_APIS}/statusCodes`;
+
+    it('calls get endpoint', async () => {
+      mockAxios.onGet(endpoint).reply(200);
+
+      const result = await adminService.listExternalAPIStatusCodes();
       expect(result).toBeTruthy();
       expect(mockAxios.history.get).toHaveLength(1);
     });
