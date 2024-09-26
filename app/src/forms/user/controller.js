@@ -1,4 +1,5 @@
 const service = require('./service');
+const oesService = require('../../components/oesService')
 
 module.exports = {
   //
@@ -101,6 +102,15 @@ module.exports = {
     try {
       const response = await service.updateUserFormPreferences(req.currentUser, req.params.formId, req.body);
       res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getUserOESData: async (req, res, next) => {
+    try {
+      const response = await oesService.getUserData(req.kauth.grant.access_token.token);
+      res.status(200).json(response || {});
     } catch (error) {
       next(error);
     }

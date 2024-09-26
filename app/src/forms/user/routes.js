@@ -24,6 +24,13 @@ routes.delete('/preferences', async (req, res, next) => {
 });
 
 //
+// External User Data
+//
+routes.get('/OESData', async (req, res, next) => {
+  await controller.getUserOESData(req, res, next);
+});
+
+//
 // User
 //
 routes.get('/', async (req, res, next) => {

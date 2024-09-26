@@ -474,7 +474,7 @@ export default function getRouter(basePath = '/') {
     }
 
     // Update document title if applicable
-    document.title = to.meta.title ? to.meta.title : process.env.VUE_APP_TITLE;
+    document.title = "WorkBC Forms" //to.meta.title ? to.meta.title : process.env.VUE_APP_TITLE;
     next();
   });
 

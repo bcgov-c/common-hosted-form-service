@@ -45,4 +45,13 @@ export default {
       body
     );
   },
+
+  /**
+   * @function getOESUserData
+   * Get the current users OES data
+   * @returns {Promise} An axios response
+   */
+  getOESUserData() {
+    return appAxios().get(`${ApiRoutes.USERS}/OESData`);
+  },
 };

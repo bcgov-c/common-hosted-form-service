@@ -1,5 +1,5 @@
 <template>
-  <BaseSecure :idp="[IDP.IDIR, IDP.BCEIDBOTH]">
+  <BaseSecure :idp="[IDP.IDIR]">
     <SubmissionsTable :formId="f" />
   </BaseSecure>
 </template>

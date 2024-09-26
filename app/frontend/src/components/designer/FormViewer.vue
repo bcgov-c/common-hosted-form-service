@@ -204,7 +204,7 @@ import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import { Form } from 'vue-formio';
 import templateExtensions from '@/plugins/templateExtensions';
-import { formService, rbacService } from '@/services';
+import { formService, rbacService, userService } from '@/services';
 import FormViewerActions from '@/components/designer/FormViewerActions.vue';
 import FormViewerMultiUpload from '@/components/designer/FormViewerMultiUpload.vue';
 import { isFormPublic } from '@/utils/permissionUtils';
@@ -518,6 +518,29 @@ export default {
             this.isLateSubmissionAllowed =
               formScheduleStatus.allowLateSubmissions;
             this.formScheduleExpireMessage = formScheduleStatus.message;
+          }
+
+          // Get pre-fill data from OES for specific forms //
+          if (this.form.id === "d91cf793-699d-46c6-a354-878a8f185c11"){ //TODO: move to env variable
+            this.loadingSubmission = true;
+            const res = await userService.getOESUserData();
+            const contact = res.data.contact;
+            const contactCase = res.data.case;
+            const sf = res.data.storefront;
+            const profile = res.data.profile;
+            this.submission = {
+              data: {
+                workBcCentreName: sf?.DisplayName,
+                workBcCentreAddress: sf?.AddressLine1,
+                workBcCentreTelephoneNumber: sf?.PhoneNumber,
+                firstName: contact?.FirstName,
+                lastName: contact?.LastName,
+                caseNumber: contactCase?.CaseID,
+                telephone: profile?.PhoneNumbers ? profile.PhoneNumbers[0].Text : contact?.MessagePhone,
+                emailAddress: profile?.Email
+              }
+            }
+            this.loadingSubmission = false;
           }
         }
         this.listenFormChangeEvent(response);

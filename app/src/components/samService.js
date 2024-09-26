@@ -1,7 +1,7 @@
 const config = require('config');
 const axios = require('axios');
 const errorToProblem = require('./errorToProblem');
-const SERVICE = 'GeoAddressService';
+const SERVICE = 'SAMService';
 
 class SAMService {
   constructor({ username, password, apiUrl }) {

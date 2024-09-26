@@ -2,6 +2,7 @@ const emailService = require('../email/emailService');
 const exportService = require('./exportService');
 const service = require('./service');
 const fileService = require('../file/service');
+const oesService = require('../../components/oesService');
 
 module.exports = {
   export: async (req, res, next) => {
@@ -125,9 +126,21 @@ module.exports = {
   },
   createSubmission: async (req, res, next) => {
     try {
+      const token = req.kauth.grant.access_token.token;
+      const { threadID, caseID } = await oesService.getThreadAndCaseID(token);
+      req.body.submission.data.threadID = threadID;
+      req.body.submission.data.caseID = caseID;
       const response = await service.createSubmission(req.params.formVersionId, req.body, req.currentUser);
       if (!req.body.draft) {
         emailService.submissionReceived(req.params.formId, response.id, req.body, req.headers.referer).catch(() => {});
+        // Send an OES message, if required //
+        if (req.params.formId === "d91cf793-699d-46c6-a354-878a8f185c11"){ //TOOD: make this a env array variable
+          let token = req.kauth.grant.access_token.token;
+          oesService.sendMessage(token, `I've submitted my form. It can be viewed here: http://localhost:8081/app/form/view?s=${response.id}`, threadID, caseID)
+          .catch((err) => {
+            console.log("ERR SENDING MESSAGE: ", err)
+          })
+        }
       }
       // do we want to await this? could take a while, but it could fail... maybe make an explicit api call?
       fileService.moveSubmissionFiles(response.id, req.currentUser).catch(() => {});

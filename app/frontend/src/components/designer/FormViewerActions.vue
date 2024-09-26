@@ -3,13 +3,13 @@
     class="d-print-none d-flex flex-md-row justify-space-between flex-sm-row flex-xs-column-reverse"
     :class="{ 'dir-rtl': isRTL }"
   >
-    <div v-if="formId">
-      <!-- <v-btn outlined @click="goToAllSubmissionOrDraft">
+    <!-- <div v-if="formId">
+      <v-btn outlined @click="goToAllSubmissionOrDraft">
         <span :lang="lang"
           >{{ $t('trans.formViewerActions.viewAllSubmissions') }}
         </span>
-      </v-btn> -->
-    </div>
+      </v-btn>
+    </div> -->
     <div>
       <!-- Bulk button -->
       <span v-if="allowSubmitterToUploadFile && !block" class="ml-2">

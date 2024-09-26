@@ -1,6 +1,7 @@
 const { Statuses } = require('../common/constants');
 const cdogsService = require('../../components/cdogsService');
 const emailService = require('../email/emailService');
+const oesService = require('../../components/oesService');
 const service = require('./service');
 
 module.exports = {
@@ -19,6 +20,18 @@ module.exports = {
         // Return Bad request if we're trying to save draft on already submitted record
         res.status(400).json({ detail: 'Incorrect Submission status.' });
       } else {
+        // Send an OES message, if required //
+        const submission = await service.read(req.params.formSubmissionId);
+        const formID = submission.form.id
+        const threadID = submission.submission.submission.data.threadID;
+        const caseID = submission.submission.submission.data.caseID;
+        if (formID === "d91cf793-699d-46c6-a354-878a8f185c11"){ //TODO: use env var
+          const token = req.kauth.grant.access_token.token;
+          oesService.sendMessage(token, `I've revised and submitted my form. It can be viewed here: http://localhost:8081/app/form/view?s=${req.params.formSubmissionId}`, threadID, caseID)
+          .catch((err) => {
+            console.log("ERR SENDING MESSAGE: ", err)
+          })
+        }
         res.status(200).json(response);
       }
     } catch (error) {
@@ -105,6 +118,23 @@ module.exports = {
       } else if (req.body.code === Statuses.REVISING && req.body.submissionUserEmail) {
         emailService.statusRevising(submission.form.id, response[0], req.body.submissionUserEmail, req.body.revisionNotificationEmailContent, req.headers.referer).catch(() => {});
       }
+
+      // Send an OES message, if required //
+      if (req.body.code === Statuses.REVISING){
+        const submission = await service.read(req.params.formSubmissionId);
+        //console.log("SUBMISSION DATA: ", submission.submission.submission.data)
+        const formID = submission.form.id
+        const threadID = submission.submission.submission.data.threadID;
+        const caseID = submission.submission.submission.data.caseID;
+        if (formID === "d91cf793-699d-46c6-a354-878a8f185c11" && threadID && caseID){ //TOOD: make this a env array variable
+          const token = req.kauth.grant.access_token.token;
+          oesService.sendMessage(token, `Hello, please review and re-sign your Client Consent Form submission. It can be accessed here: http://localhost:8081/app/user/draft?s=${req.params.formSubmissionId}`, threadID, caseID)
+          .catch((err) => {
+            console.log("ERR SENDING MESSAGE: ", err)
+          })
+        }
+      }
+
       res.status(200).json(response);
     } catch (error) {
       next(error);

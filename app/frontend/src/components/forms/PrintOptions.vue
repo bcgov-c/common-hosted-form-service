@@ -139,6 +139,12 @@ export default {
     ...mapActions('notifications', ['addNotification']),
     async printBrowser() {
       this.dialog = false;
+      window.addEventListener("beforeprint", (event) => {
+        document.title='HR3698 Client Consent Form - Completed';
+      });
+      window.addEventListener("afterprint", (event) => {
+        document.title='WorkBC Forms';
+      });
       // Setting a timeout to allow the modal to close before opening the windows print
       setTimeout(() => {
         window.print();
