@@ -18,14 +18,6 @@
             >{{ $t('trans.bCGovNavBar.myForms') }}</router-link
           >
         </li>
-        <li v-if="authenticated">
-          <router-link
-            data-cy="userFormsLinks"
-            :to="{ name: 'UserForms' }"
-            :lang="lang"
-            >{{ "My Clients " }}</router-link
-          >
-        </li>
         <li v-if="hasPrivileges">
           <router-link :to="{ name: 'FormCreate' }" :lang="lang">{{
             $t('trans.bCGovNavBar.createNewForm')

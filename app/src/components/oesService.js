@@ -31,6 +31,7 @@ class OESService {
       }
     )
     .then((res) => {
+      console.log("getThreadAndCaseID REZ: ", res.data)
       res.data.ResultList.forEach((message => {
         if (message.MessageSubject === "Client Consent Form" && !threadID && !caseID){
           console.log("MESSAGE: ", message)
@@ -52,16 +53,19 @@ class OESService {
         let request = {
           "requestObject": 
           {
-              "Attachments": null,
+              //"Attachments": null,
               "Form": null,
               "MessageSubject": "Client Consent Form",
-              "ICMParentMessageID": threadID, //"1-4ZJKH4C",//threadID, //1-4ZJKG20 or 1-4ZJJD0V
+              "ICMParentMessageID": threadID,
               "MessageBody": message,
-              "ToCaseWorkerID": null,
+              "ToCaseWorkerID": null,//"HGWRK16",
+              "FromCaseWorkerID": "HGWRK16",
               "ICMCaseID": caseID,
               "UpdateLockNumber": 0,
-              "ICMContactID": "1-4T3MXTJ", //TODO
-              //"MessageGUID": null //TODO - try hardcoding this!
+              "ProgramTypeCode": "EPBC",
+              //"ICMContactID": "1-4T3MXTJ", //TODO
+              //"MessageID": null,
+              //"MessageGUID": "92452c25666c414f812d087f0d4d29d5" //TODO - try hardcoding this!
           }            
         }
         await axios.post(
@@ -106,6 +110,7 @@ class OESService {
         }
       )
       .then(async (res) => {
+        console.log("AuthenticateClient REZ: ", res.data)
         data.contact = res.data?.CaseContactInfoResponse?.ContactInformation;
         if (res.data.CaseContactInfoResponse?.ContactInformation?.CaseInformation?.HLSCaseInformationList != null){
           const employmentCase = res.data.CaseContactInfoResponse.ContactInformation.CaseInformation.HLSCaseInformationList.find(c => c.Type === "Employment Services"); //TODO: Just getting the first for the PoC. Need to somehow get case data from the 'correct' case? Need to see how to determine this
@@ -132,6 +137,7 @@ class OESService {
                 }
               )
               .then((res) => {
+                console.log("GET PROFILE REZ: ", res.data)
                 data.profile = res.data;
               })
               .catch((err) => {

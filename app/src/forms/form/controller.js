@@ -136,7 +136,7 @@ module.exports = {
         // Send an OES message, if required //
         if (req.params.formId === "d91cf793-699d-46c6-a354-878a8f185c11"){ //TOOD: make this a env array variable
           let token = req.kauth.grant.access_token.token;
-          oesService.sendMessage(token, `I've submitted my form. It can be viewed here: http://localhost:8081/app/form/view?s=${response.id}`, threadID, caseID)
+          oesService.sendMessage(token, `I've submitted my form. It can be viewed <a href="http://localhost:8081/app/form/view?s=${response.id}" target="_blank">here</a>`, threadID, caseID)
           .catch((err) => {
             console.log("ERR SENDING MESSAGE: ", err)
           })

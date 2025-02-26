@@ -126,7 +126,7 @@ module.exports = {
         const formID = submission.form.id
         const threadID = submission.submission.submission.data.threadID;
         const caseID = submission.submission.submission.data.caseID;
-        if (formID === "d91cf793-699d-46c6-a354-878a8f185c11" && threadID && caseID){ //TOOD: make this a env array variable
+        if (formID === "d91cf793-699d-46c6-a354-878a8f185c11" && threadID && caseID){ //TOOD: make this an env array variable
           const token = req.kauth.grant.access_token.token;
           oesService.sendMessage(token, `Hello, please review and re-sign your Client Consent Form submission. It can be accessed here: http://localhost:8081/app/user/draft?s=${req.params.formSubmissionId}`, threadID, caseID)
           .catch((err) => {

@@ -536,7 +536,7 @@ export default {
                 firstName: contact?.FirstName,
                 lastName: contact?.LastName,
                 caseNumber: contactCase?.CaseID,
-                telephone: profile?.PhoneNumbers ? profile.PhoneNumbers[0].Text : contact?.MessagePhone,
+                telephone: profile?.PhoneNumbers && profile.PhoneNumbers.length > 0 ? profile.PhoneNumbers[0].Text : contact?.MessagePhone,
                 emailAddress: profile?.Email
               }
             }
